@@ -115,5 +115,12 @@ Why we use UUID as primary key?
 https://www.clever-cloud.com/blog/engineering/2015/05/20/why-auto-increment-is-a-terrible-idea/
 https://starkandwayne.com/blog/uuid-primary-keys-in-postgresql/
 
+How to setup golang?
+Just add the following lines to ~/.bashrc and this will persist. However, you can use other paths you like as GOPATH instead of $HOME/go in my sample.
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+
 
 
