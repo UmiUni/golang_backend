@@ -1,4 +1,24 @@
 ### Jogchat backend
+
+ip: 206.189.222.128
+
+# Set Go Home
+
+export GOPATH=$HOME/go
+
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+# To update Go packages:
+go get 
+
+# Backbone reference for this project:
+[odewahn/react-golang-auth](https://github.com/odewahn/react-golang-auth)
+[Building a Web App With Go, Gin and React](https://hakaselogs.me/2018-04-20/building-a-web-app-with-go-gin-and-react)
+
+
+
+
+# For Future Reference
 Jogchat scalable authentication backend architecture
 Backend:
 Why we use Go? language built for solving scaling problem.
@@ -118,12 +138,7 @@ https://starkandwayne.com/blog/uuid-primary-keys-in-postgresql/
 How to setup golang?
 Just add the following lines to ~/.bashrc and this will persist. However, you can use other paths you like as GOPATH instead of $HOME/go in my sample.
 
-export GOPATH=$HOME/go
 
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-
-# To update Go packages:
-go get 
 
 
 
