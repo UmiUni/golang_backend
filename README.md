@@ -1,4 +1,4 @@
-### Jogchat backend
+### Jogchat React+Golang
 
 ip: 206.189.222.128
 
