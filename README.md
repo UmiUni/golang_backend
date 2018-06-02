@@ -1,5 +1,6 @@
-### Jogchat React+Golang
+# Jogchat React+Golang server
 
+This server will split to react and golang microservices later
 ip: 206.189.222.128
 
 # Set Go Home
