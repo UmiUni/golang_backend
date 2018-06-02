@@ -13,8 +13,8 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 go get 
 
 # Backbone reference for this project:
-[odewahn/react-golang-auth](https://github.com/odewahn/react-golang-auth)
-[Building a Web App With Go, Gin and React](https://hakaselogs.me/2018-04-20/building-a-web-app-with-go-gin-and-react)
+* [odewahn/react-golang-auth](https://github.com/odewahn/react-golang-auth)
+* [Building a Web App With Go, Gin and React](https://hakaselogs.me/2018-04-20/building-a-web-app-with-go-gin-and-react)
 
 
 
