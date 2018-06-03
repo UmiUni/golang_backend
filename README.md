@@ -25,7 +25,7 @@ go get
 go run main.go
 ```
 
-# For Future Reference
+# For Future Microservice Migration Reference
 Jogchat scalable authentication backend architecture
 Backend:
 Why we use Go? language built for solving scaling problem.
