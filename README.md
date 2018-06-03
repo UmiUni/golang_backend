@@ -1,23 +1,29 @@
 # Jogchat React+Golang server
-
+```
 This server will split to react and golang microservices later
 ip: 206.189.222.128
+```
 
 # Set Go Home
-
+```
 export GOPATH=$HOME/go
 
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+```
 
 # To update Go packages:
+```
 go get 
+```
 
 # Backbone reference for this project:
 * [odewahn/react-golang-auth](https://github.com/odewahn/react-golang-auth)
 * [Building a Web App With Go, Gin and React](https://hakaselogs.me/2018-04-20/building-a-web-app-with-go-gin-and-react)
 
-
-
+# Run this program:
+```
+go run main.go
+```
 
 # For Future Reference
 Jogchat scalable authentication backend architecture
