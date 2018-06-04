@@ -1,6 +1,22 @@
 # Jogchat React+Golang server
 ```
-This server will split to react and golang microservices later
+Rest API
+
+POST /jogchat/backend/
+Input: JSON typed:
+{
+  username:"uber",
+  password:"这是想在群里说的话",
+}
+Return:True/False
+Description: 广播msg
+
+
+````
+
+
+```
+This server will in the split into multiple parts of microservices
 ip: 206.189.222.128
 ```
 
