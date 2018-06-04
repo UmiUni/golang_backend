@@ -1,16 +1,17 @@
 # Jogchat React+Golang server
+
 ```
 Rest API
 
-POST /jogchat/backend/
+POST ip:3001/signup
 Input: JSON typed:
 {
-  username:"uber",
-  password:"这是想在群里说的话",
+  Username:"test",
+  Password:"test_password",
 }
-Return:True/False
-Description: 广播msg
-
+Successs: return true
+Fail: return error
+Description:
 
 ````
 
