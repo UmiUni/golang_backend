@@ -1,14 +1,16 @@
 # Jogchat React+Golang server
+
 ```
 Rest API
 
 POST ip:3001/signup
 Input: JSON typed:
 {
-  Username:"jogchat",
-  Password:"",
+  Username:"test",
+  Password:"test_password",
 }
-Return:
+Successs: return true
+Fail: return error
 Description:
 
 ````
