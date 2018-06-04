@@ -2,15 +2,14 @@
 ```
 Rest API
 
-POST /jogchat/backend/
+POST ip:3001/signup
 Input: JSON typed:
 {
-  username:"uber",
-  password:"这是想在群里说的话",
+  Username:"jogchat",
+  Password:"",
 }
-Return:True/False
-Description: 广播msg
-
+Return:
+Description:
 
 ````
 
