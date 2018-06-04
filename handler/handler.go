@@ -184,6 +184,13 @@ func GetCredentials(env *Env, username, password string) Creds {
 	return credentials
 }
 
+func addCredentials(env *Env, w http.ResponseWriter, params map[string]string) {
+	credentials := GetCredentials(env, params["Username"], params["Password"])
+
+	out, _ := json.MarshalIndent(&credentials, "", "  ")
+	fmt.Fprintf(w, string(out))
+}
+
 
 // Login captures the data posted to the /login route
 func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
@@ -193,19 +200,17 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
 	json.Unmarshal(data, &params)
 
 	postgres.LoginDB(w, params)
-	credentials := GetCredentials(env, params["username"], params["password"])
-
-	out, _ := json.MarshalIndent(&credentials, "", "  ")
-	fmt.Fprintf(w, string(out))
-
+	addCredentials(env, w, params)
 	return nil
 }
 
 func Signup(env *Env, w http.ResponseWriter, r *http.Request) error {
 	data, _ := ioutil.ReadAll(r.Body)
+
 	var params map[string]string
 	json.Unmarshal(data, &params)
 
 	postgres.SignupDB(w, params)
+	addCredentials(env, w, params)
 	return nil
 }

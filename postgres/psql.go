@@ -15,14 +15,18 @@ type Credentials struct {
 
 func SignupDB(w http.ResponseWriter, params map[string]string) {
 	username, email, password := params["Username"], params["Password"], params["Email"]
-	user_id := uuid.Must(uuid.NewV4()).String()
+
+	if username == "" || email == "" || password == "" {
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	user_id := uuid.Must(uuid.NewV4())
 
 	// Salt and hash the password using the bcrypt algorithm
 	// The second argument is the cost of hashing, which we arbitrarily set as 8 (this value can be more or less, depending on the computing power you wish to utilize)
-	hashed, err := bcrypt.GenerateFromPassword([]byte(password), 8)
+	hashed, err := bcrypt.GenerateFromPassword([]byte(password), hashCost)
 
 	// Next, insert the username, along with the hashed password into the database
-	if _, err = db.Query("insert into users values ($1, $2, $3, $4, TRUE)", user_id, username, email, string(hashed)); err != nil {
+	if _, err = db.Exec("INSERT INTO users VALUES ($1, $2, $3, $4, false)", user_id, username, email, string(hashed)); err != nil {
 		// If there is any issue with inserting into the database, return a 500 error
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -33,8 +37,9 @@ func SignupDB(w http.ResponseWriter, params map[string]string) {
 func LoginDB(w http.ResponseWriter, params map[string]string){
 	// Parse and decode the request body into a new `Credentials` instance	
 	// Get the existing entry present in the database for the given username
-	username, password := params["username"], params["password"]
-	result := db.QueryRow("select password from users where username=$1", username)
+	username, password := params["Username"], params["Password"]
+
+	result := db.QueryRow("SELECT password FROM users WHERE username=$1", username)
 
 	var stored_pswd string
 	// Store the obtained password in `storedCreds`

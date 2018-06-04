@@ -5,7 +5,6 @@ import (
 	"bytes"
 
 	_ "github.com/lib/pq"
-	"fmt"
 )
 
 const hashCost = 8
@@ -15,7 +14,7 @@ var (
   connBuffer bytes.Buffer
   user = "postgres"
   password = "umiuni_jogchat_tiantian"
-  ip = "206.189.212.172:5432"
+  ip = "206.189.212.172"
   dbname = "jogchat"
   sslmode = "verify-full"
 
@@ -36,10 +35,9 @@ func InitDB(){
 	connBuffer.WriteString(dbname)
 	connBuffer.WriteString("?sslmode=")
 	connBuffer.WriteString(sslmode)
-       
-	db, err := sql.Open("postgres", connBuffer.String())
 
-	fmt.Println(db)
+	db, err = sql.Open("postgres", connBuffer.String())
+
 	if err != nil {
 		panic(err)
 	}
