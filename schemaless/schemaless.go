@@ -72,17 +72,19 @@ func CloseDB()  {
 	DataStore.Destroy(context.TODO())
 }
 
-func SignupDB(params map[string]string) (successful bool, err error) {
-	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", params["email"])
+func SignupDB(username string, email string, password string) (successful bool, err error) {
+	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", email)
 	if found {
 		return false, errors.New("email already registered")
 	}
-	hashed, _ := bcrypt.GenerateFromPassword([]byte(params["password"]), hashCost)
+	hashed, _ := bcrypt.GenerateFromPassword([]byte(password), hashCost)
+
 	body, _ := json.Marshal(map[string]interface{} {
 		"id": newUUID(),
-		"username": params["username"],
-		"email": params["email"],
+		"username": username,
+		"email": email,
 		"password": string(hashed),
+		"activate": false,
 	})
 
 	cell := models.Cell{
@@ -97,8 +99,8 @@ func SignupDB(params map[string]string) (successful bool, err error) {
 	return true, nil
 }
 
-func SigninDB(params map[string]string) (info map[string]string, successful bool, err error) {
-	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", params["email"])
+func SigninDB(email string, password string) (info map[string]string, successful bool, err error) {
+	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", email)
 	if !found {
 		return nil, false, errors.New("unregistered email")
 	}
@@ -109,7 +111,7 @@ func SigninDB(params map[string]string) (info map[string]string, successful bool
 	err = json.Unmarshal(cells[0].Body, &cell)
 	utils.CheckErr(err)
 
-	if err = bcrypt.CompareHashAndPassword(cell["password"].([]byte), []byte(params["password"])); err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(cell["password"].(string)), []byte(password)); err != nil {
 		return nil, false, errors.New("invalid password")
 	}
 	info = map[string]string {

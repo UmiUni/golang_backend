@@ -17,7 +17,6 @@ import (
 // Creds holds the credentials we send back
 type Creds struct {
 	Status      string
-	APIKey      string
 	AccountType string
 	Email       string
 	AuthToken   string
@@ -188,7 +187,7 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
 	var params map[string]string
 	json.Unmarshal(data, &params)
 
-	info, successful, err := schemaless.SigninDB(params)
+	info, successful, err := schemaless.SigninDB(params["Email"], params["Password"])
 	if !successful {
 		handleFailure(err, w)
 	} else {
@@ -203,11 +202,15 @@ func Signup(env *Env, w http.ResponseWriter, r *http.Request) error {
 	var params map[string]string
 	json.Unmarshal(data, &params)
 
-	successful, err := schemaless.SignupDB(params)
-	if !successful {
-		handleFailure(err, w)
+	if params["Username"] == "" || params["Email"] == "" || params["Password"] == "" {
+		handleFailure(errors.New("username, email and password cannot be empty"), w)
 	} else {
-		addCredentials(env, w, params["username"], params["email"])
+		successful, err := schemaless.SignupDB(params["Username"], params["Email"], params["Password"])
+		if !successful {
+			handleFailure(err, w)
+		} else {
+			addCredentials(env, w, params["Username"], params["Email"])
+		}
 	}
 	return nil
 }
