@@ -2,14 +2,20 @@ package schemaless
 
 import (
 	"code.jogchat.internal/go-schemaless/core"
-	"code.jogchat.internal/go-schemaless/utils"
+	"code.jogchat.internal/jogchat-backend/utils"
 	"code.jogchat.internal/go-schemaless/storage/mysql"
 	"os"
 	"io/ioutil"
 	"encoding/json"
 	"context"
+	"errors"
+	"github.com/satori/go.uuid"
+	"time"
+	"code.jogchat.internal/go-schemaless/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
+const hashCost = 8
 var DataStore *core.KVStore
 
 
@@ -43,6 +49,10 @@ func getShards(config map[string][]map[string]string) []core.Shard {
 	return shards
 }
 
+func newUUID() uuid.UUID {
+	return uuid.Must(uuid.NewV4())
+}
+
 func InitDB()  {
 	jsonFile, err := os.Open("config/config.json")
 	utils.CheckErr(err)
@@ -62,10 +72,50 @@ func CloseDB()  {
 	DataStore.Destroy(context.TODO())
 }
 
-func SignupDB()  {
+func SignupDB(params map[string]string) (successful bool, err error) {
+	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", params["email"])
+	if found {
+		return false, errors.New("email already registered")
+	}
+	hashed, _ := bcrypt.GenerateFromPassword([]byte(params["password"]), hashCost)
+	body, _ := json.Marshal(map[string]interface{} {
+		"id": newUUID(),
+		"username": params["username"],
+		"email": params["email"],
+		"password": string(hashed),
+	})
 
+	cell := models.Cell{
+		RowKey: newUUID().Bytes(),
+		ColumnName: "users",
+		RefKey: time.Now().UnixNano(),
+		Body: body,
+	}
+	err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
+	utils.CheckErr(err)
+
+	return true, nil
 }
 
-func SigninDB()  {
+func SigninDB(params map[string]string) (info map[string]string, successful bool, err error) {
+	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", params["email"])
+	if !found {
+		return nil, false, errors.New("unregistered email")
+	}
+	if len(cells) != 1 {
+		panic("error: duplicate email address")
+	}
+	var cell map[string]interface{}
+	err = json.Unmarshal(cells[0].Body, &cell)
+	utils.CheckErr(err)
 
+	if err = bcrypt.CompareHashAndPassword(cell["password"].([]byte), []byte(params["password"])); err != nil {
+		return nil, false, errors.New("invalid password")
+	}
+	info = map[string]string {
+		"id": cell["id"].(string),
+		"username": cell["username"].(string),
+		"email": cell["email"].(string),
+	}
+	return info, true, nil
 }

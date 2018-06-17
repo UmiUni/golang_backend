@@ -152,45 +152,34 @@ func FakeData(env *Env, w http.ResponseWriter, r *http.Request) error {
 
 // GetCredentials determines if the username and password is valid
 // This is where logic would go to validate and return account info
-func GetCredentials(env *Env, username, password string) Creds {
+func GetCredentials(env *Env, username string, email string) Creds {
 	credentials := Creds{
-		Status:      "UNAUTHORIZED",
-		APIKey:      "",
-		AccountType: "",
-		Email:       "",
-		AuthToken:   "",
-		IsLoggedIn:  false,
+		Status:      "OK",
+		AccountType: "user",
+		Email:       email,
+		IsLoggedIn:  true,
 	}
-	if (username == "admin") && (password == "admin") {
-		credentials.Status = "OK"
-		credentials.APIKey = "12345"
-		credentials.AccountType = "admin"
-		credentials.Email = "admin@example.com"
-		credentials.IsLoggedIn = true
-		// Now create a JWT for user
-		// Create the token
-		token := jwt.New(jwt.SigningMethodHS256)
-		// Set some claims
-		claims := token.Claims.(jwt.MapClaims)
-		claims["sub"] = username
-		claims["iss"] = "example.com"
-		claims["exp"] = time.Now().Add(time.Hour *72).Unix()
-		var err error
-		credentials.AuthToken, err = token.SignedString([]byte(env.Secret))
-		if err != nil {
-			log.Println(err)
-		}
+	// Now create a JWT for user
+	// Create the token
+	token := jwt.New(jwt.SigningMethodHS256)
+	// Set some claims
+	claims := token.Claims.(jwt.MapClaims)
+	claims["sub"] = username
+	claims["iss"] = "jogchat.com"
+	claims["exp"] = time.Now().Add(time.Hour *72).Unix()
+	var err error
+	credentials.AuthToken, err = token.SignedString([]byte(env.Secret))
+	if err != nil {
+		log.Println(err)
 	}
 	return credentials
 }
 
-func addCredentials(env *Env, w http.ResponseWriter, params map[string]string) {
-	credentials := GetCredentials(env, params["Username"], params["Password"])
-
+func addCredentials(env *Env, w http.ResponseWriter, username string, email string) {
+	credentials := GetCredentials(env, username, email)
 	out, _ := json.MarshalIndent(&credentials, "", "  ")
 	fmt.Fprintf(w, string(out))
 }
-
 
 // Login captures the data posted to the /login route
 func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
@@ -199,8 +188,12 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
 	var params map[string]string
 	json.Unmarshal(data, &params)
 
-	schemaless.SigninDB()
-	addCredentials(env, w, params)
+	info, successful, err := schemaless.SigninDB(params)
+	if !successful {
+		handleFailure(err, w)
+	} else {
+		addCredentials(env, w, info["username"], info["email"])
+	}
 	return nil
 }
 
@@ -210,7 +203,19 @@ func Signup(env *Env, w http.ResponseWriter, r *http.Request) error {
 	var params map[string]string
 	json.Unmarshal(data, &params)
 
-	schemaless.SignupDB()
-	addCredentials(env, w, params)
+	successful, err := schemaless.SignupDB(params)
+	if !successful {
+		handleFailure(err, w)
+	} else {
+		addCredentials(env, w, params["username"], params["email"])
+	}
 	return nil
+}
+
+
+func handleFailure(err error, w http.ResponseWriter) {
+	res, _ := json.Marshal(map[string]string{
+		"error": err.Error(),
+	})
+	fmt.Fprintf(w, string(res))
 }
