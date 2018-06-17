@@ -9,8 +9,6 @@ import (
 	"time"
 	"log"
 	"errors"
-	"strconv"
-	"math/rand"
 	"code.jogchat.internal/jogchat-backend/schemaless"
 )
 
@@ -85,68 +83,6 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
-func myLookupKey(key string) []byte {
-	return []byte(key)
-}
-
-
-
-func hasValidToken(jwtToken, key string) bool {
-	ret := false
-	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}
-		return myLookupKey(key), nil
-	})
-
-	if err == nil && token.Valid {
-		ret = true
-	}
-	return ret
-}
-
-
-// FakeData provides some fake data for testing...
-func FakeData(env *Env, w http.ResponseWriter, r *http.Request) error {
-
-	// If this is an OPTION method, then we don't do anything since it's just
-	// validating the preflight info
-	if r.Method == "OPTIONS" {
-		return nil
-	}
-
-	// Validate the API call
-	secret := r.Header.Get("x-authentication")
-	isValid := hasValidToken(secret, env.Secret)
-	if !isValid {
-		return StatusError{401, errors.New("Invalid authorization token")}
-	}
-
-	// If we get here, then we've got a valid call.  So, go ahead and
-	// process the request.  In this instance, all we want to do
-	// is pass back a list of integers that is N items long
-	N, err := strconv.Atoi(r.FormValue("N"))
-	if err != nil {
-		N = 10
-	}
-
-	// Create N random integers
-	rand.Seed(time.Now().UTC().UnixNano())
-	var data []int
-	for i := 0; i < N; i++ {
-		data = append(data, rand.Intn(100))
-	}
-
-	time.Sleep(1 * time.Second) // just for fun, pause a bit
-
-	// return the results
-	out, _ := json.MarshalIndent(&data, "", "  ")
-	fmt.Fprintf(w, string(out))
-	return nil
-}
 
 
 // GetCredentials determines if the username and password is valid

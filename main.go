@@ -25,9 +25,6 @@ func main() {
 	r.Handle("/login", handler.Handler{env, handler.Login}).Methods("POST", "OPTIONS")
 	r.Handle("/signup", handler.Handler{env, handler.Signup}).Methods("POST", "OPTIONS")
 
-	//This returns some fake data
-	r.Handle("/data", handler.Handler{env, handler.FakeData}).Methods("GET", "OPTIONS")
-
 	port := "3001" // this is the gin port, but the app port is exposed at 3000
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
