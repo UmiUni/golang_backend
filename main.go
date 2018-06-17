@@ -2,9 +2,9 @@ package main
 
 import (
 	"net/http"
-	"code.jogchat.internal/jogchat_golang_backend/handler"
+	"code.jogchat.internal/jogchat-backend/handler"
+	"code.jogchat.internal/jogchat-backend/schemaless"
 	"github.com/gorilla/mux"
-	"code.jogchat.internal/jogchat_golang_backend/postgres"
 	"log"
 )
 
@@ -15,7 +15,8 @@ func main() {
 		Secret: "biscuits and gravy",
 	}
 
-	postgres.InitDB()
+	schemaless.InitDB()
+	defer schemaless.CloseDB()
 
 	r := mux.NewRouter()
 

@@ -11,7 +11,7 @@ import (
 	"errors"
 	"strconv"
 	"math/rand"
-	"code.jogchat.internal/jogchat_golang_backend/postgres"
+	"code.jogchat.internal/jogchat-backend/schemaless"
 )
 
 // Creds holds the credentials we send back
@@ -199,7 +199,7 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
 	var params map[string]string
 	json.Unmarshal(data, &params)
 
-	postgres.LoginDB(w, params)
+	schemaless.SigninDB()
 	addCredentials(env, w, params)
 	return nil
 }
@@ -210,7 +210,7 @@ func Signup(env *Env, w http.ResponseWriter, r *http.Request) error {
 	var params map[string]string
 	json.Unmarshal(data, &params)
 
-	postgres.SignupDB(w, params)
+	schemaless.SignupDB()
 	addCredentials(env, w, params)
 	return nil
 }
