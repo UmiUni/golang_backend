@@ -9,7 +9,7 @@ import (
 	"time"
 	"log"
 	"errors"
-	"code.jogchat.internal/jogchat-backend/schemaless"
+	"code.jogchat.internal/golang_backend/schemaless"
 )
 
 // Creds holds the credentials we send back

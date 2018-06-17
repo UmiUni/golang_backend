@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-	"code.jogchat.internal/jogchat-backend/handler"
-	"code.jogchat.internal/jogchat-backend/schemaless"
+	"code.jogchat.internal/golang_backend/handler"
+	"code.jogchat.internal/golang_backend/schemaless"
 	"github.com/gorilla/mux"
 	"log"
 )

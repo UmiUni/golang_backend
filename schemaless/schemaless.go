@@ -2,7 +2,7 @@ package schemaless
 
 import (
 	"code.jogchat.internal/go-schemaless/core"
-	"code.jogchat.internal/jogchat-backend/utils"
+	"code.jogchat.internal/golang_backend/utils"
 	"encoding/json"
 	"context"
 	"errors"
