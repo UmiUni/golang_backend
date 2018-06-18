@@ -17,8 +17,7 @@ Description:
 
 
 ```
-This server will in the split into multiple parts of microservices
-ip: 206.189.222.128
+http://138.68.227.175:3001
 ```
 
 # Install Golang
