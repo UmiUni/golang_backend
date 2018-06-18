@@ -41,8 +41,13 @@ sudo mv go /usr/local
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 source ~/.profile
+mkdir -p go/src/code.internal.jogchat
 ```
-
+# Clone two repositories
+```
+clone go-schemaless
+clone golang_backend
+```
 # To update Go packages:
 ```
 go get 
