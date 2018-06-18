@@ -45,8 +45,8 @@ mkdir -p go/src/code.internal.jogchat
 ```
 # Clone two repositories
 ```
-clone go-schemaless
-clone golang_backend
+git clone https://github.com/Jogchat/go-schemaless.git
+git clone https://github.com/Jogchat/golang_backend.git
 ```
 # To update Go packages:
 ```
