@@ -37,6 +37,7 @@ sudo tar -xvf go1.10.3.linux-amd64.tar.gz
 
 # Set Go Home
 ```
+sudo mv go /usr/local
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 source ~/.profile
