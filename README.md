@@ -1,3 +1,8 @@
+# Why use Gin Framework for Golang
+  Gin uses HttpRouter github repo, all the benefits of HttpRouter are listed in the project README:
+  ```
+  https://github.com/julienschmidt/httprouter
+  ```
 # Jogchat React+Golang server
 
 ```
