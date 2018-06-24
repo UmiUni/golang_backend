@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"code.jogchat.internal/golang_backend/utils"
 	"github.com/mailgun/mailgun-go"
+	"fmt"
 )
 
 // Creds holds the credentials we send back
@@ -75,30 +76,51 @@ func Signup(env *Env) func(ctx *gin.Context) {
 		var params map[string]string
 		json.Unmarshal(data, &params)
 
-		if params["Username"] == "" || params["Email"] == "" || params["Password"] == "" {
+		username := params["Username"]
+		email := params["Email"]
+		password := params["Password"]
+		if username == "" || email == "" || password == "" {
 			handleFailure(errors.New("username, email and password cannot be empty"), ctx)
 		} else {
-			successful, err := schemaless.SignupDB(params["Username"], params["Email"], params["Password"])
+			token := utils.GetToken(env.Secret, username)
+			successful, err := schemaless.SignupDB(username, email, password, token)
 			if !successful {
 				handleFailure(err, ctx)
 			} else {
-				addCredentials(env, ctx, params["Username"], params["Email"])
+				addCredentials(env, ctx, username, email)
+				SendVerificationEmail(env, email, token)
 			}
 		}
 	}
 }
 
-func SendEmail(env *Env, email string, token string) {
+func VerifyEmail(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		email := ctx.Query("email")
+		token := ctx.Query("token")
+		rowKey, successful, err := schemaless.VerifyEmail(email, token)
+		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			schemaless.ActivateEmail(rowKey)
+			ctx.JSON(http.StatusOK, gin.H{"Congratulations": "You've activated your email."})
+		}
+	}
+}
+
+func SendVerificationEmail(env *Env, email string, token string) {
+	link := fmt.Sprintf("http://localhost:3001/activate?email=%s&token=%s", email, token)
 	mg := mailgun.NewMailgun(env.Domain, env.PrivateKey, env.PublicKey)
 	subject := "[Jogchat] Activate your account"
-	body := "<html>" +
-		"<body>" +
-		"<h1>'.$randomAdd.' Welcome to Jogchat.com '.$randomAdd.'</h1>" +
-		"<h1>Please click on the following link to activate your account: </h1>" +
-		"<h1>'.$randomAdd.'" +
-		"<a href ='.$tokenLink.'>link</a>'.$randomAdd.'" +
-		"</h1> </body> </html> "
-	message := mg.NewMessage(env.Email, subject, body, email)
+	message := mg.NewMessage(env.Email, subject, "[Jogchat] Activate your account", email)
+	message.SetHtml(fmt.Sprintf(
+		"<html>" +
+			"<body>" +
+			"<h2>Welcome to Jogchat.com.</h2>" +
+			"<h2>Please click on the following link to activate your account: </h2>" +
+			"<h2><a href =\"%s\">link</a></h2>" +
+			"</body> " +
+			"</html>", link))
 	_, _, err := mg.Send(message)
 	utils.CheckErr(err)
 }
