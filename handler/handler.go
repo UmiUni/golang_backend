@@ -8,6 +8,7 @@ import (
 	"code.jogchat.internal/golang_backend/schemaless"
 	"github.com/gin-gonic/gin"
 	"code.jogchat.internal/golang_backend/utils"
+	"github.com/mailgun/mailgun-go"
 )
 
 // Creds holds the credentials we send back
@@ -22,7 +23,11 @@ type Creds struct {
 
 // Env holds application-wide configuration.
 type Env struct {
-	Secret string
+	Secret	string
+	Domain	string
+	Email	string
+	PrivateKey	string
+	PublicKey	string
 }
 
 
@@ -81,6 +86,21 @@ func Signup(env *Env) func(ctx *gin.Context) {
 			}
 		}
 	}
+}
+
+func SendEmail(env *Env, email string, token string) {
+	mg := mailgun.NewMailgun(env.Domain, env.PrivateKey, env.PublicKey)
+	subject := "[Jogchat] Activate your account"
+	body := "<html>" +
+		"<body>" +
+		"<h1>'.$randomAdd.' Welcome to Jogchat.com '.$randomAdd.'</h1>" +
+		"<h1>Please click on the following link to activate your account: </h1>" +
+		"<h1>'.$randomAdd.'" +
+		"<a href ='.$tokenLink.'>link</a>'.$randomAdd.'" +
+		"</h1> </body> </html> "
+	message := mg.NewMessage(env.Email, subject, body, email)
+	_, _, err := mg.Send(message)
+	utils.CheckErr(err)
 }
 
 
