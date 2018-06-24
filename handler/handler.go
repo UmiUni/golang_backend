@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
+	"code.jogchat.internal/jwt-go"
 	"time"
 	"log"
 	"errors"
