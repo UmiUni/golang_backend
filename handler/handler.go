@@ -4,12 +4,10 @@ import (
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
-	"github.com/dgrijalva/jwt-go"
-	"time"
-	"log"
 	"errors"
 	"code.jogchat.internal/golang_backend/schemaless"
 	"github.com/gin-gonic/gin"
+	"code.jogchat.internal/golang_backend/utils"
 )
 
 // Creds holds the credentials we send back
@@ -39,17 +37,7 @@ func GetCredentials(env *Env, username string, email string) Creds {
 	}
 	// Now create a JWT for user
 	// Create the token
-	token := jwt.New(jwt.SigningMethodHS256)
-	// Set some claims
-	claims := token.Claims.(jwt.MapClaims)
-	claims["sub"] = username
-	claims["iss"] = "jogchat.com"
-	claims["exp"] = time.Now().Add(time.Hour *72).Unix()
-	var err error
-	credentials.AuthToken, err = token.SignedString([]byte(env.Secret))
-	if err != nil {
-		log.Println(err)
-	}
+	credentials.AuthToken = utils.GetToken(env.Secret, username)
 	return credentials
 }
 
