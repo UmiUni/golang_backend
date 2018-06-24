@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	"code.jogchat.internal/jwt-go"
 	"github.com/satori/go.uuid"
 	"time"
 	"code.jogchat.internal/go-schemaless/utils"

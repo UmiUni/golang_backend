@@ -1,3 +1,8 @@
+# Why use Gin Framework for Golang
+  Gin uses HttpRouter github repo, all the benefits of HttpRouter are listed in the project README:
+  ```
+  https://github.com/julienschmidt/httprouter
+  ```
 # Jogchat React+Golang server
 
 ```
@@ -17,17 +22,36 @@ Description:
 
 
 ```
-This server will in the split into multiple parts of microservices
-ip: 206.189.222.128
+http://138.68.227.175:3001
 ```
+
+# Install Golang
+```
+sudo apt-get update
+sudo apt-get -y upgrade
+
+find latestes version in:
+https://golang.org/dl/
+
+sudo curl -O https://storage.googleapis.com/golang/go1.10.3.linux-amd64.tar.gz
+sudo tar -xvf go1.10.3.linux-amd64.tar.gz
+
+```
+* reference: https://medium.com/@patdhlk/how-to-install-go-1-9-1-on-ubuntu-16-04-ee64c073cd79
 
 # Set Go Home
 ```
+sudo mv go /usr/local
 export GOPATH=$HOME/go
-
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+source ~/.profile
+mkdir -p go/src/code.internal.jogchat
 ```
-
+# Clone two repositories
+```
+git clone https://github.com/Jogchat/go-schemaless.git
+git clone https://github.com/Jogchat/golang_backend.git
+```
 # To update Go packages:
 ```
 go get 
