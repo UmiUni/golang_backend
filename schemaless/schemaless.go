@@ -10,7 +10,6 @@ import (
 	"code.jogchat.internal/go-schemaless/models"
 	"golang.org/x/crypto/bcrypt"
 	"code.jogchat.internal/go-schemaless"
-	"fmt"
 )
 
 const hashCost = 8
@@ -92,9 +91,6 @@ func VerifyEmail(email string, token string) (rowKey []byte, successful bool, er
 	err = json.Unmarshal(cells[0].Body, &body)
 	utils.CheckErr(err)
 
-	hashed_token, err := bcrypt.GenerateFromPassword([]byte(token), hashCost)
-	fmt.Println(hashed_token)
-	fmt.Println([]byte(body["token"].(string)))
 	if err = bcrypt.CompareHashAndPassword([]byte(body["token"].(string)), []byte(token)); err != nil {
 		return nil, false, errors.New("invalid token")
 	}
@@ -102,15 +98,20 @@ func VerifyEmail(email string, token string) (rowKey []byte, successful bool, er
 	return cells[0].RowKey, true, nil
 }
 
-func ActivateEmail(rowKey []byte) {
+func ActivateEmail(rowKey []byte) (err error) {
 	cell, _, _ := DataStore.GetCellLatest(context.TODO(), rowKey, "users")
 	var body map[string]interface{}
-	err := json.Unmarshal(cell.Body, &body)
+	err = json.Unmarshal(cell.Body, &body)
 	utils.CheckErr(err)
 
+	if body["activate"].(bool) {
+		return errors.New("email already activated")
+	}
 	body["activate"] = true
 	cell.Body, err = json.Marshal(body)
 	cell.RefKey = time.Now().UnixNano()
 	err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
 	utils.CheckErr(err)
+
+	return nil
 }

@@ -104,8 +104,12 @@ func VerifyEmail(env *Env) func(ctx *gin.Context) {
 		if !successful {
 			handleFailure(err, ctx)
 		} else {
-			schemaless.ActivateEmail(rowKey)
-			ctx.JSON(http.StatusOK, gin.H{"Congratulations": "You've activated your email."})
+			err := schemaless.ActivateEmail(rowKey)
+			if err != nil {
+				handleFailure(err, ctx)
+			} else {
+				ctx.JSON(http.StatusOK, gin.H{"Congratulations": "You've activated your email."})
+			}
 		}
 	}
 }
