@@ -11,7 +11,7 @@ func main() {
 	// Initialise our app-wide environment data we'll send to the handler
 	env := &handler.Env{
 		//IP: "localhost",
-		IP: "138.68.227.175",
+		IP: "178.128.0.108",
 		Port: ":3001",
 		Secret: "biscuits and gravy",
 		Domain: "jogchat.com",
