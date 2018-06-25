@@ -90,7 +90,7 @@ func Signup(env *Env) func(ctx *gin.Context) {
 				handleFailure(err, ctx)
 			} else {
 				addCredentials(env, ctx, username, email)
-				SendVerificationEmail(env, email, token)
+				go SendVerificationEmail(env, email, token)
 			}
 		}
 	}
