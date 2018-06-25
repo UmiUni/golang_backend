@@ -10,6 +10,7 @@ import (
 	"code.jogchat.internal/go-schemaless/models"
 	"golang.org/x/crypto/bcrypt"
 	"code.jogchat.internal/go-schemaless"
+	"fmt"
 )
 
 const hashCost = 8
@@ -91,8 +92,11 @@ func VerifyEmail(email string, token string) (rowKey []byte, successful bool, er
 	err = json.Unmarshal(cells[0].Body, &body)
 	utils.CheckErr(err)
 
+	hashed_token, err := bcrypt.GenerateFromPassword([]byte(token), hashCost)
+	fmt.Println(hashed_token)
+	fmt.Println([]byte(body["token"].(string)))
 	if err = bcrypt.CompareHashAndPassword([]byte(body["token"].(string)), []byte(token)); err != nil {
-		return nil, false, errors.New("invalid password")
+		return nil, false, errors.New("invalid token")
 	}
 
 	return cells[0].RowKey, true, nil
