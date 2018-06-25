@@ -10,6 +10,8 @@ import (
 func main() {
 	// Initialise our app-wide environment data we'll send to the handler
 	env := &handler.Env{
+		IP: "138.68.227.175",
+		Port: ":3001",
 		Secret: "biscuits and gravy",
 		Domain: "jogchat.com",
 		Email: "admin@jogchat.com",
@@ -28,5 +30,5 @@ func main() {
 	r.POST("/signup", handler.Signup(env))
 	r.GET("/activate", handler.VerifyEmail(env))
 
-	r.Run(":3001")
+	r.Run(env.Port)
 }

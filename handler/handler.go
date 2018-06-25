@@ -24,6 +24,8 @@ type Creds struct {
 
 // Env holds application-wide configuration.
 type Env struct {
+	IP	string
+	Port	string
 	Secret	string
 	Domain	string
 	Email	string
@@ -109,7 +111,7 @@ func VerifyEmail(env *Env) func(ctx *gin.Context) {
 }
 
 func SendVerificationEmail(env *Env, email string, token string) {
-	link := fmt.Sprintf("http://localhost:3001/activate?email=%s&token=%s", email, token)
+	link := fmt.Sprintf("http://%s%s/activate?email=%s&token=%s", env.IP, env.Port, email, token)
 	mg := mailgun.NewMailgun(env.Domain, env.PrivateKey, env.PublicKey)
 	subject := "[Jogchat] Activate your account"
 	message := mg.NewMessage(env.Email, subject, "[Jogchat] Activate your account", email)
