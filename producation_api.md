@@ -11,7 +11,7 @@ curl -X POST \
     "Username": "superchaoran",
     "Password": "8515111q",
     "Email": "superchaoran@gmail.com"
-}'
+}' | jq .
 ```
 Sign up possibilities:
 ```
@@ -46,7 +46,7 @@ curl -X POST \
   -d '{
     "Email": "superchaoran@gmail.com",
     "Password": "8515111"
-}'
+}' | jq .
 ```
 Sign in Possibilities:
 ```
