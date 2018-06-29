@@ -2,6 +2,19 @@ Production API:
 
 Sign up:
 ```
+curl -X POST \
+  http://178.128.0.108:3001/signup \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -H 'Postman-Token: a8b8f207-21b3-44a4-962a-77560b15993e' \
+  -d '{
+    "Username": "superchaoran",
+    "Password": "8515111q",
+    "Email": "superchaoran@gmail.com"
+}'
+```
+Sign up possibilities:
+```
 POST http://178.128.0.108:3001/signup
 raw JSON request:
 {
@@ -25,6 +38,19 @@ raw JSON response (error0):
 
 Sign in:
 ```
+curl -X POST \
+  http://178.128.0.108:3001/login \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -H 'Postman-Token: 49f0c56a-c810-4d75-8b5e-4ffb811ae0df' \
+  -d '{
+    "Email": "superchaoran@gmail.com",
+    "Password": "8515111"
+}'
+```
+Sign in Possibilities:
+```
+
 raw JSON request:
 {
     "Email": "superchaoran@gmail.com",
