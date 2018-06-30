@@ -1,4 +1,4 @@
-Production API:
+user_registration_api.md API:
 
 Sign up:
 ```
@@ -35,6 +35,11 @@ raw JSON response (error0):
     "error": "email already registered"
 }
 ```
+
+* 我们的sign up/sign in api, (email, username, password) 都是required；
+* email不能重复, username可以重复; sign in的时候必须用email sign in。
+* 前端调用api时候最好软性要求用户使用公司、edu注册。虽然现在后端还没有做validation。 
+* company or edu email (e.g. @airbnb.com @stanford.edu)
 
 Sign in:
 ```
