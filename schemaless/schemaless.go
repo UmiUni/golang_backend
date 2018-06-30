@@ -47,8 +47,11 @@ func SignupDB(username string, email string, password string, token string) (suc
 		RefKey: time.Now().UnixNano(),
 		Body: body,
 	}
-	err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
-	utils.CheckErr(err)
+
+	go func() {
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
+		utils.CheckErr(err)
+	}()
 
 	return true, nil
 }
