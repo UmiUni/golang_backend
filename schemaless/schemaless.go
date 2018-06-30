@@ -156,3 +156,4 @@ func InsertNews(domain string, timestamp int64, author string, summary string, t
 
 	return true, nil
 }
+
