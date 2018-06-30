@@ -36,6 +36,9 @@ raw JSON response (error0):
 }
 ```
 
+* 我们的sign up/sign in api, (email, username, password) 都是required；
+email不能重复, username可以重复; sign in的时候必须用email sign in。
+
 Sign in:
 ```
 curl -X POST \
