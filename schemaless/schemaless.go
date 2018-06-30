@@ -33,7 +33,6 @@ func SignupDB(username string, email string, password string, token string) (suc
 	token_hash, _ := bcrypt.GenerateFromPassword([]byte(token), hashCost)
 
 	body, _ := json.Marshal(map[string]interface{} {
-		"id": utils.NewUUID(),
 		"username": username,
 		"email": email,
 		"password": string(password_hash),
@@ -49,7 +48,7 @@ func SignupDB(username string, email string, password string, token string) (suc
 	}
 
 	go func() {
-		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password")
 		utils.CheckErr(err)
 	}()
 
@@ -66,7 +65,9 @@ func SigninDB(email string, password string) (info map[string]string, successful
 	}
 	var cell map[string]interface{}
 	err = json.Unmarshal(cells[0].Body, &cell)
-	utils.CheckErr(err)
+	if err != nil {
+		return nil,false, err
+	}
 
 	if err = bcrypt.CompareHashAndPassword([]byte(cell["password"].(string)), []byte(password)); err != nil {
 		return nil, false, errors.New("invalid password")
@@ -75,7 +76,6 @@ func SigninDB(email string, password string) (info map[string]string, successful
 		return nil, false, errors.New("please verify your email")
 	}
 	info = map[string]string {
-		"id": cell["id"].(string),
 		"username": cell["username"].(string),
 		"email": cell["email"].(string),
 	}
@@ -92,7 +92,10 @@ func VerifyEmail(email string, token string) (rowKey []byte, successful bool, er
 	}
 	var body map[string]interface{}
 	err = json.Unmarshal(cells[0].Body, &body)
-	utils.CheckErr(err)
+
+	if err != nil {
+		return nil, false, err
+	}
 
 	if err = bcrypt.CompareHashAndPassword([]byte(body["token"].(string)), []byte(token)); err != nil {
 		return nil, false, errors.New("invalid token")
@@ -105,7 +108,10 @@ func ActivateEmail(rowKey []byte) (err error) {
 	cell, _, _ := DataStore.GetCellLatest(context.TODO(), rowKey, "users")
 	var body map[string]interface{}
 	err = json.Unmarshal(cell.Body, &body)
-	utils.CheckErr(err)
+
+	if err != nil {
+		return err
+	}
 
 	if body["activate"].(bool) {
 		return errors.New("email already activated")
@@ -113,8 +119,40 @@ func ActivateEmail(rowKey []byte) (err error) {
 	body["activate"] = true
 	cell.Body, err = json.Marshal(body)
 	cell.RefKey = time.Now().UnixNano()
-	err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
-	utils.CheckErr(err)
+
+	go func() {
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password")
+		utils.CheckErr(err)
+	}()
 
 	return nil
+}
+
+func InsertNews(domain string, timestamp int64, author string, summary string, title string, text string, url string) (successful bool, err error) {
+	body, err := json.Marshal(map[string]interface{} {
+		"domain": domain,
+		"timestamp": timestamp,
+		"author": author,
+		"summary": summary,
+		"title": title,
+		"text": text,
+		"url": url,
+	})
+	if err != nil {
+		return false, err
+	}
+
+	cell := models.Cell{
+		RowKey: utils.NewUUID().Bytes(),
+		ColumnName: "news",
+		RefKey: time.Now().UnixNano(),
+		Body: body,
+	}
+
+	go func() {
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "summary", "text", "url")
+		utils.CheckErr(err)
+	}()
+
+	return true, nil
 }

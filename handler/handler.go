@@ -8,8 +8,7 @@ import (
 	"code.jogchat.internal/golang_backend/schemaless"
 	"github.com/gin-gonic/gin"
 	"code.jogchat.internal/golang_backend/utils"
-	"github.com/mailgun/mailgun-go"
-	"fmt"
+	"strconv"
 )
 
 // Creds holds the credentials we send back
@@ -90,7 +89,7 @@ func Signup(env *Env) func(ctx *gin.Context) {
 				handleFailure(err, ctx)
 			} else {
 				addCredentials(env, ctx, username, email)
-				go SendVerificationEmail(env, email, token)
+				go sendVerificationEmail(env, email, token)
 			}
 		}
 	}
@@ -114,24 +113,27 @@ func VerifyEmail(env *Env) func(ctx *gin.Context) {
 	}
 }
 
-func SendVerificationEmail(env *Env, email string, token string) {
-	link := fmt.Sprintf("http://%s%s/activate?email=%s&token=%s", env.IP, env.Port, email, token)
-	mg := mailgun.NewMailgun(env.Domain, env.PrivateKey, env.PublicKey)
-	subject := "[Jogchat] Activate your account"
-	message := mg.NewMessage(env.Email, subject, "[Jogchat] Activate your account", email)
-	message.SetHtml(fmt.Sprintf(
-		"<html>" +
-			"<body>" +
-			"<h2>Welcome to Jogchat.com.</h2>" +
-			"<h2>Please click on the following link to activate your account: </h2>" +
-			"<h2><a href =\"%s\">link</a></h2>" +
-			"</body> " +
-			"</html>", link))
-	_, _, err := mg.Send(message)
-	utils.CheckErr(err)
+func InsertNews(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		data, _ := ioutil.ReadAll(ctx.Request.Body)
+
+		var params map[string]string
+		json.Unmarshal(data, &params)
+
+		domain := params["Domain"]
+		timestamp, _ := strconv.ParseInt(params["Timestamp"], 10, 64)
+		author := params["Author"]
+		summary := params["Summary"]
+		title := params["Title"]
+		text := params["Text"]
+		url := params["URL"]
+
+		successful, err := schemaless.InsertNews(domain, timestamp, author, summary, title, text, url)
+		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"Congratulations": "News successfully added."})
+		}
+	}
 }
 
-
-func handleFailure(err error, ctx *gin.Context) {
-	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-}
