@@ -128,7 +128,7 @@ func InsertNews(env *Env) func(ctx *gin.Context) {
 		text := params["Text"]
 		url := params["URL"]
 
-		successful, err := schemaless.InsertNews(utils.NewUUID(), domain, timestamp, author, summary, title, text, url)
+		successful, err := schemaless.InsertNews(domain, timestamp, author, summary, title, text, url)
 		if !successful {
 			handleFailure(err, ctx)
 		} else {
