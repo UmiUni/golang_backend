@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"code.jogchat.internal/golang_backend/utils"
 	"strconv"
+	"github.com/satori/go.uuid"
 )
 
 // Creds holds the credentials we send back
@@ -141,12 +142,13 @@ func GetNews(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var news[]map[string]interface{}
 		var err error
+		var id uuid.UUID
 
 		id_str, exist := ctx.GetQuery("id")
 		if exist {
-			id, err := strconv.ParseInt(id_str, 10, 64)
-			if err != nil {
-				news, _, err = schemaless.GetNewsByField("id", id)
+			id, err = uuid.FromString(id_str)
+			if err == nil {
+				news, _, err = schemaless.GetNewsByField("id", id.Bytes())
 			}
 		} else {
 			domain := ctx.Query("domain")
