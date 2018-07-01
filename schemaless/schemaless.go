@@ -7,7 +7,6 @@ import (
 	"context"
 	"errors"
 	"time"
-	"code.jogchat.internal/go-schemaless/models"
 	"golang.org/x/crypto/bcrypt"
 	"code.jogchat.internal/go-schemaless"
 )
@@ -24,42 +23,39 @@ func CloseDB()  {
 	DataStore.Destroy(context.TODO())
 }
 
-func SignupDB(username string, email string, password string, token string) (successful bool, err error) {
+func SignupDB(username string, email string, password string, token string) (info map[string]string, successful bool, err error) {
 	duplicate, _ := DataStore.CheckValueExist(context.TODO(), "users", "email", email)
 	if duplicate {
-		return false, errors.New("email already registered")
+		return nil, false, errors.New("email already registered")
 	}
 	duplicate, _ = DataStore.CheckValueExist(context.TODO(), "users", "username", username)
 	if duplicate {
-		return false, errors.New("username already exist")
+		return nil, false, errors.New("username already exist")
 	}
 	password_hash, _ := bcrypt.GenerateFromPassword([]byte(password), hashCost)
 	token_hash, _ := bcrypt.GenerateFromPassword([]byte(token), hashCost)
 
-	id := uniqueUUID("users")
-
-	body, _ := json.Marshal(map[string]interface{}{
-		"id":       id,
+	body := map[string]interface{}{
 		"username": username,
 		"email":    email,
 		"password": string(password_hash),
 		"token":    string(token_hash),
 		"activate": false,
-	})
-
-	cell := models.Cell{
-		RowKey:     utils.NewUUID().Bytes(),
-		ColumnName: "users",
-		RefKey:     time.Now().UnixNano(),
-		Body:       body,
 	}
+	id, cell, err := constructCell("users", body)
 
 	go func() {
 		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password")
 		utils.CheckErr(err)
 	}()
 
-	return true, nil
+	info = map[string]string {
+		"id": id.String(),
+		"username": username,
+		"email": email,
+	}
+
+	return info, true, nil
 }
 
 func SigninDB(email string, password string) (info map[string]string, successful bool, err error) {
@@ -83,6 +79,7 @@ func SigninDB(email string, password string) (info map[string]string, successful
 		return nil, false, errors.New("please verify your email")
 	}
 	info = map[string]string {
+		"id": cell["id"].(string),
 		"username": cell["username"].(string),
 		"email": cell["email"].(string),
 	}
@@ -136,10 +133,7 @@ func ActivateEmail(rowKey []byte) (err error) {
 }
 
 func InsertNews(domain string, timestamp int64, author string, summary string, title string, text string, url string) (successful bool, err error) {
-	id := uniqueUUID("news")
-
-	body, err := json.Marshal(map[string]interface{} {
-		"id": id,
+	body := map[string]interface{} {
 		"domain": domain,
 		"timestamp": timestamp,
 		"author": author,
@@ -147,16 +141,10 @@ func InsertNews(domain string, timestamp int64, author string, summary string, t
 		"title": title,
 		"text": text,
 		"url": url,
-	})
+	}
+	_, cell, err := constructCell("news", body)
 	if err != nil {
 		return false, err
-	}
-
-	cell := models.Cell{
-		RowKey: utils.NewUUID().Bytes(),
-		ColumnName: "news",
-		RefKey: time.Now().UnixNano(),
-		Body: body,
 	}
 
 	go func() {
@@ -173,13 +161,47 @@ func GetNewsByField(field string, value interface{}) (news []map[string]interfac
 		return nil, false, errors.New("no news found")
 	}
 
-	for _, cell := range cells {
-		var body map[string]interface{}
-		err = json.Unmarshal(cell.Body, &body)
-		if err != nil {
-			return nil, false, err
-		}
-		news = append(news, body)
-	}
+	news, err = cellsToMaps(cells)
 	return news, true, nil
+}
+
+func CommentOn(user_id string, news_id string, parent_id string, comment_on string, content string, timestamp int64) (comment_id string, successful bool, err error) {
+	if exist, _ := DataStore.CheckValueExist(context.TODO(), "users", "id", user_id); !exist {
+		return comment_id, false, errors.New("invalid user_id")
+	}
+	if exist, _ := DataStore.CheckValueExist(context.TODO(), "news", "id", news_id); !exist {
+		return comment_id, false, errors.New("invalid news_id")
+	}
+	if exist, _ := DataStore.CheckValueExist(context.TODO(), comment_on, "id", parent_id); !exist {
+		return comment_id, false, errors.New("invalid parent_id")
+	}
+
+	body := map[string]interface{} {
+		"user_id": user_id,
+		"news_id": news_id,
+		"parent_id": parent_id,
+		"content": content,
+		"timestamp": timestamp,
+	}
+	id, cell, err := constructCell("comment", body)
+	if err != nil {
+		return comment_id, false, err
+	}
+
+	go func() {
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "content")
+		utils.CheckErr(err)
+	}()
+
+	return id.String(), true, nil
+}
+
+func GetComment(parent_id string) (comments []map[string]interface{}, found bool, err error) {
+	cells, found, err := DataStore.GetCellsByFieldLatest(context.TODO(), "comment", "parent_id", parent_id)
+	if !found {
+		return nil, false, errors.New("no comments found")
+	}
+
+	comments, err = cellsToMaps(cells)
+	return comments, true, nil
 }

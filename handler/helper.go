@@ -6,6 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"code.jogchat.internal/golang_backend/utils"
+	"io/ioutil"
+	"encoding/json"
 )
 
 func sendVerificationEmail(env *Env, email string, token string) {
@@ -25,6 +27,12 @@ func sendVerificationEmail(env *Env, email string, token string) {
 	utils.CheckErr(err)
 }
 
+func readParams(ctx *gin.Context) map[string]string {
+	data, _ := ioutil.ReadAll(ctx.Request.Body)
+	var params map[string]string
+	json.Unmarshal(data, &params)
+	return params
+}
 
 func handleFailure(err error, ctx *gin.Context) {
 	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
