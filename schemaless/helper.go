@@ -11,7 +11,8 @@ import (
 func uniqueUUID(columnKey string) uuid.UUID {
 	id := utils.NewUUID()
 	for {
-		duplicate, _ := DataStore.CheckValueExist(context.TODO(), columnKey, "id", id)
+		// UUIDs are stored as bytes
+		duplicate, _ := DataStore.CheckValueExist(context.TODO(), columnKey, "id", id.Bytes())
 		if !duplicate {
 			break
 		} else {
