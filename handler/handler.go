@@ -137,3 +137,16 @@ func InsertNews(env *Env) func(ctx *gin.Context) {
 	}
 }
 
+func GetNews(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		domain := ctx.Query("domain")
+		news, _, err := schemaless.GetNews(domain)
+		if err != nil {
+			handleFailure(err, ctx)
+		} else {
+			results := make(map[string]interface{})
+			results["news"] = news
+			ctx.JSON(http.StatusOK, results)
+		}
+	}
+}

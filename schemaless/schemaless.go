@@ -158,3 +158,20 @@ func InsertNews(id uuid.UUID, domain string, timestamp int64, author string, sum
 
 	return true, nil
 }
+
+func GetNews(domain string) (news []map[string]interface{}, found bool, err error) {
+	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "news", "domain", domain)
+	if !found {
+		return nil, false, errors.New("no news found")
+	}
+
+	for _, cell := range cells {
+		var body map[string]interface{}
+		err = json.Unmarshal(cell.Body, &body)
+		if err != nil {
+			return nil, false, err
+		}
+		news = append(news, body)
+	}
+	return news, true, nil
+}
