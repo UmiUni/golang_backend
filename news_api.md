@@ -9,8 +9,8 @@ Cache-Control: no-cache
 Postman-Token: fefda49c-6bfa-4359-acec-de23d0b44fd0
 
 {
-    "Domain": "soccer",
-    "Timestamp": "20180701",
+    "Domain": "google",
+    "Timestamp": "1530463875",
     "Author": "Mengxiong Liu",
     "Summary": "My summary",
     "Title": "My title",
@@ -25,8 +25,8 @@ curl -X POST \
   -H 'Content-Type: application/json' \
   -H 'Postman-Token: 1ac9cf6f-cbbf-4bd4-b6db-c7c6841e798f' \
   -d '{
-    "Domain": "soccer",
-    "Timestamp": "20180701",
+    "Domain": "google",
+    "Timestamp": "1530463875",
     "Author": "Mengxiong Liu",
     "Summary": "My summary",
     "Title": "My title",
