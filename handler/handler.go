@@ -139,8 +139,20 @@ func InsertNews(env *Env) func(ctx *gin.Context) {
 
 func GetNews(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		domain := ctx.Query("domain")
-		news, _, err := schemaless.GetNews(domain)
+		var news[]map[string]interface{}
+		var err error
+
+		id_str, exist := ctx.GetQuery("id")
+		if exist {
+			id, err := strconv.ParseInt(id_str, 10, 64)
+			if err != nil {
+				news, _, err = schemaless.GetNewsByField("id", id)
+			}
+		} else {
+			domain := ctx.Query("domain")
+			news, _, err = schemaless.GetNewsByField("domain", domain)
+		}
+
 		if err != nil {
 			handleFailure(err, ctx)
 		} else {

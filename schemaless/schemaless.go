@@ -167,8 +167,8 @@ func InsertNews(domain string, timestamp int64, author string, summary string, t
 	return true, nil
 }
 
-func GetNews(domain string) (news []map[string]interface{}, found bool, err error) {
-	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "news", "domain", domain)
+func GetNewsByField(field string, value interface{}) (news []map[string]interface{}, found bool, err error) {
+	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "news", field, value)
 	if !found {
 		return nil, false, errors.New("no news found")
 	}
