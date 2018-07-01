@@ -2,8 +2,10 @@
 
 User login/registration:
 * https://github.com/Jogchat/golang_backend/blob/master/user_registration_api.md
+
 News insert/get:
 * https://github.com/Jogchat/golang_backend/blob/master/news_api.md
+
 Comments insert/get:
 * 
 
