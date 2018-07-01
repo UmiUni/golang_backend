@@ -25,26 +25,33 @@ func CloseDB()  {
 }
 
 func SignupDB(username string, email string, password string, token string) (successful bool, err error) {
-	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", email)
-	if found {
+	duplicate, _ := DataStore.CheckValueExist(context.TODO(), "users", "email", email)
+	if duplicate {
 		return false, errors.New("email already registered")
+	}
+	duplicate, _ = DataStore.CheckValueExist(context.TODO(), "users", "username", username)
+	if duplicate {
+		return false, errors.New("username already exist")
 	}
 	password_hash, _ := bcrypt.GenerateFromPassword([]byte(password), hashCost)
 	token_hash, _ := bcrypt.GenerateFromPassword([]byte(token), hashCost)
 
-	body, _ := json.Marshal(map[string]interface{} {
+	id := uniqueUUID("users")
+
+	body, _ := json.Marshal(map[string]interface{}{
+		"id":       id,
 		"username": username,
-		"email": email,
+		"email":    email,
 		"password": string(password_hash),
-		"token": string(token_hash),
+		"token":    string(token_hash),
 		"activate": false,
 	})
 
 	cell := models.Cell{
-		RowKey: utils.NewUUID().Bytes(),
+		RowKey:     utils.NewUUID().Bytes(),
 		ColumnName: "users",
-		RefKey: time.Now().UnixNano(),
-		Body: body,
+		RefKey:     time.Now().UnixNano(),
+		Body:       body,
 	}
 
 	go func() {
@@ -129,8 +136,10 @@ func ActivateEmail(rowKey []byte) (err error) {
 }
 
 func InsertNews(domain string, timestamp int64, author string, summary string, title string, text string, url string) (successful bool, err error) {
+	id := uniqueUUID("news")
+
 	body, err := json.Marshal(map[string]interface{} {
-		"id": utils.NewUUID(),
+		"id": id,
 		"domain": domain,
 		"timestamp": timestamp,
 		"author": author,
