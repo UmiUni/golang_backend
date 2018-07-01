@@ -34,6 +34,8 @@ curl -X POST \
 }'
 ```
 
+
+
 # Get_news endpoint:
 
 ```
@@ -50,20 +52,14 @@ curl -X GET \
   'http://localhost:3001/get_news?domain=soccer' \
   -H 'Cache-Control: no-cache' \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: 1f44b44b-4a01-4326-af69-8e8d906f01a9' \
-  -d '{
-	"Domain": "soccer",
-}'
+  -H 'Postman-Token: ceeaca02-5dd7-4764-9380-414263e77031' 
 ```
 ## Get news by id:
 ```
 curl -X GET \
-  'http://localhost:3001/get_news?domain=soccer' \
+  'http://localhost:3001/get_news?id=22b35308-afcf-47dc-9b26-11e46700273a' \
   -H 'Cache-Control: no-cache' \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: 1f44b44b-4a01-4326-af69-8e8d906f01a9' \
-  -d '{
-	"id": "id",
-}'
+  -H 'Postman-Token: ceeaca02-5dd7-4764-9380-414263e77031' 
 ```
 
