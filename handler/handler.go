@@ -150,3 +150,15 @@ func GetNews(env *Env) func(ctx *gin.Context) {
 		}
 	}
 }
+
+func CommentOn(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+
+	}
+}
+
+func GetComment(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+
+	}
+}

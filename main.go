@@ -34,8 +34,8 @@ func main() {
 	r.POST("/insert_news", handler.InsertNews(env))
 	r.GET("/get_news", handler.GetNews(env))
 
-	r.POST("/comment_on", nil)
-	r.GET("/get_comment", nil)
+	r.POST("/comment_on", handler.CommentOn(env))
+	r.GET("/get_comment", handler.GetComment(env))
 
 	r.Run(env.Port)
 }
