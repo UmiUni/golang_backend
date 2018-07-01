@@ -52,7 +52,7 @@ curl -X GET \
   'http://localhost:3001/get_news?domain=soccer' \
   -H 'Cache-Control: no-cache' \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: ceeaca02-5dd7-4764-9380-414263e77031' 
+  -H 'Postman-Token: d649bd3e-3b31-4033-b949-f0d9e35deed3'
 ```
 ## Get news by id:
 ```
