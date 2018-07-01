@@ -10,6 +10,7 @@ import (
 	"code.jogchat.internal/go-schemaless/models"
 	"golang.org/x/crypto/bcrypt"
 	"code.jogchat.internal/go-schemaless"
+	"github.com/satori/go.uuid"
 )
 
 const hashCost = 8
@@ -128,8 +129,9 @@ func ActivateEmail(rowKey []byte) (err error) {
 	return nil
 }
 
-func InsertNews(domain string, timestamp int64, author string, summary string, title string, text string, url string) (successful bool, err error) {
+func InsertNews(id uuid.UUID, domain string, timestamp int64, author string, summary string, title string, text string, url string) (successful bool, err error) {
 	body, err := json.Marshal(map[string]interface{} {
+		"id": id,
 		"domain": domain,
 		"timestamp": timestamp,
 		"author": author,
@@ -156,4 +158,3 @@ func InsertNews(domain string, timestamp int64, author string, summary string, t
 
 	return true, nil
 }
-
