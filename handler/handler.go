@@ -162,8 +162,7 @@ func CommentOn(env *Env) func(ctx *gin.Context) {
 
 func GetComment(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		params := readParams(ctx)
-		parent_id := params["parent_id"]
+		parent_id := ctx.Query("parent_id")
 
 		comments, found, err := schemaless.GetComment(parent_id)
 		if !found {

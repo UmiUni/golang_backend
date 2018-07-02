@@ -177,9 +177,9 @@ func CommentOn(user_id string, news_id string, parent_id string, comment_on stri
 	}
 
 	body := map[string]interface{} {
-		"user_id": user_id,
-		"news_id": news_id,
-		"parent_id": parent_id,
+		"userId": user_id,
+		"newsId": news_id,
+		"parentId": parent_id,
 		"content": content,
 		"timestamp": timestamp,
 	}
@@ -197,7 +197,7 @@ func CommentOn(user_id string, news_id string, parent_id string, comment_on stri
 }
 
 func GetComment(parent_id string) (comments []map[string]interface{}, found bool, err error) {
-	cells, found, err := DataStore.GetCellsByFieldLatest(context.TODO(), "comment", "parent_id", parent_id)
+	cells, found, err := DataStore.GetCellsByFieldLatest(context.TODO(), "comment", "parentId", parent_id)
 	if !found {
 		return nil, false, errors.New("no comments found")
 	}
