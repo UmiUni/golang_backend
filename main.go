@@ -4,6 +4,7 @@ import (
 	"code.jogchat.internal/golang_backend/handler"
 	"code.jogchat.internal/golang_backend/schemaless"
 	"github.com/gin-gonic/gin"
+	"code.jogchat.internal/golang_backend/middleware"
 )
 
 
@@ -24,6 +25,7 @@ func main() {
 	defer schemaless.CloseDB()
 
 	r := gin.Default()
+	r.Use(middleware.CORSMiddleware())
 
 	// Test this with
 	//    curl -v -X POST -d "{\"username\":\"odewahn\", \"password\":\"password\"}" --header "X-Authentication: eddieTheYeti" localhost:3000/login
