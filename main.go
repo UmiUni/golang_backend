@@ -27,8 +27,6 @@ func main() {
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
 
-	// Test this with
-	//    curl -v -X POST -d "{\"username\":\"odewahn\", \"password\":\"password\"}" --header "X-Authentication: eddieTheYeti" localhost:3000/login
 	r.POST("/login", handler.Signin(env))
 	r.POST("/signup", handler.Signup(env))
 	r.GET("/activate", handler.VerifyEmail(env))
