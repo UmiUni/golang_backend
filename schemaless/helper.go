@@ -7,6 +7,8 @@ import (
 	"code.jogchat.internal/go-schemaless/models"
 	"time"
 	"encoding/json"
+	"golang.org/x/crypto/bcrypt"
+	"github.com/pkg/errors"
 )
 
 // Generate a unique UUID for entry
@@ -42,14 +44,24 @@ func constructCell(columnKey string, body map[string]interface{}) (id uuid.UUID,
 	return id, cell, nil
 }
 
-func cellsToMaps(cells []models.Cell) (results []map[string]interface{}, err error) {
-	for _, cell := range cells {
-		var body map[string]interface{}
-		err = json.Unmarshal(cell.Body, &body)
-		if err != nil {
-			return []map[string]interface{}{}, err
-		}
-		results = append(results, body)
+func mutateCell(cell models.Cell, body map[string]interface{}) models.Cell {
+	cell.Body, _ = json.Marshal(body)
+	cell.RefKey = time.Now().UnixNano()
+	return cell
+}
+
+func verifyEmailToken(email string, token string) (cell models.Cell, body map[string]interface{}, successful bool, err error) {
+	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", email)
+	if !found {
+		return cell, nil, false, errors.New("unregistered email")
 	}
-	return results, nil
+	if len(cells) != 1 {
+		panic("error: duplicate email address")
+	}
+	cell = cells[0]
+	json.Unmarshal(cell.Body, &body)
+	if err = bcrypt.CompareHashAndPassword([]byte(body["token"].(string)), []byte(token)); err != nil {
+		return cell, nil, false, errors.New("invalid token")
+	}
+	return cell, body, true, nil
 }

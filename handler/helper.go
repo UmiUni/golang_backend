@@ -11,18 +11,35 @@ import (
 )
 
 func sendVerificationEmail(env *Env, email string, token string) {
-	link := fmt.Sprintf("http://%s%s/activate?email=%s&token=%s", env.IP, env.Port, email, token)
-	mg := mailgun.NewMailgun(env.Domain, env.PrivateKey, env.PublicKey)
 	subject := "[Jogchat] Activate your account"
-	message := mg.NewMessage(env.Email, subject, "[Jogchat] Activate your account", email)
-	message.SetHtml(fmt.Sprintf(
+	text := subject
+	body := fmt.Sprintf(
+		"<html>" +
+		"<body>" +
+		"<h2>Welcome to Jogchat.com.</h2>" +
+		"<h2>This is your verification token: %s</h2>" +
+		"</body> " +
+		"</html>", token)
+	sendEmail(env, email, subject, text, body)
+}
+
+func sendResetPasswordEmail(env *Env, email string, token string)  {
+	subject := "[Jogchat] Reset password"
+	text := subject
+	body := fmt.Sprintf(
 		"<html>" +
 			"<body>" +
 			"<h2>Welcome to Jogchat.com.</h2>" +
-			"<h2>Please click on the following link to activate your account: </h2>" +
-			"<h2><a href =\"%s\">link</a></h2>" +
+			"<h2>This is your verification token: %s</h2>" +
 			"</body> " +
-			"</html>", link))
+			"</html>", token)
+	sendEmail(env, email, subject, text, body)
+}
+
+func sendEmail(env *Env, email string, subject string, text string, body string)  {
+	mg := mailgun.NewMailgun(env.Domain, env.PrivateKey, env.PublicKey)
+	message := mg.NewMessage(env.Email, subject, text, email)
+	message.SetHtml(body)
 	_, _, err := mg.Send(message)
 	utils.CheckErr(err)
 }

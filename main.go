@@ -27,17 +27,12 @@ func main() {
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
 
-	r.POST("/login", handler.Signin(env))
 	r.POST("/signup", handler.Signup(env))
-	r.GET("/activate", handler.VerifyEmail(env))
+	r.POST("/activate", handler.ActivateEmail(env))
+	r.POST("/login", handler.Signin(env))
 
-	r.POST("/upload_resume", handler.UploadResume(env))
-
-	r.POST("/insert_news", handler.InsertNews(env))
-	r.GET("/get_news", handler.GetNews(env))
-
-	r.POST("/comment_on", handler.CommentOn(env))
-	r.GET("/get_comment", handler.GetComment(env))
+	r.POST("/reset_request", handler.ResetRequest(env))
+	r.POST("/reset_password", handler.ResetPassword(env))
 
 	r.Run(env.Port)
 }

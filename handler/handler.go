@@ -8,7 +8,6 @@ import (
 	"code.jogchat.internal/golang_backend/schemaless"
 	"github.com/gin-gonic/gin"
 	"code.jogchat.internal/golang_backend/utils"
-	"strconv"
 )
 
 
@@ -30,7 +29,7 @@ func addCredentials(env *Env, ctx *gin.Context, id string, username string, emai
 		"UserId": id,
 		"Username": username,
 		"Email": email,
-		"AuthToken": utils.GetToken(env.Secret, username),
+		"AuthToken": utils.GetToken(env.Secret, email),
 	}
 	ctx.JSON(http.StatusOK, credentials)
 }
@@ -55,131 +54,65 @@ func Signin(env *Env) func(ctx *gin.Context) {
 func Signup(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		username := params["Username"]
 		email := params["Email"]
-		password := params["Password"]
-		category := params["Category"]
-		if username == "" || email == "" || password == "" {
-			handleFailure(errors.New("username, email and password cannot be empty"), ctx)
-		} else if category != "referrer" && category != "applicant" {
-			handleFailure(errors.New("invalid category"), ctx)
+		if email == "" {
+			handleFailure(errors.New("email cannot be empty"), ctx)
 		} else {
-			token := utils.GetToken(env.Secret, username)
-			info, successful, err := schemaless.SignupDB(username, email, password, category, token)
+			token := utils.GetToken(env.Secret, email)
+			successful, err := schemaless.SignupDB(email, token)
 			if !successful {
 				handleFailure(err, ctx)
 			} else {
-				addCredentials(env, ctx, info["id"], info["username"], info["email"])
 				go sendVerificationEmail(env, email, token)
 			}
 		}
 	}
 }
 
-func VerifyEmail(env *Env) func(ctx *gin.Context) {
-	return func(ctx *gin.Context) {
-		email := ctx.Query("email")
-		token := ctx.Query("token")
-		rowKey, successful, err := schemaless.VerifyEmail(email, token)
-		if !successful {
-			handleFailure(err, ctx)
-		} else {
-			err := schemaless.ActivateEmail(rowKey)
-			if err != nil {
-				handleFailure(err, ctx)
-			} else {
-				ctx.JSON(http.StatusOK, gin.H{"Congratulations": "You've activated your email."})
-			}
-		}
-	}
-}
-
-func UploadResume(env *Env) func(ctx *gin.Context) {
-	return func(ctx *gin.Context) {
-
-	}
-}
-
-func InsertNews(env *Env) func(ctx *gin.Context) {
+func ActivateEmail(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		domain := params["Domain"]
-		timestamp, _ := strconv.ParseInt(params["Timestamp"], 10, 64)
-		author := params["Author"]
-		summary := params["Summary"]
-		title := params["Title"]
-		text := params["Text"]
-		url := params["URL"]
-
-		successful, err := schemaless.InsertNews(domain, timestamp, author, summary, title, text, url)
+		email := params["Email"]
+		username := params["Username"]
+		password := params["Password"]
+		category := params["Category"]
+		token := params["Token"]
+		info, successful, err := schemaless.ActivateEmail(email, username, password, category, token)
 		if !successful {
 			handleFailure(err, ctx)
 		} else {
-			ctx.JSON(http.StatusOK, gin.H{"Congratulations": "News successfully added."})
+			addCredentials(env, ctx, info["id"], info["username"], info["email"])
 		}
 	}
 }
 
-func GetNews(env *Env) func(ctx *gin.Context) {
-	return func(ctx *gin.Context) {
-		var (
-			news[]map[string]interface{}
-			err error
-		)
-
-		id, exist := ctx.GetQuery("id")
-		if exist {
-			news, _, err = schemaless.GetNewsByField("id", id)
-		} else {
-			domain := ctx.Query("domain")
-			news, _, err = schemaless.GetNewsByField("domain", domain)
-		}
-
-		if err != nil {
-			handleFailure(err, ctx)
-		} else {
-			ctx.JSON(http.StatusOK, map[string]interface{} {
-				"news": news,
-			})
-		}
-	}
-}
-
-// If replying to other comment, parent_id should be the comment it's replying to
-// If commenting on news directly, parent_id should be the news_id
-// CommentOn can be either comment or news
-func CommentOn(env *Env) func(ctx *gin.Context) {
+// Used by frontend to send a request to reset password
+// send email to user with token
+func ResetRequest(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		user_id := params["UserId"]
-		news_id := params["NewsId"]
-		parent_id := params["ParentId"]
-		content := params["Content"]
-		comment_on := params["CommentOn"]
-		timestamp, _ := strconv.ParseInt(params["Timestamp"], 10, 64)
-
-		comment_id, successful, err := schemaless.CommentOn(user_id, news_id, parent_id, comment_on, content, timestamp)
-		if !successful {
-			handleFailure(err, ctx)
-		} else {
-			ctx.JSON(http.StatusOK, map[string]string {
-				"comment_id": comment_id,
-			})
-		}
-	}
-}
-
-func GetComment(env *Env) func(ctx *gin.Context) {
-	return func(ctx *gin.Context) {
-		parent_id := ctx.Query("parent_id")
-
-		comments, found, err := schemaless.GetComment(parent_id)
+		email := params["Email"]
+		token, found, err := schemaless.ResetRequest(email)
 		if !found {
 			handleFailure(err, ctx)
 		} else {
-			ctx.JSON(http.StatusOK, map[string]interface{} {
-				"comments": comments,
-			})
+			go sendResetPasswordEmail(env, email, token)
+		}
+	}
+}
+
+// Used by frontend after user click the password reset link in email
+func ResetPassword(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		params := readParams(ctx)
+		email := params["Email"]
+		password := params["Password"]
+		token := params["Token"]
+		info, successful, err := schemaless.ResetPassword(email, password, token)
+		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			addCredentials(env, ctx, info["id"], info["username"], info["email"])
 		}
 	}
 }
