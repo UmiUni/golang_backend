@@ -58,11 +58,14 @@ func Signup(env *Env) func(ctx *gin.Context) {
 		username := params["Username"]
 		email := params["Email"]
 		password := params["Password"]
+		category := params["Category"]
 		if username == "" || email == "" || password == "" {
 			handleFailure(errors.New("username, email and password cannot be empty"), ctx)
+		} else if category != "referrer" && category != "applicant" {
+			handleFailure(errors.New("invalid category"), ctx)
 		} else {
 			token := utils.GetToken(env.Secret, username)
-			info, successful, err := schemaless.SignupDB(username, email, password, token)
+			info, successful, err := schemaless.SignupDB(username, email, password, category, token)
 			if !successful {
 				handleFailure(err, ctx)
 			} else {
@@ -88,6 +91,12 @@ func VerifyEmail(env *Env) func(ctx *gin.Context) {
 				ctx.JSON(http.StatusOK, gin.H{"Congratulations": "You've activated your email."})
 			}
 		}
+	}
+}
+
+func UploadResume(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+
 	}
 }
 

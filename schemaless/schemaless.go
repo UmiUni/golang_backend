@@ -23,7 +23,7 @@ func CloseDB()  {
 	DataStore.Destroy(context.TODO())
 }
 
-func SignupDB(username string, email string, password string, token string) (info map[string]string, successful bool, err error) {
+func SignupDB(username string, email string, password string, category, token string) (info map[string]string, successful bool, err error) {
 	duplicate, _ := DataStore.CheckValueExist(context.TODO(), "users", "email", email)
 	if duplicate {
 		return nil, false, errors.New("email already registered")
@@ -39,13 +39,14 @@ func SignupDB(username string, email string, password string, token string) (inf
 		"username": username,
 		"email":    email,
 		"password": string(password_hash),
+		"category": category,
 		"token":    string(token_hash),
 		"activate": false,
 	}
 	id, cell, err := constructCell("users", body)
 
 	go func() {
-		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password")
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password", "token")
 		utils.CheckErr(err)
 	}()
 

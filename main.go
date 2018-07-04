@@ -31,6 +31,8 @@ func main() {
 	r.POST("/signup", handler.Signup(env))
 	r.GET("/activate", handler.VerifyEmail(env))
 
+	r.POST("/upload_resume", handler.UploadResume(env))
+
 	r.POST("/insert_news", handler.InsertNews(env))
 	r.GET("/get_news", handler.GetNews(env))
 
