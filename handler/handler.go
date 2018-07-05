@@ -52,10 +52,11 @@ func Signup(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
 		email := params["Email"]
+		token := utils.GetToken(env.Secret, email)
 		if email == "" {
 			handleFailure(errors.New("email cannot be empty"), ctx)
 		} else {
-			token, successful, err := schemaless.SignupDB(email)
+			successful, err := schemaless.SignupDB(email, token)
 			if !successful {
 				handleFailure(err, ctx)
 			} else {
@@ -90,7 +91,8 @@ func ResetRequest(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
 		email := params["Email"]
-		token, found, err := schemaless.ResetRequest(email)
+		token := utils.GetToken(env.Secret, email)
+		found, err := schemaless.ResetRequest(email, token)
 		if !found {
 			handleFailure(err, ctx)
 		} else {

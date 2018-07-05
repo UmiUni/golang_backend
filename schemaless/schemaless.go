@@ -22,15 +22,16 @@ func CloseDB()  {
 	DataStore.Destroy(context.TODO())
 }
 
-func SignupDB(email string) (token string, successful bool, err error) {
+func SignupDB(email string, token string) (successful bool, err error) {
 	duplicate, _ := DataStore.CheckValueExist(context.TODO(), "users", "email", email)
 	if duplicate {
-		return token, false, errors.New("email already registered")
+		return false, errors.New("email already registered")
 	}
-	token = utils.NewUUID().String()
+	token_hash, _ := bcrypt.GenerateFromPassword([]byte(token), hashCost)
+
 	body := map[string]interface{} {
 		"email": email,
-		"token": token,
+		"token": string(token_hash),
 		"activate": false,
 	}
 	_, cell, err := constructCell("users", body)
@@ -40,7 +41,7 @@ func SignupDB(email string) (token string, successful bool, err error) {
 		utils.CheckErr(err)
 	}()
 
-	return token, true, nil
+	return true, nil
 }
 
 func ActivateEmail(email string, username string, password string, token string) (info map[string]string, successful bool, err error) {
@@ -93,15 +94,25 @@ func SigninDB(email string, password string) (info map[string]string, successful
 	return info, true, nil
 }
 
-func ResetRequest(email string) (token string, found bool, err error) {
+func ResetRequest(email string, token string) (found bool, err error) {
 	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", email)
 	if !found {
-		return token, false, errors.New("unregistered email")
+		return false, errors.New("unregistered email")
 	}
-	var cell map[string]interface{}
-	json.Unmarshal(cells[0].Body, &cell)
+	cell := cells[0]
 
-	return cell["token"].(string), true, nil
+	var body map[string]interface{}
+	json.Unmarshal(cell.Body, &body)
+	token_hash, _ := bcrypt.GenerateFromPassword([]byte(token), hashCost)
+	body["token"] = string(token_hash)
+	cell = mutateCell(cell, body)
+
+	go func() {
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password", "token")
+		utils.CheckErr(err)
+	}()
+
+	return true, nil
 }
 
 func ResetPassword(email string, password string, token string) (info map[string]string, successful bool, err error) {
