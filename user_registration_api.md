@@ -3,7 +3,7 @@ user_registration_api.md API:
 **User Signup**:
 ```$xslt
 POST /signup HTTP/1.1
-Host: localhost:3001
+Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
 Postman-Token: e6223021-522c-45fe-9336-e5a9aeaf559e
@@ -16,7 +16,7 @@ Postman-Token: e6223021-522c-45fe-9336-e5a9aeaf559e
 **Activate Email**:
 ```$xslt
 POST /activate HTTP/1.1
-Host: localhost:3001
+Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
 Postman-Token: c21b47e0-1cea-4270-b05a-255a308f6652
@@ -25,7 +25,6 @@ Postman-Token: c21b47e0-1cea-4270-b05a-255a308f6652
 	"Username": "mliu",
 	"Password": "mengxiong",
 	"Email": "liumengxiong1218@gmail.com",
-	"Category": "applicant",
 	"Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEwMTc0MTMsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoibGl1bWVuZ3hpb25nMTIxOEBnbWFpbC5jb20ifQ.ft10FCf6ONPg64f7oPqWY6Y1Dgo5Sx_tpLObbT084do"
 }
 ```
@@ -33,7 +32,7 @@ Postman-Token: c21b47e0-1cea-4270-b05a-255a308f6652
 **User Login**:
 ```$xslt
 POST /login HTTP/1.1
-Host: localhost:3001
+Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
 Postman-Token: f9cd548e-c112-4f6f-ad6a-02ea0e8c25c0
@@ -48,7 +47,7 @@ Postman-Token: f9cd548e-c112-4f6f-ad6a-02ea0e8c25c0
 **User Request Password Reset**:
 ```$xslt
 POST /reset_request HTTP/1.1
-Host: localhost:3001
+Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
 Postman-Token: d7c1297f-61c6-4d96-b889-a899248edc29
@@ -62,7 +61,7 @@ Postman-Token: d7c1297f-61c6-4d96-b889-a899248edc29
 **User Reset Password**:
 ```$xslt
 POST /reset_password HTTP/1.1
-Host: localhost:3001
+Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
 Postman-Token: 9f4d4eb5-5a91-4d7f-b648-107b9073aab3
