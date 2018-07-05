@@ -1,38 +1,76 @@
 user_registration_api.md API:
 
-Sign up:
-```
-curl -X POST \
-  http://178.128.0.108:3001/signup \
-  -H 'Cache-Control: no-cache' \
-  -H 'Content-Type: application/json' \
-  -H 'Postman-Token: a8b8f207-21b3-44a4-962a-77560b15993e' \
-  -d '{
-    "Username": "superchaoran",
-    "Password": "8515111q",
-    "Email": "superchaoran@gmail.com"
-}' | jq .
-```
-Sign up possibilities:
-```
-POST http://178.128.0.108:3001/signup
-raw JSON request:
+**User Signup**:
+```$xslt
+POST /signup HTTP/1.1
+Host: localhost:3001
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: e6223021-522c-45fe-9336-e5a9aeaf559e
+
 {
-    "Username": "superchaoran",
-    "Password": "8515111q",
-    "Email": "superchaoran@gmail.com"
+	"Email": "liumengxiong1218@gmail.com"
 }
-raw JSON response (success):
+```
+
+**Activate Email**:
+```$xslt
+POST /activate HTTP/1.1
+Host: localhost:3001
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: c21b47e0-1cea-4270-b05a-255a308f6652
+
 {
-    "Status": "OK",
-    "AccountType": "user",
-    "Email": "superchaoran@gmail.com",
-    "AuthToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzA1NjY5NzksImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoic3VwZXJjaGFvcmFuIn0.ZGX1xnj_ZMyA5qS_apgsJqKboijUSJrqzT_XyNKbvU8",
-    "IsLoggedIn": true
+	"Username": "mliu",
+	"Password": "mengxiong",
+	"Email": "liumengxiong1218@gmail.com",
+	"Category": "applicant",
+	"Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEwMTc0MTMsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoibGl1bWVuZ3hpb25nMTIxOEBnbWFpbC5jb20ifQ.ft10FCf6ONPg64f7oPqWY6Y1Dgo5Sx_tpLObbT084do"
 }
-raw JSON response (error0):
+```
+
+**User Login**:
+```$xslt
+POST /login HTTP/1.1
+Host: localhost:3001
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: f9cd548e-c112-4f6f-ad6a-02ea0e8c25c0
+
 {
-    "error": "email already registered"
+	"Username": "mliu",
+	"Password": "mengxiong1218",
+	"Email": "liumengxiong1218@gmail.com"
+}
+```
+
+**User Request Password Reset**:
+```$xslt
+POST /reset_request HTTP/1.1
+Host: localhost:3001
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: d7c1297f-61c6-4d96-b889-a899248edc29
+
+{
+	"Email": "liumengxiong1218@gmail.com"
+}
+```
+* Backend will generate a new password reset token, and send user an email with password reset link and the generated verification token.
+
+**User Reset Password**:
+```$xslt
+POST /reset_password HTTP/1.1
+Host: localhost:3001
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 9f4d4eb5-5a91-4d7f-b648-107b9073aab3
+
+{
+	"Email": "liumengxiong1218@gmail.com",
+	"Password": "mengxiong1218",
+	"Token": "eyJbbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEwMTc2NzIsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoibGl1bWVuZ3hpb25nMTIxOEBnbWFpbC5jb20ifQ.Zel4ZEG2ALmYxw8kLVbsbobj_foUB1TuTqshvgNybkI"
 }
 ```
 
@@ -40,50 +78,3 @@ raw JSON response (error0):
 * email, username都不能重复; sign in的时候必须用email sign in。
 * 前端调用api时候最好软性要求用户使用公司、edu注册。虽然现在后端还没有做validation必须要求公司使用公司, edu邮箱注册。 
 * company or edu email (e.g. @airbnb.com @stanford.edu)
-
-Sign in:
-```
-curl -X POST \
-  http://178.128.0.108:3001/login \
-  -H 'Cache-Control: no-cache' \
-  -H 'Content-Type: application/json' \
-  -H 'Postman-Token: 49f0c56a-c810-4d75-8b5e-4ffb811ae0df' \
-  -d '{
-    "Email": "superchaoran@gmail.com",
-    "Password": "8515111"
-}' | jq .
-```
-Sign in Possibilities:
-```
-
-raw JSON request:
-{
-    "Email": "superchaoran@gmail.com",
-    "Password": "8515111q"
-}
-raw JSON response (success):
-{
-    "Status": "OK",
-    "AccountType": "user",
-    "Email": "superchaoran@gmail.com",
-    "AuthToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzA1Njc1MjAsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoic3VwZXJjaGFvcmFuIn0.86i5NNArj12EACL0uPji2uKE26omLDStfb3iOx8wLgE",
-    "IsLoggedIn": true
-}
-raw JSON response (error0):
-{
-    "error": "please verify your email"
-}
-raw JSON response (error1):
-{
-    "error": "invalid password"
-}
-```
-
-Email activation example:
-```
-http://178.128.0.108:3001/activate?email=superchaoran@gmail.com&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzA1NjY5NzksImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoic3VwZXJjaGFvcmFuIn0.ZGX1xnj_ZMyA5qS_apgsJqKboijUSJrqzT_XyNKbvU8
-raw JSON response (success):
-{"Congratulations":"You've activated your email."}
-raw JSON response (error0):
-{"error":"email already activated"}
-```
