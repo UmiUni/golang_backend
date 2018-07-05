@@ -74,9 +74,8 @@ func ActivateEmail(env *Env) func(ctx *gin.Context) {
 		email := params["Email"]
 		username := params["Username"]
 		password := params["Password"]
-		category := params["Category"]
 		token := params["Token"]
-		info, successful, err := schemaless.ActivateEmail(email, username, password, category, token)
+		info, successful, err := schemaless.ActivateEmail(email, username, password, token)
 		if !successful {
 			handleFailure(err, ctx)
 		} else {

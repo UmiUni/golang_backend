@@ -43,7 +43,7 @@ func SignupDB(email string) (token string, successful bool, err error) {
 	return token, true, nil
 }
 
-func ActivateEmail(email string, username string, password string, category string, token string) (info map[string]string, successful bool, err error) {
+func ActivateEmail(email string, username string, password string, token string) (info map[string]string, successful bool, err error) {
 	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "username", username)
 	if found {
 		return nil, false, errors.New("username already in use")
@@ -56,7 +56,6 @@ func ActivateEmail(email string, username string, password string, category stri
 	password_hash, _ := bcrypt.GenerateFromPassword([]byte(password), hashCost)
 	body["username"] = string(username)
 	body["password"] = string(password_hash)
-	body["category"] = category
 	body["activate"] = true
 	cell = mutateCell(cell, body)
 	go func() {
