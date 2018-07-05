@@ -53,6 +53,9 @@ func ActivateEmail(email string, username string, password string, token string)
 	if !successful {
 		return nil, false, err
 	}
+	if body["activate"].(bool) {
+		return nil, false, errors.New("email already activated")
+	}
 
 	password_hash, _ := bcrypt.GenerateFromPassword([]byte(password), hashCost)
 	body["username"] = string(username)
