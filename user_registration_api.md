@@ -38,7 +38,6 @@ Cache-Control: no-cache
 Postman-Token: f9cd548e-c112-4f6f-ad6a-02ea0e8c25c0
 
 {
-	"Username": "mliu",
 	"Password": "mengxiong1218",
 	"Email": "liumengxiong1218@gmail.com"
 }
