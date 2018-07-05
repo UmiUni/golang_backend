@@ -8,6 +8,7 @@ import (
 	"time"
 	"encoding/json"
 	"github.com/pkg/errors"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Generate a unique UUID for entry
@@ -56,7 +57,7 @@ func verifyEmailToken(email string, token string) (cell models.Cell, body map[st
 	}
 	cell = cells[0]
 	json.Unmarshal(cell.Body, &body)
-	if body["token"].(string) != token {
+	if err = bcrypt.CompareHashAndPassword([]byte(body["token"].(string)), []byte(token)); err != nil {
 		return cell, nil, false, errors.New("invalid token")
 	}
 	return cell, body, true, nil
