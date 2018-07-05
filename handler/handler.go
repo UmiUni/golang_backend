@@ -2,8 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"io/ioutil"
-	"encoding/json"
 	"errors"
 	"code.jogchat.internal/golang_backend/schemaless"
 	"github.com/gin-gonic/gin"
@@ -37,12 +35,11 @@ func addCredentials(env *Env, ctx *gin.Context, id string, username string, emai
 // Login captures the data posted to the /login route
 func Signin(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		data, _ := ioutil.ReadAll(ctx.Request.Body) // Read the body of the POST request
-		// Unmarshall this into a map
-		var params map[string]string
-		json.Unmarshal(data, &params)
+		params := readParams(ctx)
+		email := params["Email"]
+		password := params["Password"]
 
-		info, successful, err := schemaless.SigninDB(params["Email"], params["Password"])
+		info, successful, err := schemaless.SigninDB(email, password)
 		if !successful {
 			handleFailure(err, ctx)
 		} else {
@@ -58,11 +55,13 @@ func Signup(env *Env) func(ctx *gin.Context) {
 		if email == "" {
 			handleFailure(errors.New("email cannot be empty"), ctx)
 		} else {
-			token := utils.GetToken(env.Secret, email)
-			successful, err := schemaless.SignupDB(email, token)
+			token, successful, err := schemaless.SignupDB(email)
 			if !successful {
 				handleFailure(err, ctx)
 			} else {
+				ctx.JSON(http.StatusOK, map[string]interface{} {
+					"message": "verification email sent",
+				})
 				go sendVerificationEmail(env, email, token)
 			}
 		}
@@ -96,6 +95,9 @@ func ResetRequest(env *Env) func(ctx *gin.Context) {
 		if !found {
 			handleFailure(err, ctx)
 		} else {
+			ctx.JSON(http.StatusOK, map[string]interface{} {
+				"message": "reset email sent",
+			})
 			go sendResetPasswordEmail(env, email, token)
 		}
 	}

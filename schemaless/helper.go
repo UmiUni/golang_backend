@@ -7,7 +7,6 @@ import (
 	"code.jogchat.internal/go-schemaless/models"
 	"time"
 	"encoding/json"
-	"golang.org/x/crypto/bcrypt"
 	"github.com/pkg/errors"
 )
 
@@ -55,12 +54,9 @@ func verifyEmailToken(email string, token string) (cell models.Cell, body map[st
 	if !found {
 		return cell, nil, false, errors.New("unregistered email")
 	}
-	if len(cells) != 1 {
-		panic("error: duplicate email address")
-	}
 	cell = cells[0]
 	json.Unmarshal(cell.Body, &body)
-	if err = bcrypt.CompareHashAndPassword([]byte(body["token"].(string)), []byte(token)); err != nil {
+	if body["token"].(string) != token {
 		return cell, nil, false, errors.New("invalid token")
 	}
 	return cell, body, true, nil

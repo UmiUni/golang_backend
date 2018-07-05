@@ -22,15 +22,15 @@ func CloseDB()  {
 	DataStore.Destroy(context.TODO())
 }
 
-func SignupDB(email string, token string) (successful bool, err error) {
+func SignupDB(email string) (token string, successful bool, err error) {
 	duplicate, _ := DataStore.CheckValueExist(context.TODO(), "users", "email", email)
 	if duplicate {
-		return false, errors.New("email already registered")
+		return token, false, errors.New("email already registered")
 	}
-	token_hash, _ := bcrypt.GenerateFromPassword([]byte(token), hashCost)
+	token = utils.NewUUID().String()
 	body := map[string]interface{} {
 		"email": email,
-		"token": string(token_hash),
+		"token": token,
 		"activate": false,
 	}
 	_, cell, err := constructCell("users", body)
@@ -40,17 +40,17 @@ func SignupDB(email string, token string) (successful bool, err error) {
 		utils.CheckErr(err)
 	}()
 
-	return true, nil
+	return token, true, nil
 }
 
 func ActivateEmail(email string, username string, password string, category string, token string) (info map[string]string, successful bool, err error) {
 	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "username", username)
 	if found {
-		return info, false, errors.New("username already in use")
+		return nil, false, errors.New("username already in use")
 	}
 	cell, body, successful, err := verifyEmailToken(email, token)
 	if !successful {
-		return info, false, err
+		return nil, false, err
 	}
 
 	password_hash, _ := bcrypt.GenerateFromPassword([]byte(password), hashCost)
@@ -77,17 +77,14 @@ func SigninDB(email string, password string) (info map[string]string, successful
 	if !found {
 		return nil, false, errors.New("unregistered email")
 	}
-	if len(cells) != 1 {
-		panic("error: duplicate email address")
-	}
 	var cell map[string]interface{}
 	json.Unmarshal(cells[0].Body, &cell)
 
-	if err = bcrypt.CompareHashAndPassword([]byte(cell["password"].(string)), []byte(password)); err != nil {
-		return nil, false, errors.New("invalid password")
-	}
 	if !cell["activate"].(bool) {
 		return nil, false, errors.New("please verify your email")
+	}
+	if err = bcrypt.CompareHashAndPassword([]byte(cell["password"].(string)), []byte(password)); err != nil {
+		return nil, false, errors.New("invalid password")
 	}
 	info = map[string]string {
 		"id": cell["id"].(string),
@@ -102,9 +99,6 @@ func ResetRequest(email string) (token string, found bool, err error) {
 	if !found {
 		return token, false, errors.New("unregistered email")
 	}
-	if len(cells) != 1 {
-		panic("error: duplicate email address")
-	}
 	var cell map[string]interface{}
 	json.Unmarshal(cells[0].Body, &cell)
 
@@ -114,7 +108,10 @@ func ResetRequest(email string) (token string, found bool, err error) {
 func ResetPassword(email string, password string, token string) (info map[string]string, successful bool, err error) {
 	cell, body, successful, err := verifyEmailToken(email, token)
 	if !successful {
-		return info, false, err
+		return nil, false, err
+	}
+	if !body["activate"].(bool) {
+		return nil, false, errors.New("please verify your email")
 	}
 
 	password_hash, _ := bcrypt.GenerateFromPassword([]byte(password), hashCost)
