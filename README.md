@@ -9,6 +9,14 @@ User login/registration:
   ```
   https://github.com/julienschmidt/httprouter
   ```
+# Clone other dependency repos
+git clone repos under $GOPATH/src/code.jogchat.internal
+https://github.com/Jogchat/dgrijalva-jwt-go
+https://github.com/Jogchat/dgryski-go-shardedkv
+https://github.com/Jogchat/dgryski-go-metro
+git clone repos under $GOPATH/src/github.com
+https://github.com/go-sql-driver/mysql.git
+
 # Jogchat React+Golang server
 
 ```
