@@ -6,8 +6,6 @@ POST /signup HTTP/1.1
 Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
-Postman-Token: e6223021-522c-45fe-9336-e5a9aeaf559e
-
 {
 	"Email": "liumengxiong1218@gmail.com"
 }
@@ -19,8 +17,6 @@ POST /activate HTTP/1.1
 Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
-Postman-Token: c21b47e0-1cea-4270-b05a-255a308f6652
-
 {
 	"Username": "mliu",
 	"Password": "mengxiong",
@@ -35,8 +31,6 @@ POST /login HTTP/1.1
 Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
-Postman-Token: f9cd548e-c112-4f6f-ad6a-02ea0e8c25c0
-
 {
 	"Password": "mengxiong1218",
 	"Email": "liumengxiong1218@gmail.com"
@@ -49,8 +43,6 @@ POST /reset_request HTTP/1.1
 Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
-Postman-Token: d7c1297f-61c6-4d96-b889-a899248edc29
-
 {
 	"Email": "liumengxiong1218@gmail.com"
 }
@@ -63,8 +55,6 @@ POST /reset_password HTTP/1.1
 Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
-Postman-Token: 9f4d4eb5-5a91-4d7f-b648-107b9073aab3
-
 {
 	"Email": "liumengxiong1218@gmail.com",
 	"Password": "mengxiong1218",
