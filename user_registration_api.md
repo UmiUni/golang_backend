@@ -6,8 +6,6 @@ POST /signup HTTP/1.1
 Host: 178.128.0.108:3001
 Content-Type: application/json
 Cache-Control: no-cache
-Postman-Token: e6223021-522c-45fe-9336-e5a9aeaf559e
-
 {
 	"Email": "liumengxiong1218@gmail.com"
 }
