@@ -115,3 +115,27 @@ func ResetPassword(env *Env) func(ctx *gin.Context) {
 		}
 	}
 }
+
+func AddCompany(env *Env) func(ctx *gin.Context) {
+	return AddCompanySchool(env, "companies")
+}
+
+func AddSchool(env *Env) func(ctx *gin.Context) {
+	return AddCompanySchool(env, "schools")
+}
+
+func AddCompanySchool(env *Env, category string) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		params := readParams(ctx)
+		name := params["Name"]
+		domain := params["Domain"]
+		successful, err := schemaless.AddCompanySchool(category, name, domain)
+		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			ctx.JSON(http.StatusOK, map[string]interface{} {
+				"message": "company added",
+			})
+		}
+	}
+}
