@@ -48,12 +48,14 @@ func main() {
 	r.POST("/applicant_signup", handler.ApplicantSignup(env))
 	r.POST("/activate", handler.ActivateEmail(env))
 	r.POST("/login", handler.Signin(env))
-
 	r.POST("/reset_request", handler.ResetRequest(env))
 	r.POST("/reset_password", handler.ResetPassword(env))
-
+  
     // use ginSwagger middleware to 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	r.POST("/add_company", handler.AddCompany(env))
+	r.POST("/add_school", handler.AddSchool(env))
 
 	r.Run(env.Port)
 }

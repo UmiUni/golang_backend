@@ -143,3 +143,26 @@ func ResetPassword(email string, password string, token string) (info map[string
 	}
 	return info, true, nil
 }
+
+func AddCompanySchool(category, name string, domain string) (successful bool, err error) {
+	duplicate, _ := DataStore.CheckValueExist(context.TODO(), category, "name", name)
+	if duplicate {
+		return false, errors.New(category + " name already exist")
+	}
+	duplicate, _ = DataStore.CheckValueExist(context.TODO(), category, "domain", domain)
+	if duplicate {
+		return false, errors.New(category + " domain already exist")
+	}
+
+	body := map[string]interface{} {
+		"name": name,
+		"domain": domain,
+	}
+	_, cell, err := constructCell(category, body)
+	go func() {
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
+		utils.CheckErr(err)
+	}()
+
+	return true, nil
+}
