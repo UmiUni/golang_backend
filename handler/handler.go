@@ -134,7 +134,7 @@ func AddCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 			handleFailure(err, ctx)
 		} else {
 			ctx.JSON(http.StatusOK, map[string]interface{} {
-				"message": "company added",
+				"message": category + " added",
 			})
 		}
 	}
