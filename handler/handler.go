@@ -20,35 +20,15 @@ type Env struct {
 	PublicKey	string
 }
 
-// GetCredentials determines if the username and password is valid
-// This is where logic would go to validate and return account info
-func addCredentials(env *Env, ctx *gin.Context, id string, username string, email string) {
-	credentials := map[string]string {
-		"UserId": id,
-		"Username": username,
-		"Email": email,
-		"AuthToken": utils.GetToken(env.Secret, email),
-	}
-	ctx.JSON(http.StatusOK, credentials)
+func ReferrerSignup(env *Env) func(ctx *gin.Context) {
+	return Signup(env, "referrer")
 }
 
-// Login captures the data posted to the /login route
-func Signin(env *Env) func(ctx *gin.Context) {
-	return func(ctx *gin.Context) {
-		params := readParams(ctx)
-		email := params["Email"]
-		password := params["Password"]
-
-		info, successful, err := schemaless.SigninDB(email, password)
-		if !successful {
-			handleFailure(err, ctx)
-		} else {
-			addCredentials(env, ctx, info["id"], info["username"], info["email"])
-		}
-	}
+func ApplicantSignup(env *Env) func(ctx *gin.Context) {
+	return Signup(env, "applicant")
 }
 
-func Signup(env *Env) func(ctx *gin.Context) {
+func Signup(env *Env, category string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
 		email := params["Email"]
@@ -56,7 +36,7 @@ func Signup(env *Env) func(ctx *gin.Context) {
 		if email == "" {
 			handleFailure(errors.New("email cannot be empty"), ctx)
 		} else {
-			successful, err := schemaless.SignupDB(email, token)
+			successful, err := schemaless.SignupDB(category, email, token)
 			if !successful {
 				handleFailure(err, ctx)
 			} else {
@@ -77,6 +57,22 @@ func ActivateEmail(env *Env) func(ctx *gin.Context) {
 		password := params["Password"]
 		token := params["Token"]
 		info, successful, err := schemaless.ActivateEmail(email, username, password, token)
+		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			addCredentials(env, ctx, info["id"], info["username"], info["email"])
+		}
+	}
+}
+
+// Login captures the data posted to the /login route
+func Signin(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		params := readParams(ctx)
+		email := params["Email"]
+		password := params["Password"]
+
+		info, successful, err := schemaless.SigninDB(email, password)
 		if !successful {
 			handleFailure(err, ctx)
 		} else {

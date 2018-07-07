@@ -22,7 +22,7 @@ func CloseDB()  {
 	DataStore.Destroy(context.TODO())
 }
 
-func SignupDB(email string, token string) (successful bool, err error) {
+func SignupDB(category, email string, token string) (successful bool, err error) {
 	duplicate, _ := DataStore.CheckValueExist(context.TODO(), "users", "email", email)
 	if duplicate {
 		return false, errors.New("email already registered")
@@ -32,6 +32,7 @@ func SignupDB(email string, token string) (successful bool, err error) {
 	body := map[string]interface{} {
 		"email": email,
 		"token": string(token_hash),
+		category: true,
 		"activate": false,
 	}
 	_, cell, err := constructCell("users", body)

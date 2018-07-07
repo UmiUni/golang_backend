@@ -25,7 +25,8 @@ func main() {
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
 
-	r.POST("/signup", handler.Signup(env))
+	r.POST("/referrer_signup", handler.ReferrerSignup(env))
+	r.POST("/applicant_signup", handler.ApplicantSignup(env))
 	r.POST("/activate", handler.ActivateEmail(env))
 	r.POST("/login", handler.Signin(env))
 

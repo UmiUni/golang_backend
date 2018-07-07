@@ -10,6 +10,19 @@ import (
 	"encoding/json"
 )
 
+
+// GetCredentials determines if the username and password is valid
+// This is where logic would go to validate and return account info
+func addCredentials(env *Env, ctx *gin.Context, id string, username string, email string) {
+	credentials := map[string]string {
+		"UserId": id,
+		"Username": username,
+		"Email": email,
+		"AuthToken": utils.GetToken(env.Secret, email),
+	}
+	ctx.JSON(http.StatusOK, credentials)
+}
+
 func sendVerificationEmail(env *Env, email string, token string) {
 	subject := "[Jogchat] Activate your account"
 	text := subject
