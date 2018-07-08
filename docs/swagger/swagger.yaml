@@ -1,48 +1,94 @@
 basePath: /
 definitions:
-  model.ApplicantSignupAPIError0:
+  model.ActivateAndSignupRequest:
     properties:
-      error:
-        example: email cannot be empty
+      Email:
+        example: wang374@uiuc.edu
+        type: string
+      Password:
+        example: wang374password
+        type: string
+      Token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEyOTE4MTgsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoic3VwZXJjaGFvcmFuQGdtYWlsLmNvbSJ9.yYQOAIyHQJJUntMGtRaAm2bXF-HvvsK6vHjhe0SDsHg
+        type: string
+      Username:
+        example: wang374
         type: string
     type: object
-  model.ApplicantSignupAPIError1:
+  model.ActivateAndSignupResponseAPIError0:
     properties:
       error:
-        example: email already registered
+        example: username already in use
         type: string
     type: object
-  model.ApplicantSignupEmailStruct:
+  model.ActivateAndSignupResponseAPIError1:
+    properties:
+      error:
+        example: invalid token
+        type: string
+    type: object
+  model.ActivateAndSignupResponseAPIError2:
+    properties:
+      error:
+        example: email already activated
+        type: string
+    type: object
+  model.ActivateAndSignupResponseSuccess:
+    properties:
+      AuthToken:
+        type: string
+      Email:
+        example: wang374@uiuc.edu
+        type: string
+      UserId:
+        type: string
+      Username:
+        example: wang374
+        type: string
+    type: object
+  model.ApplicantSignupEmailRequest:
     properties:
       Email:
         example: wang374@uiuc.edu
         type: string
     type: object
-  model.ApplicantSignupSuccessStruct:
-    properties:
-      message:
-        example: verification email sent
-        type: string
-    type: object
-  model.ReferrerSignupAPIError0:
+  model.ApplicantSignupResponseAPIError0:
     properties:
       error:
         example: email cannot be empty
         type: string
     type: object
-  model.ReferrerSignupAPIError1:
+  model.ApplicantSignupResponseAPIError1:
     properties:
       error:
         example: email already registered
         type: string
     type: object
-  model.ReferrerSignupEmailStruct:
+  model.ApplicantSignupResponseSuccess:
+    properties:
+      message:
+        example: verification email sent
+        type: string
+    type: object
+  model.ReferrerSignupEmailRequest:
     properties:
       Email:
         example: admin@jogchat.com
         type: string
     type: object
-  model.ReferrerSignupSuccessStruct:
+  model.ReferrerSignupResponseAPIError0:
+    properties:
+      error:
+        example: email cannot be empty
+        type: string
+    type: object
+  model.ReferrerSignupResponseAPIError1:
+    properties:
+      error:
+        example: email already registered
+        type: string
+    type: object
+  model.ReferrerSignupResponseSuccess:
     properties:
       message:
         example: verification email sent
@@ -62,54 +108,82 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
-  /applicant_signup:
+  /activate_and_signup:
     post:
       consumes:
       - application/json
-      description: ApplicantSignup
+      description: When user click on the GET link in user email, it will hit a frontend
+        page as a GET request with
       parameters:
-      - description: Body JSON
+      - description: ActivateAndSignupRequest is a POST JSON type
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/model.ApplicantSignupEmailStruct'
+          $ref: '#/definitions/model.ActivateAndSignupRequest'
           type: object
       responses:
         "200":
           description: 'Success: verification email sent'
           schema:
-            $ref: '#/definitions/model.ApplicantSignupSuccessStruct'
+            $ref: '#/definitions/model.ActivateAndSignupResponseSuccess'
             type: object
         "400":
-          description: email already registered
+          description: email already activated
           schema:
-            $ref: '#/definitions/model.ApplicantSignupAPIError1'
+            $ref: '#/definitions/model.ActivateAndSignupResponseAPIError2'
             type: object
-      summary: ApplicantSignup
-  /referrer_signup:
+      summary: ActivateAndSignup
+  /applicant_check_signup_email:
     post:
       consumes:
       - application/json
-      description: ReferrerSignup
+      description: Provide a school/university edu email to sign up for the applicant
+        portal, if the email does not
       parameters:
-      - description: Body JSON
+      - description: ApplicantSignupEmailRequest is a POST JSON type
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/model.ReferrerSignupEmailStruct'
+          $ref: '#/definitions/model.ApplicantSignupEmailRequest'
           type: object
       responses:
         "200":
           description: 'Success: verification email sent'
           schema:
-            $ref: '#/definitions/model.ReferrerSignupSuccessStruct'
+            $ref: '#/definitions/model.ApplicantSignupResponseSuccess'
             type: object
         "400":
           description: email already registered
           schema:
-            $ref: '#/definitions/model.ReferrerSignupAPIError1'
+            $ref: '#/definitions/model.ApplicantSignupResponseAPIError1'
             type: object
-      summary: ReferrerSignup
+      summary: ApplicantCheckSignupEmail
+  /referrer_check_signup_email:
+    post:
+      consumes:
+      - application/json
+      description: Onboarding user will provide a company email to sign up for the
+        referral portal, if the email does not
+      parameters:
+      - description: ReferrerSignupEmailRequest is a POST JSON type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.ReferrerSignupEmailRequest'
+          type: object
+      responses:
+        "200":
+          description: 'Success: verification email sent'
+          schema:
+            $ref: '#/definitions/model.ReferrerSignupResponseSuccess'
+            type: object
+        "400":
+          description: email already registered
+          schema:
+            $ref: '#/definitions/model.ReferrerSignupResponseAPIError1'
+            type: object
+      summary: ReferrerCheckSignupEmail
 swagger: "2.0"
