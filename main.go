@@ -50,6 +50,9 @@ func main() {
 	r.POST("/login", handler.Signin(env))
 	r.POST("/reset_request", handler.ResetRequest(env))
 	r.POST("/reset_password", handler.ResetPassword(env))
+
+	r.POST("/upload_resume", handler.UploadResume(env))
+	r.GET("/get_resume", handler.GetResume(env))
   
     // use ginSwagger middleware to 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

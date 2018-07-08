@@ -116,6 +116,44 @@ func ResetPassword(env *Env) func(ctx *gin.Context) {
 	}
 }
 
+func UploadResume(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		username := ctx.PostForm("Username")
+		email := ctx.PostForm("Email")
+		file, err := ctx.FormFile("Resume")
+		if err != nil {
+			handleFailure(err, ctx)
+		} else {
+			filename := resumePath(username, file.Filename)
+			err = ctx.SaveUploadedFile(file, filename)
+			if err != nil {
+				handleFailure(err, ctx)
+			} else {
+				sucessful, err := schemaless.UploadResume(email, filename)
+				if !sucessful {
+					handleFailure(err, ctx)
+				} else {
+					ctx.JSON(http.StatusOK, gin.H{
+						"message": "resume uploaded",
+					})
+				}
+			}
+		}
+	}
+}
+
+func GetResume(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		email := ctx.Query("Email")
+		filename, found, err := schemaless.GetResume(email)
+		if !found {
+			handleFailure(err, ctx)
+		} else {
+			ctx.File(filename)
+		}
+	}
+}
+
 func AddCompany(env *Env) func(ctx *gin.Context) {
 	return AddCompanySchool(env, "companies")
 }
