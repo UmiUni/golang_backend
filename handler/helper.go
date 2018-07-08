@@ -70,5 +70,9 @@ func handleFailure(err error, ctx *gin.Context) {
 
 // TODO: change path to S3 bucket
 func resumePath(username string, filename string) string {
-	return "tmp/" + username + "_" + filename
+	return "tmp/resume" + username + "_" + filename
+}
+
+func iconPath(name string, filename string) string {
+	return "tmp/icon/" + name + "_" + filename
 }

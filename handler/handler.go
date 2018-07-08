@@ -208,10 +208,20 @@ func AddSchool(env *Env) func(ctx *gin.Context) {
 
 func AddCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		params := readParams(ctx)
-		name := params["Name"]
-		domain := params["Domain"]
-		successful, err := schemaless.AddCompanySchool(category, name, domain)
+		name := ctx.PostForm("Name")
+		domain := ctx.PostForm("Domain")
+		file, err := ctx.FormFile("Icon")
+		if err != nil {
+			handleFailure(err, ctx)
+			return
+		}
+		filename := iconPath(name, file.Filename)
+		err = ctx.SaveUploadedFile(file, filename)
+		if err != nil {
+			handleFailure(err, ctx)
+			return
+		}
+		successful, err := schemaless.AddCompanySchool(category, name, domain, filename)
 		if !successful {
 			handleFailure(err, ctx)
 		} else {
