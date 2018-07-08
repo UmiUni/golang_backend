@@ -1,5 +1,18 @@
-basePath: /v2
-host: petstore.swagger.io
+basePath: /
+definitions:
+  model.ReferrerSignupEmailStruct:
+    properties:
+      Email:
+        example: superchaoran@gmail.com
+        type: string
+    type: object
+  model.ReferrerSignupSuccessStruct:
+    properties:
+      message:
+        example: verification email sent
+        type: string
+    type: object
+host: 178.128.0.108:3001
 info:
   contact:
     email: support@swagger.io
@@ -12,5 +25,25 @@ info:
   termsOfService: http://swagger.io/terms/
   title: Swagger Example API
   version: "1.0"
-paths: {}
+paths:
+  /referrer_signup:
+    post:
+      consumes:
+      - application/json
+      description: Signup
+      parameters:
+      - description: Body JSON
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.ReferrerSignupEmailStruct'
+          type: object
+      responses:
+        "200":
+          description: 'Success: verification email sent'
+          schema:
+            $ref: '#/definitions/model.ReferrerSignupSuccessStruct'
+            type: object
+      summary: Signup
 swagger: "2.0"

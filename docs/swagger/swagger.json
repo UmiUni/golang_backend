@@ -15,7 +15,58 @@
         },
         "version": "1.0"
     },
-    "host": "petstore.swagger.io",
-    "basePath": "/v2",
-    "paths": {}
+    "host": "178.128.0.108:3001",
+    "basePath": "/",
+    "paths": {
+        "/referrer_signup": {
+            "post": {
+                "description": "Signup",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Signup",
+                "parameters": [
+                    {
+                        "description": "Body JSON",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ReferrerSignupEmailStruct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success: verification email sent",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ReferrerSignupSuccessStruct"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.ReferrerSignupEmailStruct": {
+            "type": "object",
+            "properties": {
+                "Email": {
+                    "type": "string",
+                    "example": "superchaoran@gmail.com"
+                }
+            }
+        },
+        "model.ReferrerSignupSuccessStruct": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "verification email sent"
+                }
+            }
+        }
+    }
 }

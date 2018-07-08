@@ -6,6 +6,7 @@ import (
 	"code.jogchat.internal/golang_backend/schemaless"
 	"github.com/gin-gonic/gin"
 	"code.jogchat.internal/golang_backend/utils"
+	//model "code.jogchat.internal/golang_backend/model"
 )
 
 
@@ -20,6 +21,16 @@ type Env struct {
 	PublicKey	string
 }
 
+// @Title Signup
+// @Summary Signup
+// @Description Signup
+// @Accept  json
+// @Param body body model.ReferrerSignupEmailStruct true "Body JSON"
+// @Example "{"email":"superchaoran@gmail.com"}"
+// @Success 200 {object} model.ReferrerSignupSuccessStruct "Success: verification email sent"
+// @Failure 400 {object} model.APIError0 "email cannot be empty"
+// @Failure 400 {object} model.APIError1 "email already registered"
+// @Router /referrer_signup [post]
 func ReferrerSignup(env *Env) func(ctx *gin.Context) {
 	return Signup(env, "referrer")
 }
