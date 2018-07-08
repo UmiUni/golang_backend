@@ -1,7 +1,7 @@
 package model
 
 type ReferrerSignupEmailStruct struct {
-	Email string `required:"true" json:"Email" example:"superchaoran@gmail.com"`
+	Email string `required:"true" json:"Email" example:"admin@jogchat.com"`
 }
 
 type ReferrerSignupSuccessStruct struct {
@@ -17,7 +17,7 @@ type ReferrerSignupAPIError1 struct {
 }
 
 type ApplicantSignupEmailStruct struct {
-	Email string `required:"true" json:"Email" example:"superchaoran@gmail.com"`
+	Email string `required:"true" json:"Email" example:"wang374@uiuc.edu"`
 }
 
 type ApplicantSignupSuccessStruct struct {
