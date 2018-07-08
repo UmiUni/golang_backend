@@ -42,8 +42,8 @@ func ReferrerSignup(env *Env) func(ctx *gin.Context) {
 // @Param body body model.ApplicantSignupEmailStruct true "Body JSON"
 // @Example "{"email":"wang374@uiuc.edu"}"
 // @Success 200 {object} model.ApplicantSignupSuccessStruct "Success: verification email sent"
-// @Failure 400 {object} ApplicantSignupAPIError0 "email cannot be empty"
-// @Failure 400 {object} ApplicantSignupAPIError1 "email already registered"
+// @Failure 400 {object} model.ApplicantSignupAPIError0 "email cannot be empty"
+// @Failure 400 {object} model.ApplicantSignupAPIError1 "email already registered"
 // @Router /applicant_signup [post]
 func ApplicantSignup(env *Env) func(ctx *gin.Context) {
 	return Signup(env, "applicant")

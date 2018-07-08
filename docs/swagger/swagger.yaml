@@ -1,5 +1,41 @@
 basePath: /
 definitions:
+  model.ApplicantSignupAPIError0:
+    properties:
+      error:
+        example: email cannot be empty
+        type: string
+    type: object
+  model.ApplicantSignupAPIError1:
+    properties:
+      error:
+        example: email already registered
+        type: string
+    type: object
+  model.ApplicantSignupEmailStruct:
+    properties:
+      Email:
+        example: superchaoran@gmail.com
+        type: string
+    type: object
+  model.ApplicantSignupSuccessStruct:
+    properties:
+      message:
+        example: verification email sent
+        type: string
+    type: object
+  model.ReferrerSignupAPIError0:
+    properties:
+      error:
+        example: email cannot be empty
+        type: string
+    type: object
+  model.ReferrerSignupAPIError1:
+    properties:
+      error:
+        example: email already registered
+        type: string
+    type: object
   model.ReferrerSignupEmailStruct:
     properties:
       Email:
@@ -26,11 +62,36 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /applicant_signup:
+    post:
+      consumes:
+      - application/json
+      description: ApplicantSignup
+      parameters:
+      - description: Body JSON
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.ApplicantSignupEmailStruct'
+          type: object
+      responses:
+        "200":
+          description: 'Success: verification email sent'
+          schema:
+            $ref: '#/definitions/model.ApplicantSignupSuccessStruct'
+            type: object
+        "400":
+          description: email already registered
+          schema:
+            $ref: '#/definitions/model.ApplicantSignupAPIError1'
+            type: object
+      summary: ApplicantSignup
   /referrer_signup:
     post:
       consumes:
       - application/json
-      description: Signup
+      description: ReferrerSignup
       parameters:
       - description: Body JSON
         in: body
@@ -45,5 +106,10 @@ paths:
           schema:
             $ref: '#/definitions/model.ReferrerSignupSuccessStruct'
             type: object
-      summary: Signup
+        "400":
+          description: email already registered
+          schema:
+            $ref: '#/definitions/model.ReferrerSignupAPIError1'
+            type: object
+      summary: ReferrerSignup
 swagger: "2.0"
