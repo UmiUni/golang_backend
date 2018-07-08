@@ -76,9 +76,9 @@ func ActivateEmail(email string, username string, password string, token string)
 }
 
 func SigninDB(email string, password string) (info map[string]string, successful bool, err error) {
-	_, body, found, err := getUserByUniqueField("email", email)
+	_, body, found, _ := getUserByUniqueField("email", email)
 	if !found {
-		return nil, false, err
+		return nil, false, errors.New("email not registered")
 	}
 	if !body["activate"].(bool) {
 		return nil, false, errors.New("please verify your email")
@@ -97,7 +97,7 @@ func SigninDB(email string, password string) (info map[string]string, successful
 func ResetRequest(email string, token string) (found bool, err error) {
 	cell, body, found, err := getUserByUniqueField("email", email)
 	if !found {
-		return false, err
+		return false, errors.New("email not registered")
 	}
 	token_hash, _ := bcrypt.GenerateFromPassword([]byte(token), hashCost)
 	body["token"] = string(token_hash)
@@ -136,10 +136,10 @@ func ResetPassword(email string, password string, token string) (info map[string
 	return info, true, nil
 }
 
-func UploadResume(email string, filename string) (successful bool, err error) {
-	cell, body, found, err := getUserByUniqueField("email", email)
+func UploadResume(username string, filename string) (successful bool, err error) {
+	cell, body, found, err := getUserByUniqueField("username", username)
 	if !found {
-		return false, err
+		return false, errors.New("username not registered")
 	}
 	body["resume"] = filename
 	cell = mutateCell(cell, body)
@@ -151,10 +151,10 @@ func UploadResume(email string, filename string) (successful bool, err error) {
 	return true, nil
 }
 
-func GetResume(email string) (filename string, found bool, err error) {
-	_, body, found, err := getUserByUniqueField("email", email)
+func GetResume(username string) (filename string, found bool, err error) {
+	_, body, found, err := getUserByUniqueField("username", username)
 	if !found {
-		return filename, false, err
+		return filename, false, errors.New("username not registered")
 	}
 	resume, ok := body["resume"]
 	if !ok {
