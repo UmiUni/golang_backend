@@ -52,7 +52,7 @@ func Signup(env *Env, category string) func(ctx *gin.Context) {
 		if !successful {
 			handleFailure(err, ctx)
 		} else {
-			ctx.JSON(http.StatusOK, map[string]interface{} {
+			ctx.JSON(http.StatusOK, gin.H{
 				"message": "verification email sent",
 			})
 			go sendVerificationEmail(env, email, token)
@@ -102,7 +102,7 @@ func ResetRequest(env *Env) func(ctx *gin.Context) {
 		if !found {
 			handleFailure(err, ctx)
 		} else {
-			ctx.JSON(http.StatusOK, map[string]interface{} {
+			ctx.JSON(http.StatusOK, gin.H{
 				"message": "reset email sent",
 			})
 			go sendResetPasswordEmail(env, email, token)
@@ -185,7 +185,7 @@ func AddCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 		if !successful {
 			handleFailure(err, ctx)
 		} else {
-			ctx.JSON(http.StatusOK, map[string]interface{} {
+			ctx.JSON(http.StatusOK, gin.H{
 				"message": category + " added",
 			})
 		}
