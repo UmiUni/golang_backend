@@ -139,7 +139,7 @@ func ResetPassword(email string, password string, token string) (info map[string
 func UploadResume(username string, filename string) (successful bool, err error) {
 	cell, body, found, err := getUserByUniqueField("username", username)
 	if !found {
-		return false, errors.New("username not registered")
+		return false, errors.New("username does not exist")
 	}
 	body["resume"] = filename
 	cell = mutateCell(cell, body)
@@ -154,7 +154,7 @@ func UploadResume(username string, filename string) (successful bool, err error)
 func GetResume(username string) (filename string, found bool, err error) {
 	_, body, found, err := getUserByUniqueField("username", username)
 	if !found {
-		return filename, false, errors.New("username not registered")
+		return filename, false, errors.New("username does not exist")
 	}
 	resume, ok := body["resume"]
 	if !ok {
