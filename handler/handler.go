@@ -21,10 +21,30 @@ type Env struct {
 	PublicKey	string
 }
 
+// @Title ReferrerSignup
+// @Summary ReferrerSignup
+// @Description ReferrerSignup
+// @Accept  json
+// @Param body body model.ReferrerSignupEmailStruct true "Body JSON"
+// @Example "{"email":"chaoran@uber.com"}"
+// @Success 200 {object} model.ReferrerSignupSuccessStruct "Success: verification email sent"
+// @Failure 400 {object} model.ReferrerSignupAPIError0 "email cannot be empty"
+// @Failure 400 {object} model.ReferrerSignupAPIError1 "email already registered"
+// @Router /referrer_signup [post]
 func ReferrerSignup(env *Env) func(ctx *gin.Context) {
 	return Signup(env, "referrer")
 }
 
+// @Title ApplicantSignup
+// @Summary ApplicantSignup
+// @Description ApplicantSignup
+// @Accept  json
+// @Param body body model.ApplicantSignupEmailStruct true "Body JSON"
+// @Example "{"email":"wang374@uiuc.edu"}"
+// @Success 200 {object} model.ApplicantSignupSuccessStruct "Success: verification email sent"
+// @Failure 400 {object} model.ApplicantSignupAPIError0 "email cannot be empty"
+// @Failure 400 {object} model.ApplicantSignupAPIError1 "email already registered"
+// @Router /applicant_signup [post]
 func ApplicantSignup(env *Env) func(ctx *gin.Context) {
 	return Signup(env, "applicant")
 }
