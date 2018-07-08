@@ -15,7 +15,7 @@ definitions:
   model.ApplicantSignupEmailStruct:
     properties:
       Email:
-        example: superchaoran@gmail.com
+        example: wang374@uiuc.edu
         type: string
     type: object
   model.ApplicantSignupSuccessStruct:
@@ -39,7 +39,7 @@ definitions:
   model.ReferrerSignupEmailStruct:
     properties:
       Email:
-        example: superchaoran@gmail.com
+        example: admin@jogchat.com
         type: string
     type: object
   model.ReferrerSignupSuccessStruct:
