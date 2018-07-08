@@ -3,7 +3,6 @@ package schemaless
 import (
 	"code.jogchat.internal/go-schemaless/core"
 	"code.jogchat.internal/golang_backend/utils"
-	"encoding/json"
 	"context"
 	"errors"
 	"golang.org/x/crypto/bcrypt"
@@ -77,36 +76,29 @@ func ActivateEmail(email string, username string, password string, token string)
 }
 
 func SigninDB(email string, password string) (info map[string]string, successful bool, err error) {
-	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", email)
+	_, body, found, err := getUserByUniqueField("email", email)
 	if !found {
-		return nil, false, errors.New("unregistered email")
+		return nil, false, err
 	}
-	var cell map[string]interface{}
-	json.Unmarshal(cells[0].Body, &cell)
-
-	if !cell["activate"].(bool) {
+	if !body["activate"].(bool) {
 		return nil, false, errors.New("please verify your email")
 	}
-	if err = bcrypt.CompareHashAndPassword([]byte(cell["password"].(string)), []byte(password)); err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(body["password"].(string)), []byte(password)); err != nil {
 		return nil, false, errors.New("invalid password")
 	}
 	info = map[string]string {
-		"id": cell["id"].(string),
-		"username": cell["username"].(string),
-		"email": cell["email"].(string),
+		"id": body["id"].(string),
+		"username": body["username"].(string),
+		"email": body["email"].(string),
 	}
 	return info, true, nil
 }
 
 func ResetRequest(email string, token string) (found bool, err error) {
-	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", email)
+	cell, body, found, err := getUserByUniqueField("email", email)
 	if !found {
-		return false, errors.New("unregistered email")
+		return false, err
 	}
-	cell := cells[0]
-
-	var body map[string]interface{}
-	json.Unmarshal(cell.Body, &body)
 	token_hash, _ := bcrypt.GenerateFromPassword([]byte(token), hashCost)
 	body["token"] = string(token_hash)
 	cell = mutateCell(cell, body)
@@ -142,6 +134,33 @@ func ResetPassword(email string, password string, token string) (info map[string
 		"email": body["email"].(string),
 	}
 	return info, true, nil
+}
+
+func UploadResume(email string, filename string) (successful bool, err error) {
+	cell, body, found, err := getUserByUniqueField("email", email)
+	if !found {
+		return false, err
+	}
+	body["resume"] = filename
+	cell = mutateCell(cell, body)
+	go func() {
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password", "token")
+		utils.CheckErr(err)
+	}()
+
+	return true, nil
+}
+
+func GetResume(email string) (filename string, found bool, err error) {
+	_, body, found, err := getUserByUniqueField("email", email)
+	if !found {
+		return filename, false, err
+	}
+	resume, ok := body["resume"]
+	if !ok {
+		return filename, false, errors.New("resume not uploaded")
+	}
+	return resume.(string), true, nil
 }
 
 func AddCompanySchool(category, name string, domain string) (successful bool, err error) {

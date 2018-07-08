@@ -49,7 +49,7 @@ func sendResetPasswordEmail(env *Env, email string, token string)  {
 	sendEmail(env, email, subject, text, body)
 }
 
-func sendEmail(env *Env, email string, subject string, text string, body string)  {
+func sendEmail(env *Env, email string, subject string, text string, body string) {
 	mg := mailgun.NewMailgun(env.Domain, env.PrivateKey, env.PublicKey)
 	message := mg.NewMessage(env.Email, subject, text, email)
 	message.SetHtml(body)
@@ -66,4 +66,9 @@ func readParams(ctx *gin.Context) map[string]string {
 
 func handleFailure(err error, ctx *gin.Context) {
 	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+}
+
+// TODO: change path to S3 bucket
+func resumePath(username string, filename string) string {
+	return "tmp/" + username + "_" + filename
 }

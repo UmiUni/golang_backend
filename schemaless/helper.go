@@ -51,14 +51,19 @@ func mutateCell(cell models.Cell, body map[string]interface{}) models.Cell {
 }
 
 func verifyEmailToken(email string, token string) (cell models.Cell, body map[string]interface{}, successful bool, err error) {
-	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "email", email)
-	if !found {
-		return cell, nil, false, errors.New("unregistered email")
-	}
-	cell = cells[0]
-	json.Unmarshal(cell.Body, &body)
+	cell, body, _, err = getUserByUniqueField("email", email)
 	if err = bcrypt.CompareHashAndPassword([]byte(body["token"].(string)), []byte(token)); err != nil {
 		return cell, nil, false, errors.New("invalid token")
 	}
+	return cell, body, true, nil
+}
+
+func getUserByUniqueField(field string, value string) (cell models.Cell, body map[string]interface{}, successful bool, err error) {
+	cells, found, err := DataStore.GetCellsByFieldLatest(context.TODO(), "users", field, value)
+	if !found {
+		return cell, nil, false, err
+	}
+	cell = cells[0]
+	json.Unmarshal(cell.Body, &body)
 	return cell, body, true, nil
 }
