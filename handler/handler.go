@@ -23,8 +23,7 @@ type Env struct {
 
 // @Title ReferrerCheckSignupEmail
 // @Summary ReferrerCheckSignupEmail
-// @Description Onboarding user will provide a company email to sign up for the referral portal, if the email does not
-// exists in schemaless database, we will send the email an activation link
+// @Description Onboarding user will provide a company email to sign up for the referral portal, if the email does not exists in schemaless database, we will send the email an activation link
 // @Accept  json
 // @Param body body model.ReferrerSignupEmailRequest true "ReferrerSignupEmailRequest is a POST JSON type"
 // @Example "{"Email":"chaoran@uber.com"}"
@@ -38,8 +37,7 @@ func ReferrerCheckSignupEmail(env *Env) func(ctx *gin.Context) {
 
 // @Title ApplicantCheckSignupEmail
 // @Summary ApplicantCheckSignupEmail
-// @Description Provide a school/university edu email to sign up for the applicant portal, if the email does not
-// exists in schemaless database, we will send the email an activation link
+// @Description Provide a school/university edu email to sign up for the applicant portal, if the email does not exists in schemaless database, we will send the email an activation link
 // @Accept  json
 // @Param body body model.ApplicantSignupEmailRequest true "ApplicantSignupEmailRequest is a POST JSON type"
 // @Example "{"Email":"wang374@uiuc.edu"}"
@@ -74,11 +72,7 @@ func CheckSignupEmail(env *Env, category string) func(ctx *gin.Context) {
 
 // @Title ActivateAndSignup
 // @Summary ActivateAndSignup
-// @Description When user click on the GET link in user email, it will hit a frontend page as a GET request with
-// {Email, Token} as parameters. The frontend page should then provide user with a form that ask for (Email(prefilled),
-// Username, password, token(prefilled and hidden)). Once frontend gather all infos from the user, frontend should
-// POST call this [ActivateAndSignup endpoint] with a post request that has {email, username, password, token} as JSON
-// to sign the user up. This endpoint will both signup the user and activate their account.
+// @Description When user click on the GET link in user email, it will hit a frontend page as a GET request with {Email, Token} as parameters. The frontend page should then provide user with a form that ask for (Email(prefilled), Username, password, token(prefilled and hidden)). Once frontend gather all infos from the user, frontend should POST call this [ActivateAndSignup endpoint] with a post request that has {email, username, password, token} as JSON to sign the user up. This endpoint will both signup the user and activate their account.
 // @Accept  json
 // @Param body body model.ActivateAndSignupRequest true "ActivateAndSignupRequest is a POST JSON type"
 // @Success 200 {object} model.ActivateAndSignupResponseSuccess "Success: verification email sent"
