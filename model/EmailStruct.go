@@ -9,9 +9,17 @@ type ReferrerSignupSuccessStruct struct {
 }
 
 type ReferrerSignupAPIError0 struct {
-	ErrorMessage string `json:"error" example:"email already registered"`
+	ErrorMessage string `json:"error" example:"email cannot be empty"`
 }
 
 type ReferrerSignupAPIError1 struct {
+	ErrorMessage string `json:"error" example:"email already registered"`
+}
+
+type ApplicantSignupAPIError0 struct {
+	ErrorMessage string `json:"error" example:"email cannot be empty"`
+}
+
+type ApplicantSignupAPIError1 struct {
 	ErrorMessage string `json:"error" example:"email already registered"`
 }
