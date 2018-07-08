@@ -117,7 +117,7 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "superchaoran@gmail.com"
+                    "example": "wang374@uiuc.edu"
                 }
             }
         },
@@ -153,7 +153,7 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "superchaoran@gmail.com"
+                    "example": "admin@jogchat.com"
                 }
             }
         },
