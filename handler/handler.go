@@ -6,6 +6,7 @@ import (
 	"code.jogchat.internal/golang_backend/schemaless"
 	"github.com/gin-gonic/gin"
 	"code.jogchat.internal/golang_backend/utils"
+	"os"
 )
 
 
@@ -118,9 +119,8 @@ func ResetPassword(env *Env) func(ctx *gin.Context) {
 func UploadResume(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		username := ctx.PostForm("Username")
-		email := ctx.PostForm("Email")
-		if username == "" || email == "" {
-			handleFailure(errors.New("invalid username or email"), ctx)
+		if username == "" {
+			handleFailure(errors.New("invalid username"), ctx)
 			return
 		}
 		file, err := ctx.FormFile("Resume")
@@ -134,8 +134,9 @@ func UploadResume(env *Env) func(ctx *gin.Context) {
 			handleFailure(err, ctx)
 			return
 		}
-		sucessful, err := schemaless.UploadResume(email, filename)
+		sucessful, err := schemaless.UploadResume(username, filename)
 		if !sucessful {
+			os.Remove(filename)
 			handleFailure(err, ctx)
 		} else {
 			ctx.JSON(http.StatusOK, gin.H{
@@ -147,8 +148,8 @@ func UploadResume(env *Env) func(ctx *gin.Context) {
 
 func GetResume(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		email := ctx.Query("Email")
-		filename, found, err := schemaless.GetResume(email)
+		username := ctx.Query("Username")
+		filename, found, err := schemaless.GetResume(username)
 		if !found {
 			handleFailure(err, ctx)
 		} else {

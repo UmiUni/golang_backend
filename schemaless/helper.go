@@ -51,7 +51,7 @@ func mutateCell(cell models.Cell, body map[string]interface{}) models.Cell {
 }
 
 func verifyEmailToken(email string, token string) (cell models.Cell, body map[string]interface{}, successful bool, err error) {
-	cell, body, _, err = getUserByUniqueField("email", email)
+	cell, body, _, _ = getUserByUniqueField("email", email)
 	if err = bcrypt.CompareHashAndPassword([]byte(body["token"].(string)), []byte(token)); err != nil {
 		return cell, nil, false, errors.New("invalid token")
 	}
