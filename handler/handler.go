@@ -35,16 +35,16 @@ func Signup(env *Env, category string) func(ctx *gin.Context) {
 		token := utils.GetToken(env.Secret, email)
 		if email == "" {
 			handleFailure(errors.New("email cannot be empty"), ctx)
+			return
+		}
+		successful, err := schemaless.SignupDB(category, email, token)
+		if !successful {
+			handleFailure(err, ctx)
 		} else {
-			successful, err := schemaless.SignupDB(category, email, token)
-			if !successful {
-				handleFailure(err, ctx)
-			} else {
-				ctx.JSON(http.StatusOK, map[string]interface{} {
-					"message": "verification email sent",
-				})
-				go sendVerificationEmail(env, email, token)
-			}
+			ctx.JSON(http.StatusOK, map[string]interface{} {
+				"message": "verification email sent",
+			})
+			go sendVerificationEmail(env, email, token)
 		}
 	}
 }
@@ -71,7 +71,6 @@ func Signin(env *Env) func(ctx *gin.Context) {
 		params := readParams(ctx)
 		email := params["Email"]
 		password := params["Password"]
-
 		info, successful, err := schemaless.SigninDB(email, password)
 		if !successful {
 			handleFailure(err, ctx)
@@ -120,24 +119,28 @@ func UploadResume(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		username := ctx.PostForm("Username")
 		email := ctx.PostForm("Email")
+		if username == "" || email == "" {
+			handleFailure(errors.New("invalid username or email"), ctx)
+			return
+		}
 		file, err := ctx.FormFile("Resume")
 		if err != nil {
 			handleFailure(err, ctx)
+			return
+		}
+		filename := resumePath(username, file.Filename)
+		err = ctx.SaveUploadedFile(file, filename)
+		if err != nil {
+			handleFailure(err, ctx)
+			return
+		}
+		sucessful, err := schemaless.UploadResume(email, filename)
+		if !sucessful {
+			handleFailure(err, ctx)
 		} else {
-			filename := resumePath(username, file.Filename)
-			err = ctx.SaveUploadedFile(file, filename)
-			if err != nil {
-				handleFailure(err, ctx)
-			} else {
-				sucessful, err := schemaless.UploadResume(email, filename)
-				if !sucessful {
-					handleFailure(err, ctx)
-				} else {
-					ctx.JSON(http.StatusOK, gin.H{
-						"message": "resume uploaded",
-					})
-				}
-			}
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "resume uploaded",
+			})
 		}
 	}
 }
