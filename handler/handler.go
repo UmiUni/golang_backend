@@ -153,6 +153,9 @@ func GetResume(env *Env) func(ctx *gin.Context) {
 		if !found {
 			handleFailure(err, ctx)
 		} else {
+			ctx.Header("Content-Description", "File Transfer")
+			ctx.Header("Content-Transfer-Encoding", "binary")
+			ctx.Header("Content-Disposition", "attachment; filename=" + filename)
 			ctx.File(filename)
 		}
 	}
