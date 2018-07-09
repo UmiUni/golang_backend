@@ -48,7 +48,7 @@ func main() {
 	r.POST("/applicant_check_signup_email", handler.ApplicantCheckSignupEmail(env))
 	r.POST("/activate_and_signup", handler.ActivateAndSignup(env))
 	r.POST("/signin", handler.Signin(env))
-	r.POST("/send+reset_password_email", handler.SendResetPasswordEmail(env))
+	r.POST("/send_reset_password_email", handler.SendResetPasswordEmail(env))
 	r.POST("/reset_password_form", handler.ResetPasswordForm(env))
 
 	r.POST("/upload_resume", handler.UploadResume(env))
