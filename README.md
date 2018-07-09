@@ -1,9 +1,9 @@
 # Golang_backend Production APIs:
 
 * (Most Updated Swagger API):
-** http://178.128.0.108:3001/swagger/index.html
+http://178.128.0.108:3001/swagger/index.html
 * (Outdated README API) User login/registration:
-** https://github.com/Jogchat/golang_backend/blob/master/user_registration_api.md
+https://github.com/Jogchat/golang_backend/blob/master/user_registration_api.md
 
 
 # Why use Gin Framework for Golang
