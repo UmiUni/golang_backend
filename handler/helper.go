@@ -31,7 +31,7 @@ func sendVerificationEmail(env *Env, email string, token string) {
 		"<body>" +
 		"<h2>Welcome to ReferHelper.com.</h2>" +
 		"<h2>This is your activation link:</h2>" +
-			"<a href=\"https://referhelper.com/signup/email?=%stoken?=%s\">activate account</a>"+
+			"<a href=\"https://referhelper.com/signup?email=%s&token=%s\">activate account</a>"+
 		"</body> " +
 		"</html>", email, token)
 	sendEmail(env, email, subject, text, body)
@@ -45,7 +45,7 @@ func sendResetPasswordEmail(env *Env, email string, token string)  {
 			"<body>" +
 			"<h2>Welcome to ReferHelper.com.</h2>" +
 			"<h2>This is your reset password link:</h2>" +
-			"<a href=\"https://referhelper.com/reset/email?=%stoken?=%s\">reset password</a>"+
+			"<a href=\"https://referhelper.com/reset?email=%s&token=%s\">reset password</a>"+
 			"</body> " +
 			"</html>", email, token)
 	sendEmail(env, email, subject, text, body)
