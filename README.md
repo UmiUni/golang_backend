@@ -1,7 +1,7 @@
 # Golang_backend Production APIs:
 
 * (Most Updated Swagger API):
-http://178.128.0.108:3001/swagger/index.html
+http://api.referhelper.com
 * (Outdated README API) User login/registration:
 https://github.com/Jogchat/golang_backend/blob/master/user_registration_api.md
 
@@ -11,13 +11,40 @@ https://github.com/Jogchat/golang_backend/blob/master/user_registration_api.md
   ```
   https://github.com/julienschmidt/httprouter
   ```
+# Why use Swaggo/swagger Framework
+* Swaggo has a nice gin-middleware that using Swagger2.0 UI for API doc generating purpose. Swaggo is an open source org created by a Taiwaness and a Japanese geeks aimed at providing swagger API support for different popular open source golang framework.
+ ```
+ https://github.com/swaggo
+ ```
 # Clone other dependency repos
-git clone repos under $GOPATH/src/code.jogchat.internal
+* git clone repos under $GOPATH/src/code.jogchat.internal
+```
 https://github.com/Jogchat/dgrijalva-jwt-go
 https://github.com/Jogchat/dgryski-go-shardedkv
 https://github.com/Jogchat/dgryski-go-metro
-git clone repos under $GOPATH/src/github.com
+```
+
+* download swaggo/swagger repos and swag executable
+```
+go get -u github.com/swaggo/swag/cmd/swag
+go get -u github.com/swaggo/gin-swagger
+go get -u github.com/swaggo/gin-swagger/swaggerFiles
+
+```
+* link  swaggo/swag executable, note that swag is installed in go's bin folder
+```
+export PATH=$PATH:/root/go/bin
+```
+* generate swag doc in our repo
+
+```
+swag init
+```
+
+* git clone repos under $GOPATH/src/github.com
+```
 https://github.com/go-sql-driver/mysql.git
+```
 
 # Jogchat React+Golang server
 
