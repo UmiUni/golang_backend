@@ -53,6 +53,9 @@ func main() {
 
 	r.POST("/upload_resume", handler.UploadResume(env))
 	r.GET("/get_resume", handler.GetResume(env))
+
+	r.POST("/post_job", handler.PostPosition(env))
+	r.POST("/comment_on", handler.CommentOn(env))
   
     // use ginSwagger middleware to 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

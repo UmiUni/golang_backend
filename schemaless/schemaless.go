@@ -104,7 +104,7 @@ func ResetRequest(email string, token string) (found bool, err error) {
 	cell = mutateCell(cell, body)
 
 	go func() {
-		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password", "token")
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password", "token", "resume")
 		utils.CheckErr(err)
 	}()
 
@@ -124,7 +124,7 @@ func ResetPassword(email string, password string, token string) (info map[string
 	body["password"] = string(password_hash)
 	cell = mutateCell(cell, body)
 	go func() {
-		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password", "token")
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password", "token", "resume")
 		utils.CheckErr(err)
 	}()
 
@@ -144,7 +144,7 @@ func UploadResume(username string, filename string) (successful bool, err error)
 	body["resume"] = filename
 	cell = mutateCell(cell, body)
 	go func() {
-		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password", "token")
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "password", "token", "resume")
 		utils.CheckErr(err)
 	}()
 
@@ -180,9 +180,32 @@ func AddCompanySchool(category, name string, domain string, filename string) (su
 	}
 	_, cell, err := constructCell(category, body)
 	go func() {
-		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "icon")
 		utils.CheckErr(err)
 	}()
 
 	return true, nil
+}
+
+func PostPosition(username string, company string, position string, description string) (info map[string]interface{}, successful bool, err error) {
+	found, _ := DataStore.CheckValueExist(context.TODO(), "users", "username", username)
+	if !found {
+		return nil, false, errors.New("username does not exist")
+	}
+	body := map[string]interface{} {
+		"postedBy": username,
+		"position": position,
+		"description": description,
+	}
+	id, cell, err := constructCell("position", body)
+	go func() {
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "description")
+		utils.CheckErr(err)
+	}()
+
+	info = map[string]interface{} {
+		"id": id,
+		"postedBy": username,
+	}
+	return info, true, nil
 }

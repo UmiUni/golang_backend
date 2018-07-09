@@ -225,3 +225,25 @@ func AddCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 		}
 	}
 }
+
+func PostPosition(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		params := readParams(ctx)
+		username := params["Username"]
+		company := params["Company"]
+		position := params["Position"]
+		description := params["Description"]
+		info, successful, err := schemaless.PostPosition(username, company, position, description)
+		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			ctx.JSON(http.StatusOK, info)
+		}
+	}
+}
+
+func CommentOn(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+
+	}
+}
