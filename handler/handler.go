@@ -70,6 +70,26 @@ func CheckSignupEmail(env *Env, category string) func(ctx *gin.Context) {
 	}
 }
 
+func ResendActivation(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		params := readParams(ctx)
+		email := params["Email"]
+		token := utils.GetToken(env.Secret, email)
+		if email == "" {
+			handleFailure(errors.New("email cannot be empty"), ctx)
+			return
+		}
+		successful, err := schemaless.ResendActivation(email, token)
+		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "verification email sent",
+			})
+		}
+	}
+}
+
 // @Title ActivateAndSignup
 // @Summary ActivateAndSignup
 // @Description When user click on the GET link in user email, it will hit a frontend page as a GET request with {Email, Token} as parameters. The frontend page should then provide user with a form that ask for (Email(prefilled), Username, password, token(prefilled and hidden)). Once frontend gather all infos from the user, frontend should POST call this [ActivateAndSignup endpoint] with a post request that has {email, username, password, token} as JSON to sign the user up. This endpoint will both signup the user and activate their account.
@@ -254,6 +274,21 @@ func PostPosition(env *Env) func(ctx *gin.Context) {
 
 func CommentOn(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-
+		params := readParams(ctx)
+		username := params["Username"]
+		positionId := params["PositionId"]
+		parentId := params["ParentId"]
+		parentType := params["ParentType"]
+		content := params["Content"]
+		if parentType != "position" && parentType != "comment" {
+			handleFailure(errors.New("invalid parent type"), ctx)
+			return
+		}
+		info, successful, err := schemaless.CommentOn(username, positionId, parentId, parentType, content)
+		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			ctx.JSON(http.StatusOK, info)
+		}
 	}
 }
