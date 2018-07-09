@@ -94,18 +94,54 @@ definitions:
         example: verification email sent
         type: string
     type: object
+  model.SigninRequest:
+    properties:
+      Email:
+        example: wang374@uiuc.edu
+        type: string
+      Password:
+        example: wang374password
+        type: string
+    type: object
+  model.SigninResponseAPIError0:
+    properties:
+      error:
+        example: email not registered
+        type: string
+    type: object
+  model.SigninResponseAPIError1:
+    properties:
+      error:
+        example: please verify your email
+        type: string
+    type: object
+  model.SigninResponseAPIError2:
+    properties:
+      error:
+        example: invalid password
+        type: string
+    type: object
+  model.SigninResponseSuccess:
+    properties:
+      Email:
+        example: wang374@uiuc.edu
+        type: string
+      Password:
+        example: wang374password
+        type: string
+    type: object
 host: 178.128.0.108:3001
 info:
   contact:
-    email: support@swagger.io
+    email: admin@jogchat.com
     name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server Petstore server.
+    url: admin@jogchat.com
+  description: This is a ReferHelper API server.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: Swagger Example API
+  title: ReferHelper API
   version: "1.0"
 paths:
   /activate_and_signup:
@@ -113,7 +149,12 @@ paths:
       consumes:
       - application/json
       description: When user click on the GET link in user email, it will hit a frontend
-        page as a GET request with
+        page as a GET request with {Email, Token} as parameters. The frontend page
+        should then provide user with a form that ask for (Email(prefilled), Username,
+        password, token(prefilled and hidden)). Once frontend gather all infos from
+        the user, frontend should POST call this [ActivateAndSignup endpoint] with
+        a post request that has {email, username, password, token} as JSON to sign
+        the user up. This endpoint will both signup the user and activate their account.
       parameters:
       - description: ActivateAndSignupRequest is a POST JSON type
         in: body
@@ -139,7 +180,8 @@ paths:
       consumes:
       - application/json
       description: Provide a school/university edu email to sign up for the applicant
-        portal, if the email does not
+        portal, if the email does not exists in schemaless database, we will send
+        the email an activation link
       parameters:
       - description: ApplicantSignupEmailRequest is a POST JSON type
         in: body
@@ -165,7 +207,8 @@ paths:
       consumes:
       - application/json
       description: Onboarding user will provide a company email to sign up for the
-        referral portal, if the email does not
+        referral portal, if the email does not exists in schemaless database, we will
+        send the email an activation link
       parameters:
       - description: ReferrerSignupEmailRequest is a POST JSON type
         in: body
@@ -186,4 +229,34 @@ paths:
             $ref: '#/definitions/model.ReferrerSignupResponseAPIError1'
             type: object
       summary: ReferrerCheckSignupEmail
+  /signin:
+    post:
+      consumes:
+      - application/json
+      description: After user click on sign-in button, front-end will call this endpoint
+        with a JSON wrapped {Email and Password}, the end point will then return an
+        AuthToken on success. Front-end should store the authtoken for user either
+        in session or cookie for user. To access password protect resource later,
+        front-end needs to pass (username+AuthToken) to backend to verify user identity.
+        This is called JWT Auth flow.
+      parameters:
+      - description: SigninRequest is a POST JSON type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.SigninRequest'
+          type: object
+      responses:
+        "200":
+          description: 'Success: sign in request succeed'
+          schema:
+            $ref: '#/definitions/model.SigninResponseSuccess'
+            type: object
+        "400":
+          description: invalid password
+          schema:
+            $ref: '#/definitions/model.SigninResponseAPIError2'
+            type: object
+      summary: Signin
 swagger: "2.0"

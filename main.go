@@ -12,14 +12,14 @@ import (
 )
 
 
-// @title Swagger Example API
+// @title ReferHelper API
 // @version 1.0
-// @description This is a sample server Petstore server.
+// @description This is a ReferHelper API server.
 // @termsOfService http://swagger.io/terms/
 
 // @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
+// @contact.url admin@jogchat.com
+// @contact.email admin@jogchat.com
 
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
@@ -47,7 +47,7 @@ func main() {
 	r.POST("/referrer_check_signup_email", handler.ReferrerCheckSignupEmail(env))
 	r.POST("/applicant_check_signup_email", handler.ApplicantCheckSignupEmail(env))
 	r.POST("/activate_and_signup", handler.ActivateAndSignup(env))
-	r.POST("/login", handler.Signin(env))
+	r.POST("/signin", handler.Signin(env))
 	r.POST("/reset_request", handler.ResetRequest(env))
 	r.POST("/reset_password", handler.ResetPassword(env))
 

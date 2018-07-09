@@ -96,8 +96,16 @@ func ActivateAndSignup(env *Env) func(ctx *gin.Context) {
 	}
 }
 
-// Login captures the data posted to the /login route
-// need to verify authtoken
+// @Title Signin
+// @Summary Signin
+// @Description After user click on sign-in button, front-end will call this endpoint with a JSON wrapped {Email and Password}, the end point will then return an AuthToken on success. Front-end should store the authtoken for user either in session or cookie for user. To access password protect resource later, front-end needs to pass (username+AuthToken) to backend to verify user identity. This is called JWT Auth flow.
+// @Accept json
+// @Param body body model.SigninRequest true "SigninRequest is a POST JSON type"
+// @Success 200 {object} model.SigninResponseSuccess "Success: sign in request succeed"
+// @Failure 400 {object} model.SigninResponseAPIError0 "email not registered"
+// @Failure 400 {object} model.SigninResponseAPIError1 "please verify your email"
+// @Failure 400 {object} model.SigninResponseAPIError2 "invalid password"
+// @Router /signin [post]
 func Signin(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
@@ -112,6 +120,8 @@ func Signin(env *Env) func(ctx *gin.Context) {
 	}
 }
 
+// @Title ActivateAndSignup
+// @Summary
 // Used by frontend to send a request to reset password
 // send email to user with token
 func ResetRequest(env *Env) func(ctx *gin.Context) {
