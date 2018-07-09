@@ -5,15 +5,15 @@ type ActivateAndSignupRequest struct {
 	Email string `required:"true" json:"Email" example:"wang374@uiuc.edu"`
 	Username string `required:"true" json:"Username" example:"wang374"`
 	Password string `required:"true" json:"Password" example:"wang374password"`
-	Token string `required:"true" json:"Token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEyOTE4MTgsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoic3VwZXJjaGFvcmFuQGdtYWlsLmNvbSJ9.yYQOAIyHQJJUntMGtRaAm2bXF-HvvsK6vHjhe0SDsHg"`
+	Token string `required:"true" json:"Token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTIyMDAsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.gC7dTl64XDe5BwlS8PuZxBxGes1ujcCWFbe23r0xOXM"`
 }
 
 // return would be a credential
 type ActivateAndSignupResponseSuccess struct {
-	UserId string `required:"true" json:"UserId" example:""`
 	Username string `required:"true" json:"Username" example:"wang374"`
+	UserId string `required:"true" json:"UserId" example:"ce57e12a-fe27-43a2-9a1f-0792b3d36f2e"`
 	Email string `required:"true" json:"Email" example:"wang374@uiuc.edu"`
-	AuthToken string `required:"true" json:"AuthToken" example:""`
+	AuthToken string `required:"true" json:"AuthToken" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM1NjUsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.XwmDhW1b99E9jwGatN_6y1tYpLGBcAqywS9fI23Oxxo"`
 }
 
 type ActivateAndSignupResponseAPIError0 struct {

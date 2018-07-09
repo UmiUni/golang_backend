@@ -6,8 +6,10 @@ type SigninRequest struct {
 }
 
 type SigninResponseSuccess struct {
+	UserId string `required:"true" json:"UserId" example:"ce57e12a-fe27-43a2-9a1f-0792b3d36f2e"`
+	Username string `required:"true" json:"Username" example:"wang374"`
 	Email string `required:"true" json:"Email" example:"wang374@uiuc.edu"`
-	Password string `required:"true" json:"Password" example:"wang374password"`
+	AuthToken string `required:"true" json:"AuthToken" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM2MzgsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.RhRUpHJbIfid1hiJOTtStuxc86v0isnWny85COG9Mek"`
 }
 
 type SigninResponseAPIError0 struct {

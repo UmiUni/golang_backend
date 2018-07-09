@@ -129,6 +129,80 @@
                 }
             }
         },
+        "/reset_password_form": {
+            "post": {
+                "description": "After user clicks on reset password link(GET with email and token) in email, front-end/mobile will provide user with a form, {Email(prefilled), Password, Token(prefilled)}. After user filled the form, front-end/mobile will call this endpoint with a JSON wrapped {Email(prefilled), Password, Token(prefilled)} POST to reset password. If the user is not activated at the point of click on reset_password, an email titled reset_password with activation instruction will be sent.",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "ResetPasswordForm",
+                "parameters": [
+                    {
+                        "description": "ResetPasswordButtonRequest is a POST JSON type",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ResetPasswordFormRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success: message: reset email sent",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ResetPasswordFormResponseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Failure: email not registered",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ResetPasswordFormResponseAPIError0"
+                        }
+                    }
+                }
+            }
+        },
+        "/send_reset_password_email": {
+            "post": {
+                "description": "When user click on reset password button with an email filled in a form above, front-end will call this endpoint with a JSON wrapped {Email} to sent reset password email, a hacker can hack this end point currently by repeatedly calling and our system will spam send email. Next step would be requiring a session {Email, AuthToken} combination and this endpoint will only be able to sent email to this session's Email.",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "SendResetPasswordEmail",
+                "parameters": [
+                    {
+                        "description": "ResetPasswordButtonRequest is a POST JSON type",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.SendResetPasswordEmailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success: message: reset email sent",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.SendResetPasswordEmailResponseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Failure: email not registered",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.SendResetPasswordEmailResponseAPIError0"
+                        }
+                    }
+                }
+            }
+        },
         "/signin": {
             "post": {
                 "description": "After user click on sign-in button, front-end will call this endpoint with a JSON wrapped {Email and Password}, the end point will then return an AuthToken on success. Front-end should store the authtoken for user either in session or cookie for user. To access password protect resource later, front-end needs to pass (username+AuthToken) to backend to verify user identity. This is called JWT Auth flow.",
@@ -181,7 +255,7 @@
                 },
                 "Token": {
                     "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEyOTE4MTgsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoic3VwZXJjaGFvcmFuQGdtYWlsLmNvbSJ9.yYQOAIyHQJJUntMGtRaAm2bXF-HvvsK6vHjhe0SDsHg"
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTIyMDAsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.gC7dTl64XDe5BwlS8PuZxBxGes1ujcCWFbe23r0xOXM"
                 },
                 "Username": {
                     "type": "string",
@@ -220,14 +294,16 @@
             "type": "object",
             "properties": {
                 "AuthToken": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM1NjUsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.XwmDhW1b99E9jwGatN_6y1tYpLGBcAqywS9fI23Oxxo"
                 },
                 "Email": {
                     "type": "string",
                     "example": "wang374@uiuc.edu"
                 },
                 "UserId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ce57e12a-fe27-43a2-9a1f-0792b3d36f2e"
                 },
                 "Username": {
                     "type": "string",
@@ -307,6 +383,78 @@
                 }
             }
         },
+        "model.ResetPasswordFormRequest": {
+            "type": "object",
+            "properties": {
+                "Email": {
+                    "type": "string",
+                    "example": "wang374@uiuc.edu"
+                },
+                "Password": {
+                    "type": "string",
+                    "example": "wang374newpassword"
+                },
+                "Token": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ResetPasswordFormResponseAPIError0": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "email not registered"
+                }
+            }
+        },
+        "model.ResetPasswordFormResponseSuccess": {
+            "type": "object",
+            "properties": {
+                "AuthToken": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string",
+                    "example": "wang374@uiuc.edu"
+                },
+                "UserId": {
+                    "type": "string",
+                    "example": "ce57e12a-fe27-43a2-9a1f-0792b3d36f2e"
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "wang374"
+                }
+            }
+        },
+        "model.SendResetPasswordEmailRequest": {
+            "type": "object",
+            "properties": {
+                "Email": {
+                    "type": "string",
+                    "example": "wang374@uiuc.edu"
+                }
+            }
+        },
+        "model.SendResetPasswordEmailResponseAPIError0": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "email not registered"
+                }
+            }
+        },
+        "model.SendResetPasswordEmailResponseSuccess": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "reset email sent"
+                }
+            }
+        },
         "model.SigninRequest": {
             "type": "object",
             "properties": {
@@ -350,13 +498,21 @@
         "model.SigninResponseSuccess": {
             "type": "object",
             "properties": {
+                "AuthToken": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM2MzgsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.RhRUpHJbIfid1hiJOTtStuxc86v0isnWny85COG9Mek"
+                },
                 "Email": {
                     "type": "string",
                     "example": "wang374@uiuc.edu"
                 },
-                "Password": {
+                "UserId": {
                     "type": "string",
-                    "example": "wang374password"
+                    "example": "ce57e12a-fe27-43a2-9a1f-0792b3d36f2e"
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "wang374"
                 }
             }
         }
