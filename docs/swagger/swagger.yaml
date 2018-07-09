@@ -9,7 +9,7 @@ definitions:
         example: wang374password
         type: string
       Token:
-        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEyOTE4MTgsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoic3VwZXJjaGFvcmFuQGdtYWlsLmNvbSJ9.yYQOAIyHQJJUntMGtRaAm2bXF-HvvsK6vHjhe0SDsHg
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTIyMDAsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.gC7dTl64XDe5BwlS8PuZxBxGes1ujcCWFbe23r0xOXM
         type: string
       Username:
         example: wang374
@@ -36,11 +36,13 @@ definitions:
   model.ActivateAndSignupResponseSuccess:
     properties:
       AuthToken:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM1NjUsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.XwmDhW1b99E9jwGatN_6y1tYpLGBcAqywS9fI23Oxxo
         type: string
       Email:
         example: wang374@uiuc.edu
         type: string
       UserId:
+        example: ce57e12a-fe27-43a2-9a1f-0792b3d36f2e
         type: string
       Username:
         example: wang374
@@ -94,6 +96,55 @@ definitions:
         example: verification email sent
         type: string
     type: object
+  model.ResetPasswordFormRequest:
+    properties:
+      Email:
+        example: wang374@uiuc.edu
+        type: string
+      Password:
+        example: wang374newpassword
+        type: string
+      Token:
+        type: string
+    type: object
+  model.ResetPasswordFormResponseAPIError0:
+    properties:
+      error:
+        example: email not registered
+        type: string
+    type: object
+  model.ResetPasswordFormResponseSuccess:
+    properties:
+      AuthToken:
+        type: string
+      Email:
+        example: wang374@uiuc.edu
+        type: string
+      UserId:
+        example: ce57e12a-fe27-43a2-9a1f-0792b3d36f2e
+        type: string
+      Username:
+        example: wang374
+        type: string
+    type: object
+  model.SendResetPasswordEmailRequest:
+    properties:
+      Email:
+        example: wang374@uiuc.edu
+        type: string
+    type: object
+  model.SendResetPasswordEmailResponseAPIError0:
+    properties:
+      error:
+        example: email not registered
+        type: string
+    type: object
+  model.SendResetPasswordEmailResponseSuccess:
+    properties:
+      message:
+        example: reset email sent
+        type: string
+    type: object
   model.SigninRequest:
     properties:
       Email:
@@ -123,11 +174,17 @@ definitions:
     type: object
   model.SigninResponseSuccess:
     properties:
+      AuthToken:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM2MzgsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.RhRUpHJbIfid1hiJOTtStuxc86v0isnWny85COG9Mek
+        type: string
       Email:
         example: wang374@uiuc.edu
         type: string
-      Password:
-        example: wang374password
+      UserId:
+        example: ce57e12a-fe27-43a2-9a1f-0792b3d36f2e
+        type: string
+      Username:
+        example: wang374
         type: string
     type: object
 host: 178.128.0.108:3001
@@ -229,6 +286,67 @@ paths:
             $ref: '#/definitions/model.ReferrerSignupResponseAPIError1'
             type: object
       summary: ReferrerCheckSignupEmail
+  /reset_password_form:
+    post:
+      consumes:
+      - application/json
+      description: After user clicks on reset password link(GET with email and token)
+        in email, front-end/mobile will provide user with a form, {Email(prefilled),
+        Password, Token(prefilled)}. After user filled the form, front-end/mobile
+        will call this endpoint with a JSON wrapped {Email(prefilled), Password, Token(prefilled)}
+        POST to reset password. If the user is not activated at the point of click
+        on reset_password, an email titled reset_password with activation instruction
+        will be sent.
+      parameters:
+      - description: ResetPasswordButtonRequest is a POST JSON type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.ResetPasswordFormRequest'
+          type: object
+      responses:
+        "200":
+          description: 'Success: message: reset email sent'
+          schema:
+            $ref: '#/definitions/model.ResetPasswordFormResponseSuccess'
+            type: object
+        "400":
+          description: 'Failure: email not registered'
+          schema:
+            $ref: '#/definitions/model.ResetPasswordFormResponseAPIError0'
+            type: object
+      summary: ResetPasswordForm
+  /send_reset_password_email:
+    post:
+      consumes:
+      - application/json
+      description: When user click on reset password button with an email filled in
+        a form above, front-end will call this endpoint with a JSON wrapped {Email}
+        to sent reset password email, a hacker can hack this end point currently by
+        repeatedly calling and our system will spam send email. Next step would be
+        requiring a session {Email, AuthToken} combination and this endpoint will
+        only be able to sent email to this session's Email.
+      parameters:
+      - description: ResetPasswordButtonRequest is a POST JSON type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.SendResetPasswordEmailRequest'
+          type: object
+      responses:
+        "200":
+          description: 'Success: message: reset email sent'
+          schema:
+            $ref: '#/definitions/model.SendResetPasswordEmailResponseSuccess'
+            type: object
+        "400":
+          description: 'Failure: email not registered'
+          schema:
+            $ref: '#/definitions/model.SendResetPasswordEmailResponseAPIError0'
+            type: object
+      summary: SendResetPasswordEmail
   /signin:
     post:
       consumes:

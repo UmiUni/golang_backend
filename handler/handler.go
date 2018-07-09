@@ -120,11 +120,15 @@ func Signin(env *Env) func(ctx *gin.Context) {
 	}
 }
 
-// @Title ActivateAndSignup
-// @Summary
-// Used by frontend to send a request to reset password
-// send email to user with token
-func ResetRequest(env *Env) func(ctx *gin.Context) {
+// @Title SendResetPasswordEmail
+// @Summary SendResetPasswordEmail
+// @Description When user click on reset password button with an email filled in a form above, front-end will call this endpoint with a JSON wrapped {Email} to sent reset password email, a hacker can hack this end point currently by repeatedly calling and our system will spam send email. Next step would be requiring a session {Email, AuthToken} combination and this endpoint will only be able to sent email to this session's Email.
+// @Accept json
+// @Param body body model.SendResetPasswordEmailRequest true "ResetPasswordButtonRequest is a POST JSON type"
+// @Success 200 {object} model.SendResetPasswordEmailResponseSuccess "Success: message: reset email sent"
+// @Failure 400 {object} model.SendResetPasswordEmailResponseAPIError0 "Failure: email not registered"
+// @Router /send_reset_password_email [post]
+func SendResetPasswordEmail(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
 		email := params["Email"]
@@ -141,8 +145,15 @@ func ResetRequest(env *Env) func(ctx *gin.Context) {
 	}
 }
 
-// Used by frontend after user click the password reset link in email
-func ResetPassword(env *Env) func(ctx *gin.Context) {
+// @Title ResetPasswordForm
+// @Summary ResetPasswordForm
+// @Description After user clicks on reset password link(GET with email and token) in email, front-end/mobile will provide user with a form, {Email(prefilled), Password, Token(prefilled)}. After user filled the form, front-end/mobile will call this endpoint with a JSON wrapped {Email(prefilled), Password, Token(prefilled)} POST to reset password. If the user is not activated at the point of click on reset_password, an email titled reset_password with activation instruction will be sent.
+// @Accept json
+// @Param body body model.ResetPasswordFormRequest true "ResetPasswordButtonRequest is a POST JSON type"
+// @Success 200 {object} model.ResetPasswordFormResponseSuccess "Success: message: reset email sent"
+// @Failure 400 {object} model.ResetPasswordFormResponseAPIError0 "Failure: email not registered"
+// @Router /reset_password_form [post]
+func ResetPasswordForm(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
 		email := params["Email"]
