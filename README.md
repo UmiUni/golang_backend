@@ -7,20 +7,15 @@ https://github.com/Jogchat/golang_backend/blob/master/user_registration_api.md
 
 
 # Why use Gin Framework for Golang
-  Gin uses HttpRouter github repo, all the benefits of HttpRouter are listed in the project README:
-  ```
+  Gin uses HttpRouter github repo, all the benefits of HttpRouter are listed in the project README: 
   https://github.com/julienschmidt/httprouter
-  ```
+ 
 # Why use Swaggo/swagger Framework
 * Swaggo has a nice gin-middleware that using Swagger2.0 UI for API doc generating purpose. 
 * Swaggo is an open source org created by a Taiwaness and a Japanese geeks aimed at providing swagger API support for different popular open source golang framework.
-```
 https://github.com/swaggo
-``` 
 * Comments should follow Declarative Comments Format:
-```
 https://github.com/Jogchat/golang_backend/blob/master/DeclarativeCommentsFormat.md
-```
 
  
 # Clone other dependency repos
