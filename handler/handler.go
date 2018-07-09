@@ -70,7 +70,7 @@ func CheckSignupEmail(env *Env, category string) func(ctx *gin.Context) {
 	}
 }
 
-func ResendActivation(env *Env) func(ctx *gin.Context) {
+func ResendActivationEmail(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
 		email := params["Email"]
@@ -79,13 +79,14 @@ func ResendActivation(env *Env) func(ctx *gin.Context) {
 			handleFailure(errors.New("email cannot be empty"), ctx)
 			return
 		}
-		successful, err := schemaless.ResendActivation(email, token)
+		successful, err := schemaless.ReverifyEmail(email, token)
 		if !successful {
 			handleFailure(err, ctx)
 		} else {
 			ctx.JSON(http.StatusOK, gin.H{
 				"message": "verification email sent",
 			})
+			go sendVerificationEmail(env, email, token)
 		}
 	}
 }

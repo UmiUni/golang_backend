@@ -46,6 +46,7 @@ func main() {
 
 	r.POST("/referrer_check_signup_email", handler.ReferrerCheckSignupEmail(env))
 	r.POST("/applicant_check_signup_email", handler.ApplicantCheckSignupEmail(env))
+	r.POST("/resend_activation_email", handler.ResendActivationEmail(env))
 	r.POST("/activate_and_signup", handler.ActivateAndSignup(env))
 	r.POST("/signin", handler.Signin(env))
 	r.POST("/reset_request", handler.ResetRequest(env))

@@ -42,7 +42,7 @@ func SignupDB(category string, email string, token string) (successful bool, err
 	return true, nil
 }
 
-func ResendActivation(email string, token string) (successful bool, err error) {
+func ReverifyEmail(email string, token string) (successful bool, err error) {
 	cell, body, found, err := getUserByUniqueField("email", email)
 	if !found {
 		return false, errors.New("email not registered")
