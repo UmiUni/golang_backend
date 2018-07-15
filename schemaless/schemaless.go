@@ -7,6 +7,7 @@ import (
 	"errors"
 	"golang.org/x/crypto/bcrypt"
 	"code.jogchat.internal/go-schemaless"
+	"encoding/json"
 )
 
 const hashCost = 8
@@ -172,7 +173,7 @@ func GetResume(username string) (filename string, found bool, err error) {
 	return resume.(string), true, nil
 }
 
-func AddCompanySchool(category, name string, domain string) (successful bool, err error) {
+func AddCompanySchool(category string, name string, domain string) (successful bool, err error) {
 	duplicate, _ := DataStore.CheckValueExist(context.TODO(), category, "name", name)
 	if duplicate {
 		return false, errors.New(category + " name already exist")
@@ -192,6 +193,31 @@ func AddCompanySchool(category, name string, domain string) (successful bool, er
 	}()
 
 	return true, nil
+}
+
+func GetAllCompaniesSchools(category string) (info map[string]interface{}, err error) {
+	cells, found, err := DataStore.GetCellsByColumnLatest(context.TODO(), category)
+	if !found {
+		return nil, err
+	}
+	var results []map[string]interface{}
+	for _, cell := range cells {
+		var body map[string]interface{}
+		json.Unmarshal(cell.Body, &body)
+		results = append(results, body)
+	}
+	info = map[string]interface{} {
+		category: results,
+	}
+	return info, nil
+}
+
+func GetCompanySchool(category string, domain string) (info map[string]interface{}, found bool, err error) {
+	_, body, found, err := getEntityByUniqueField(category, "domain", domain)
+	if !found {
+		return nil, false, errors.New("invalid domain")
+	}
+	return body, true, nil
 }
 
 func PostPosition(username string, company string, position string, description string) (info map[string]interface{}, successful bool, err error) {

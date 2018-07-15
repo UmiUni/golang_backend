@@ -284,7 +284,12 @@ func GetAllSchools(env *Env) func(ctx *gin.Context) {
 
 func GetAllCompaniesSchools(env *Env, category string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-
+		results, err := schemaless.GetAllCompaniesSchools(category)
+		if err != nil {
+			handleFailure(err, ctx)
+		} else {
+			ctx.JSON(http.StatusOK, results)
+		}
 	}
 }
 
@@ -298,7 +303,20 @@ func GetSchool(env *Env) func(ctx *gin.Context) {
 
 func GetCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		getIcons("Google")
+		params := readParams(ctx)
+		domain := params["Domain"]
+		icons, err := getIcons(domain)
+		if err != nil {
+			handleFailure(err, ctx)
+			return
+		}
+		info, found, err := schemaless.GetCompanySchool(category, domain)
+		if !found {
+			handleFailure(err, ctx)
+		} else {
+			info["icons"] = icons
+			ctx.JSON(http.StatusOK, info)
+		}
 	}
 }
 

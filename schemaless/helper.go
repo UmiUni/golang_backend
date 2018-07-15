@@ -58,8 +58,12 @@ func verifyEmailToken(email string, token string) (cell models.Cell, body map[st
 	return cell, body, true, nil
 }
 
-func getUserByUniqueField(field string, value string) (cell models.Cell, body map[string]interface{}, successful bool, err error) {
-	cells, found, err := DataStore.GetCellsByFieldLatest(context.TODO(), "users", field, value)
+func getUserByUniqueField(field string, value string) (cell models.Cell, body map[string]interface{}, found bool, err error) {
+	return getEntityByUniqueField("users", field, value)
+}
+
+func getEntityByUniqueField(category string, field string, value interface{}) (cell models.Cell, body map[string]interface{}, found bool, err error) {
+	cells, found, err := DataStore.GetCellsByFieldLatest(context.TODO(), category, field, value)
 	if !found {
 		return cell, nil, false, err
 	}

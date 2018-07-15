@@ -10,7 +10,6 @@ import (
 	"encoding/json"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"os"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/aws"
 )
@@ -80,20 +79,15 @@ func resumePath(username string, filename string) string {
 	return "tmp/resume" + username + "_" + filename
 }
 
-func iconLocalPath(filename string) string {
-	dir, _ := os.Getwd()
-	return dir + "/tmp/icon/" + filename
-}
-
 func getIcons(domain string) (icons map[string][]byte, err error) {
 	// The session the S3 Downloader will use
 	sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("us-west-2")}))
 	// Create a downloader with the session and default options
 	downloader := s3manager.NewDownloader(sess)
 
-	var sizes = []string{"1.0", "1.5", "2.0", "2.5", "3.0"}
+	var sizes = []string{"100", "150", "200", "250", "300"}
 	for _, size := range sizes {
-		filename := domain + size + ".png"
+		filename := domain + "/" + size + ".png"
 		icon, err := getS3(downloader, filename)
 		if err != nil {
 			return nil, err
@@ -104,17 +98,11 @@ func getIcons(domain string) (icons map[string][]byte, err error) {
 }
 
 func getS3(downloader *s3manager.Downloader, filename string) (content []byte, err error) {
-	// Create a file to write the S3 Object contents to.
-	localPath := iconLocalPath(filename)
-	f, err := os.Create(localPath)
-	utils.CheckErr(err)
 	// Write the contents of S3 Object to the file
-	_, err = downloader.Download(f, &s3.GetObjectInput{
+	_, err = downloader.Download(aws.NewWriteAtBuffer(content), &s3.GetObjectInput{
 		Bucket: aws.String("jogchat"),
-		Key:    aws.String("icons/company/svg/google.svg"),
+		Key:    aws.String("icons/company/png/" + filename),
 	})
-	utils.CheckErr(err)
-	_, err = f.Read(content)
 	utils.CheckErr(err)
 	return content, nil
 }
