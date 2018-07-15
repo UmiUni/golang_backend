@@ -55,6 +55,80 @@
                 }
             }
         },
+        "/add_company": {
+            "post": {
+                "description": "AddCompany is an endpoint that adds company json(id(generated), name, domain) to schemaless database",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "AddCompany",
+                "parameters": [
+                    {
+                        "description": "AddCompanyRequest is a POST JSON type",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.AddCompanyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success: schemaless add company success",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.AddCompanyRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Failure: schemaless add company fail",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.AddCompanyRequestError0"
+                        }
+                    }
+                }
+            }
+        },
+        "/add_school": {
+            "post": {
+                "description": "AddSchool is an endpoint that adds school json(id(generated), name, domain) to schemaless database",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "AddSchool",
+                "parameters": [
+                    {
+                        "description": "AddSchoolRequest is a POST JSON type",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.AddSchoolRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success: schemaless add school success",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.AddSchoolRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Failure: schemaless add school fail",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.AddSchoolRequestError0"
+                        }
+                    }
+                }
+            }
+        },
         "/applicant_check_signup_email": {
             "post": {
                 "description": "Provide a school/university edu email to sign up for the applicant portal, if the email does not exists in schemaless database, we will send the email an activation link",
@@ -138,7 +212,7 @@
                 "summary": "ResetPasswordForm",
                 "parameters": [
                     {
-                        "description": "ResetPasswordButtonRequest is a POST JSON type",
+                        "description": "ResetPasswordFormRequest is a POST JSON type",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -308,6 +382,46 @@
                 "Username": {
                     "type": "string",
                     "example": "wang374"
+                }
+            }
+        },
+        "model.AddCompanyRequest": {
+            "type": "object",
+            "properties": {
+                "domain": {
+                    "type": "string",
+                    "example": "google"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Google"
+                }
+            }
+        },
+        "model.AddCompanyRequestError0": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "email not registered"
+                }
+            }
+        },
+        "model.AddSchoolRequest": {
+            "type": "object",
+            "properties": {
+                "Email": {
+                    "type": "string",
+                    "example": "wang374@uiuc.edu"
+                }
+            }
+        },
+        "model.AddSchoolRequestError0": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "schemaless add school fail"
                 }
             }
         },
