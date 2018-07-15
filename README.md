@@ -111,6 +111,13 @@ go get
 go run main.go
 ```
 
+# aws configuration
+## login to console
+username: jogchat@gmail.com 
+password: jogchat_AWS
+## config credential
+Only one User is created, called admin. For aws a User is created with certain access. A user is associated with credentials so as to config a program to act as the User with the certain access. The credentials are stored in ~/.aws/credentials at the backend server. 
+
 # For Future Microservice Migration Reference
 Jogchat scalable authentication backend architecture
 Backend:
