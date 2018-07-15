@@ -244,8 +244,9 @@ func AddSchool(env *Env) func(ctx *gin.Context) {
 
 func AddCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		name := ctx.PostForm("Name")
-		domain := ctx.PostForm("Domain")
+		params := readParams(ctx)
+		name := params["Name"]
+		domain := params["Domain"]
 		successful, err := schemaless.AddCompanySchool(category, name, domain)
 		if !successful {
 			handleFailure(err, ctx)
