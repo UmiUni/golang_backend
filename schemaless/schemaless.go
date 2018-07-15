@@ -172,7 +172,7 @@ func GetResume(username string) (filename string, found bool, err error) {
 	return resume.(string), true, nil
 }
 
-func AddCompanySchool(category, name string, domain string, filename string) (successful bool, err error) {
+func AddCompanySchool(category, name string, domain string) (successful bool, err error) {
 	duplicate, _ := DataStore.CheckValueExist(context.TODO(), category, "name", name)
 	if duplicate {
 		return false, errors.New(category + " name already exist")
@@ -184,11 +184,10 @@ func AddCompanySchool(category, name string, domain string, filename string) (su
 	body := map[string]interface{} {
 		"name": name,
 		"domain": domain,
-		"icon": filename,
 	}
 	_, cell, err := constructCell(category, body)
 	go func() {
-		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "icon")
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
 		utils.CheckErr(err)
 	}()
 
