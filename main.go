@@ -61,15 +61,15 @@ func main() {
 	r.POST("/reset_request", handler.SendResetPasswordEmail(env))
 	r.POST("/reset_password", handler.ResetPasswordForm(env))
 
-	// use ginSwagger middleware to
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	r.POST("/add_company", handler.AddCompany(env))
 	r.POST("/add_school", handler.AddSchool(env))
 	r.GET("/get_all_companies", handler.GetAllCompanies(env))
 	r.GET("/get_all_schools", handler.GetAllSchools(env))
 	r.GET("/get_company", handler.GetCompany(env))
 	r.GET("/get_school", handler.GetSchool(env))
+
+	// use ginSwagger middleware to
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(env.Port)
 }
