@@ -44,20 +44,23 @@ func main() {
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
 
+	v1 := r.Group("/v1")
+	{
+		v1.POST("/reset_password", handler.ResetPasswordForm(env))
+		v1.POST("/upload_resume", handler.UploadResume(env))
+		v1.GET("/get_resume", handler.GetResume(env))
+		v1.POST("/post_job", handler.PostPosition(env))
+		v1.POST("/comment_on", handler.CommentOn(env))
+	}
+	v1.Use(middleware.VerifyToken(env))
+
 	r.POST("/referrer_check_signup_email", handler.ReferrerCheckSignupEmail(env))
 	r.POST("/applicant_check_signup_email", handler.ApplicantCheckSignupEmail(env))
 	r.POST("/resend_activation_email", handler.ResendActivationEmail(env))
 	r.POST("/activate_and_signup", handler.ActivateAndSignup(env))
 	r.POST("/signin", handler.Signin(env))
-	r.POST("/reset_request", handler.ResetRequest(env))
-	r.POST("/reset_password", handler.ResetPassword(env))
+	r.POST("/reset_request", handler.SendResetPasswordEmail(env))
 
-	r.POST("/upload_resume", handler.UploadResume(env))
-	r.GET("/get_resume", handler.GetResume(env))
-
-	r.POST("/post_job", handler.PostPosition(env))
-	r.POST("/comment_on", handler.CommentOn(env))
-  
     // use ginSwagger middleware to 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
