@@ -196,11 +196,14 @@ func AddCompanySchool(category string, name string, domain string) (successful b
 }
 
 func GetAllCompaniesSchools(category string) (info map[string]interface{}, err error) {
+	var results []map[string]interface{}
+	info = map[string]interface{} {
+		category: results,
+	}
 	cells, found, err := DataStore.GetCellsByColumnLatest(context.TODO(), category)
 	if !found {
-		return nil, err
+		return info, err
 	}
-	var results []map[string]interface{}
 	for _, cell := range cells {
 		var body map[string]interface{}
 		json.Unmarshal(cell.Body, &body)

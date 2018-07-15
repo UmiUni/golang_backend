@@ -85,6 +85,7 @@ func getIcons(domain string) (icons map[string][]byte, err error) {
 	// Create a downloader with the session and default options
 	downloader := s3manager.NewDownloader(sess)
 
+	icons = map[string][]byte{}
 	var sizes = []string{"100", "150", "200", "250", "300"}
 	for _, size := range sizes {
 		filename := domain + "/" + size + ".png"
@@ -99,10 +100,11 @@ func getIcons(domain string) (icons map[string][]byte, err error) {
 
 func getS3(downloader *s3manager.Downloader, filename string) (content []byte, err error) {
 	// Write the contents of S3 Object to the file
-	_, err = downloader.Download(aws.NewWriteAtBuffer(content), &s3.GetObjectInput{
+	content = make([]byte, 1024 * 12)
+	n, err := downloader.Download(aws.NewWriteAtBuffer(content), &s3.GetObjectInput{
 		Bucket: aws.String("jogchat"),
 		Key:    aws.String("icons/company/png/" + filename),
 	})
 	utils.CheckErr(err)
-	return content, nil
+	return content[:n], nil
 }

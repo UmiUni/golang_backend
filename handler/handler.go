@@ -303,20 +303,19 @@ func GetSchool(env *Env) func(ctx *gin.Context) {
 
 func GetCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		params := readParams(ctx)
-		domain := params["Domain"]
+		domain := ctx.Query("Domain")
 		icons, err := getIcons(domain)
 		if err != nil {
 			handleFailure(err, ctx)
 			return
 		}
-		info, found, err := schemaless.GetCompanySchool(category, domain)
+		info, found, _ := schemaless.GetCompanySchool(category, domain)
 		if !found {
-			handleFailure(err, ctx)
-		} else {
-			info["icons"] = icons
-			ctx.JSON(http.StatusOK, info)
+			info = map[string]interface{}{}
+
 		}
+		info["icons"] = icons
+		ctx.JSON(http.StatusOK, info)
 	}
 }
 
