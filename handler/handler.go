@@ -257,6 +257,20 @@ func AddCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 	}
 }
 
+func GetAllCompanies(env *Env) func(ctx *gin.Context) {
+	return GetAllCompaniesSchools(env, "companies")
+}
+
+func GetAllSchools(env *Env) func(ctx *gin.Context) {
+	return GetAllCompaniesSchools(env, "schools")
+}
+
+func GetAllCompaniesSchools(env *Env, category string) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+
+	}
+}
+
 func PostPosition(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)

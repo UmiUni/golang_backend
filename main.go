@@ -66,6 +66,10 @@ func main() {
 
 	r.POST("/add_company", handler.AddCompany(env))
 	r.POST("/add_school", handler.AddSchool(env))
+	r.GET("/get_all_companies", handler.GetAllCompanies(env))
+	r.GET("/get_all_schools", handler.GetAllSchools(env))
+	r.GET("/get_company", nil)
+	r.GET("/get_school", nil)
 
 	r.Run(env.Port)
 }
