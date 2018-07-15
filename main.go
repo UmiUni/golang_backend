@@ -71,8 +71,5 @@ func main() {
 	// use ginSwagger middleware to
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// use ginSwagger middleware to
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	r.Run(env.Port)
 }

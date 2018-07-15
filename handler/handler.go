@@ -143,7 +143,7 @@ func Signin(env *Env) func(ctx *gin.Context) {
 
 // @Title SendResetPasswordEmail
 // @Summary SendResetPasswordEmail
-// @Description When user click on reset password button with an email filled in a form above, front-end will call this endpoint with a JSON wrapped {Email} to sent reset password email, a hacker can hack this end point currently by repeatedly calling and our system will spam send email. Next step would be requiring a session {Email, AuthToken} combination and this endpoint will only be able to sent email to this session's Email.
+// @Description When user click on reset password button with an email filled in a form above, front-end will call this endpoint with a JSON wrapped {Email, Token} to sent reset password email, a hacker cannot hack this end point by repeatedly calling and our system and spam send email. Requiring a session {Email, AuthToken} combination and this endpoint will only be able to sent email to this session's Email.
 // @Accept json
 // @Param body body model.SendResetPasswordEmailRequest true "ResetPasswordButtonRequest is a POST JSON type"
 // @Success 200 {object} model.SendResetPasswordEmailResponseSuccess "Success: message: reset email sent"
