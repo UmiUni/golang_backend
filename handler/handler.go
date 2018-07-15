@@ -298,7 +298,7 @@ func GetSchool(env *Env) func(ctx *gin.Context) {
 
 func GetCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-
+		getIcons("Google")
 	}
 }
 
