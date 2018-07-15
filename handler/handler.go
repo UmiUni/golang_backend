@@ -170,7 +170,7 @@ func SendResetPasswordEmail(env *Env) func(ctx *gin.Context) {
 // @Summary ResetPasswordForm
 // @Description After user clicks on reset password link(GET with email and token) in email, front-end/mobile will provide user with a form, {Email(prefilled), Password, Token(prefilled)}. After user filled the form, front-end/mobile will call this endpoint with a JSON wrapped {Email(prefilled), Password, Token(prefilled)} POST to reset password. If the user is not activated at the point of click on reset_password, an email titled reset_password with activation instruction will be sent.
 // @Accept json
-// @Param body body model.ResetPasswordFormRequest true "ResetPasswordButtonRequest is a POST JSON type"
+// @Param body body model.ResetPasswordFormRequest true "ResetPasswordFormRequest is a POST JSON type"
 // @Success 200 {object} model.ResetPasswordFormResponseSuccess "Success: message: reset email sent"
 // @Failure 400 {object} model.ResetPasswordFormResponseAPIError0 "Failure: email not registered"
 // @Router /reset_password_form [post]
@@ -234,10 +234,26 @@ func GetResume(env *Env) func(ctx *gin.Context) {
 	}
 }
 
+// @Title AddCompany
+// @Summary AddCompany
+// @Description AddCompany is an endpoint that adds company json(id(generated), name, domain) to schemaless database
+// @Accept json
+// @Param body body model.AddCompanyRequest true "AddCompanyRequest is a POST JSON type"
+// @Success 200 {object} model.AddCompanyRequest "Success: schemaless add company success"
+// @Failure 400 {object} model.AddCompanyRequestError0 "Failure: schemaless add company fail"
+// @Router /add_company [post]
 func AddCompany(env *Env) func(ctx *gin.Context) {
 	return AddCompanySchool(env, "companies")
 }
 
+// @Title AddSchool
+// @Summary AddSchool
+// @Description AddSchool is an endpoint that adds school json(id(generated), name, domain) to schemaless database
+// @Accept json
+// @Param body body model.AddSchoolRequest true "AddSchoolRequest is a POST JSON type"
+// @Success 200 {object} model.AddSchoolRequest "Success: schemaless add school success"
+// @Failure 400 {object} model.AddSchoolRequestError0 "Failure: schemaless add school fail"
+// @Router /add_school [post]
 func AddSchool(env *Env) func(ctx *gin.Context) {
 	return AddCompanySchool(env, "schools")
 }

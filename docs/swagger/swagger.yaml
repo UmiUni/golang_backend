@@ -48,6 +48,33 @@ definitions:
         example: wang374
         type: string
     type: object
+  model.AddCompanyRequest:
+    properties:
+      domain:
+        example: google
+        type: string
+      name:
+        example: Google
+        type: string
+    type: object
+  model.AddCompanyRequestError0:
+    properties:
+      error:
+        example: email not registered
+        type: string
+    type: object
+  model.AddSchoolRequest:
+    properties:
+      Email:
+        example: wang374@uiuc.edu
+        type: string
+    type: object
+  model.AddSchoolRequestError0:
+    properties:
+      error:
+        example: schemaless add school fail
+        type: string
+    type: object
   model.ApplicantSignupEmailRequest:
     properties:
       Email:
@@ -232,6 +259,58 @@ paths:
             $ref: '#/definitions/model.ActivateAndSignupResponseAPIError2'
             type: object
       summary: ActivateAndSignup
+  /add_company:
+    post:
+      consumes:
+      - application/json
+      description: AddCompany is an endpoint that adds company json(id(generated),
+        name, domain) to schemaless database
+      parameters:
+      - description: AddCompanyRequest is a POST JSON type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.AddCompanyRequest'
+          type: object
+      responses:
+        "200":
+          description: 'Success: schemaless add company success'
+          schema:
+            $ref: '#/definitions/model.AddCompanyRequest'
+            type: object
+        "400":
+          description: 'Failure: schemaless add company fail'
+          schema:
+            $ref: '#/definitions/model.AddCompanyRequestError0'
+            type: object
+      summary: AddCompany
+  /add_school:
+    post:
+      consumes:
+      - application/json
+      description: AddSchool is an endpoint that adds school json(id(generated), name,
+        domain) to schemaless database
+      parameters:
+      - description: AddSchoolRequest is a POST JSON type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.AddSchoolRequest'
+          type: object
+      responses:
+        "200":
+          description: 'Success: schemaless add school success'
+          schema:
+            $ref: '#/definitions/model.AddSchoolRequest'
+            type: object
+        "400":
+          description: 'Failure: schemaless add school fail'
+          schema:
+            $ref: '#/definitions/model.AddSchoolRequestError0'
+            type: object
+      summary: AddSchool
   /applicant_check_signup_email:
     post:
       consumes:
@@ -298,7 +377,7 @@ paths:
         on reset_password, an email titled reset_password with activation instruction
         will be sent.
       parameters:
-      - description: ResetPasswordButtonRequest is a POST JSON type
+      - description: ResetPasswordFormRequest is a POST JSON type
         in: body
         name: body
         required: true
