@@ -50,23 +50,26 @@ definitions:
     type: object
   model.AddCompanyRequest:
     properties:
-      domain:
-        example: google
+      Domain:
+        example: google.com
         type: string
-      name:
+      Name:
         example: Google
         type: string
     type: object
   model.AddCompanyRequestError0:
     properties:
       error:
-        example: email not registered
+        example: schemaless add company fail
         type: string
     type: object
   model.AddSchoolRequest:
     properties:
-      Email:
-        example: wang374@uiuc.edu
+      Domain:
+        example: illinois.edu
+        type: string
+      Name:
+        example: University of Illinois at Urbana-Champaign
         type: string
     type: object
   model.AddSchoolRequestError0:
@@ -338,6 +341,16 @@ paths:
             $ref: '#/definitions/model.ApplicantSignupResponseAPIError1'
             type: object
       summary: ApplicantCheckSignupEmail
+  /get_all_companies:
+    get:
+      description: GetAllCompanies is an endpoint that returns companies list from
+        schemaless database
+      summary: Get All Companies
+  /get_all_schools:
+    get:
+      description: GetAllSchools is an endpoint that returns schools list from schemaless
+        database
+      summary: Get All Schools
   /referrer_check_signup_email:
     post:
       consumes:
@@ -401,11 +414,11 @@ paths:
       consumes:
       - application/json
       description: When user click on reset password button with an email filled in
-        a form above, front-end will call this endpoint with a JSON wrapped {Email}
-        to sent reset password email, a hacker can hack this end point currently by
-        repeatedly calling and our system will spam send email. Next step would be
-        requiring a session {Email, AuthToken} combination and this endpoint will
-        only be able to sent email to this session's Email.
+        a form above, front-end will call this endpoint with a JSON wrapped {Email,
+        Token} to sent reset password email, a hacker cannot hack this end point by
+        repeatedly calling and our system and spam send email. Requiring a session
+        {Email, AuthToken} combination and this endpoint will only be able to sent
+        email to this session's Email.
       parameters:
       - description: ResetPasswordButtonRequest is a POST JSON type
         in: body

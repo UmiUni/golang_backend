@@ -274,10 +274,18 @@ func AddCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 	}
 }
 
+// @Title GetAllCompanies
+// @Summary Get All Companies
+// @Description GetAllCompanies is an endpoint that returns companies list from schemaless database
+// @Router /get_all_companies [get]
 func GetAllCompanies(env *Env) func(ctx *gin.Context) {
 	return GetAllCompaniesSchools(env, "companies")
 }
 
+// @Title GetAllSchools
+// @Summary Get All Schools
+// @Description GetAllSchools is an endpoint that returns schools list from schemaless database
+// @Router /get_all_schools [get]
 func GetAllSchools(env *Env) func(ctx *gin.Context) {
 	return GetAllCompaniesSchools(env, "schools")
 }
