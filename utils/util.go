@@ -28,3 +28,12 @@ func GetToken(secret string, email string) string {
 	utils.CheckErr(err)
 	return signed
 }
+
+// TODO; figure out a way to use generic type
+func List2Map(list []string) map[string]bool {
+	result := map[string]bool{}
+	for _, entry := range list {
+		result[entry] = true
+	}
+	return result
+}

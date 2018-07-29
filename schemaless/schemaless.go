@@ -8,6 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"code.jogchat.internal/go-schemaless"
 	"encoding/json"
+	"time"
 )
 
 const hashCost = 8
@@ -61,7 +62,7 @@ func ReverifyEmail(email string, token string) (successful bool, err error) {
 }
 
 func ActivateEmail(email string, username string, password string, token string) (info map[string]string, successful bool, err error) {
-	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "username", username)
+	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "username", username, "=")
 	if found {
 		return nil, false, errors.New("username already in use")
 	}
@@ -230,7 +231,9 @@ func PostPosition(username string, company string, position string, description 
 	}
 	body := map[string]interface{} {
 		"postedBy": username,
+		"company": company,
 		"position": position,
+		"postedAt": time.Now().UnixNano(),
 		"description": description,
 	}
 	id, cell, err := constructCell("position", body)
@@ -271,6 +274,29 @@ func CommentOn(username string, positionId string, parentId string, parentType s
 	}()
 	info = map[string]interface{} {
 		"id": id,
+	}
+	return info, true, nil
+}
+
+func GetPositions(companies map[string]bool, duration time.Duration) (info map[string]interface{}, found bool, err error) {
+	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "positions", "postedAt", time.Now().UnixNano() - duration.Nanoseconds(), ">=")
+	if !found {
+		return nil, false, err
+	}
+	var positions []map[string]interface{}
+	for _, cell := range cells {
+		var body map[string]interface{}
+		json.Unmarshal(cell.Body, &body)
+		if len(companies) > 0 {
+			if _, ok := companies[body["company"].(string)]; ok {
+				positions = append(positions, body)
+			}
+		} else {
+			positions = append(positions, body)
+		}
+	}
+	info = map[string]interface{} {
+		"positions": positions,
 	}
 	return info, true, nil
 }

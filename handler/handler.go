@@ -7,6 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"code.jogchat.internal/golang_backend/utils"
 	"os"
+	"time"
+	"strings"
 )
 
 
@@ -357,6 +359,34 @@ func CommentOn(env *Env) func(ctx *gin.Context) {
 		}
 		info, successful, err := schemaless.CommentOn(username, positionId, parentId, parentType, content)
 		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			ctx.JSON(http.StatusOK, info)
+		}
+	}
+}
+
+func GetPositions(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		params := readParams(ctx)
+		var companies []string
+		var duration time.Duration
+		switch params["Companies"] {
+		case "*":
+			companies = strings.Split(params["Companies"], ",")
+		default:
+			companies = []string{}
+		}
+		switch params["Duration"] {
+		case "day":
+			duration = 24 * time.Hour
+		case "month":
+			duration = 24 * 30 * time.Hour
+		default:
+			duration = 365 * 30 * time.Hour
+		}
+		info, found, err := schemaless.GetPositions(utils.List2Map(companies), duration)
+		if !found {
 			handleFailure(err, ctx)
 		} else {
 			ctx.JSON(http.StatusOK, info)

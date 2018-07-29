@@ -66,7 +66,7 @@ func getUserByUniqueField(field string, value string) (cell models.Cell, body ma
 }
 
 func getEntityByUniqueField(category string, field string, value interface{}) (cell models.Cell, body map[string]interface{}, found bool, err error) {
-	cells, found, err := DataStore.GetCellsByFieldLatest(context.TODO(), category, field, value)
+	cells, found, err := DataStore.GetCellsByFieldLatest(context.TODO(), category, field, value, "=")
 	if !found {
 		return cell, nil, false, err
 	}

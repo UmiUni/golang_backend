@@ -67,6 +67,7 @@ func main() {
 	r.GET("/get_all_schools", handler.GetAllSchools(env))
 	r.GET("/get_company", handler.GetCompany(env))
 	r.GET("/get_school", handler.GetSchool(env))
+	r.GET("/get_jobs", handler.GetPositions(env))
 
 	// use ginSwagger middleware to
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
