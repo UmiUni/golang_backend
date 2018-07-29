@@ -58,8 +58,8 @@ func main() {
 	r.POST("/resend_activation_email", handler.ResendActivationEmail(env))
 	r.POST("/activate_and_signup", handler.ActivateAndSignup(env))
 	r.POST("/signin", handler.Signin(env))
-	r.POST("/reset_request", handler.SendResetPasswordEmail(env))
-	r.POST("/reset_password", handler.ResetPasswordForm(env))
+	r.POST("/send_reset_password_email", handler.SendResetPasswordEmail(env))
+	r.POST("/reset_password_form", handler.ResetPasswordForm(env))
 
 	r.POST("/add_company", handler.AddCompany(env))
 	r.POST("/add_school", handler.AddSchool(env))
