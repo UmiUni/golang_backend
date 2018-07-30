@@ -62,7 +62,7 @@ func ReverifyEmail(email string, token string) (successful bool, err error) {
 }
 
 func ActivateEmail(email string, username string, password string, token string) (info map[string]string, successful bool, err error) {
-	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "username", username, "=")
+	_, found, _ := DataStore.GetCellByUniqueFieldLatest(context.TODO(), "users", "username", username)
 	if found {
 		return nil, false, errors.New("username already in use")
 	}

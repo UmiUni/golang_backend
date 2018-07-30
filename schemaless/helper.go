@@ -66,11 +66,10 @@ func getUserByUniqueField(field string, value string) (cell models.Cell, body ma
 }
 
 func getEntityByUniqueField(category string, field string, value interface{}) (cell models.Cell, body map[string]interface{}, found bool, err error) {
-	cells, found, err := DataStore.GetCellsByFieldLatest(context.TODO(), category, field, value, "=")
+	cell, found, err = DataStore.GetCellByUniqueFieldLatest(context.TODO(), category, field, value)
 	if !found {
 		return cell, nil, false, err
 	}
-	cell = cells[0]
 	json.Unmarshal(cell.Body, &body)
 	return cell, body, true, nil
 }
