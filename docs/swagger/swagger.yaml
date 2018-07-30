@@ -57,10 +57,16 @@ definitions:
         example: Google
         type: string
     type: object
-  model.AddCompanyRequestError0:
+  model.AddCompanyResponseError0:
     properties:
       error:
         example: schemaless add company fail
+        type: string
+    type: object
+  model.AddCompanyResponseSuccess:
+    properties:
+      message:
+        example: status 200
         type: string
     type: object
   model.AddSchoolRequest:
@@ -72,10 +78,16 @@ definitions:
         example: University of Illinois at Urbana-Champaign
         type: string
     type: object
-  model.AddSchoolRequestError0:
+  model.AddSchoolResponseError0:
     properties:
       error:
         example: schemaless add school fail
+        type: string
+    type: object
+  model.AddSchoolResponseSuccess:
+    properties:
+      message:
+        example: status 200
         type: string
     type: object
   model.ApplicantSignupEmailRequest:
@@ -100,6 +112,40 @@ definitions:
     properties:
       message:
         example: verification email sent
+        type: string
+    type: object
+  model.PostPositionRequest:
+    properties:
+      Company:
+        example: Uber
+        type: string
+      Description:
+        example: Build a microservice platform for Uber. A position require microservice
+          knowledge and past experience in Golang.
+        type: string
+      Position:
+        example: Software Engineer
+        type: string
+      Username:
+        example: chaoran@Uber.com
+        type: string
+    type: object
+  model.PostPositionResponseAPIError0:
+    properties:
+      error:
+        example: username does not exist
+        type: string
+    type: object
+  model.PostPositionResponseAPIError1:
+    properties:
+      error:
+        example: construct cell failure
+        type: string
+    type: object
+  model.PostPositionResponseSuccess:
+    properties:
+      message:
+        example: 'Success: status 200'
         type: string
     type: object
   model.ReferrerSignupEmailRequest:
@@ -280,12 +326,12 @@ paths:
         "200":
           description: 'Success: schemaless add company success'
           schema:
-            $ref: '#/definitions/model.AddCompanyRequest'
+            $ref: '#/definitions/model.AddCompanyResponseSuccess'
             type: object
         "400":
           description: 'Failure: schemaless add company fail'
           schema:
-            $ref: '#/definitions/model.AddCompanyRequestError0'
+            $ref: '#/definitions/model.AddCompanyResponseError0'
             type: object
       summary: AddCompany
   /add_school:
@@ -306,12 +352,12 @@ paths:
         "200":
           description: 'Success: schemaless add school success'
           schema:
-            $ref: '#/definitions/model.AddSchoolRequest'
+            $ref: '#/definitions/model.AddSchoolResponseSuccess'
             type: object
         "400":
           description: 'Failure: schemaless add school fail'
           schema:
-            $ref: '#/definitions/model.AddSchoolRequestError0'
+            $ref: '#/definitions/model.AddSchoolResponseError0'
             type: object
       summary: AddSchool
   /applicant_check_signup_email:
@@ -351,6 +397,32 @@ paths:
       description: GetAllSchools is an endpoint that returns schools list from schemaless
         database
       summary: Get All Schools
+  /post_position:
+    post:
+      consumes:
+      - application/json
+      description: PostPosition is an endpoint called when an applicant create a referral
+        position with dedicated JSON.
+      parameters:
+      - description: PostPositionRequest is a POST JSON type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.PostPositionRequest'
+          type: object
+      responses:
+        "200":
+          description: 'Success: verification email sent'
+          schema:
+            $ref: '#/definitions/model.PostPositionResponseSuccess'
+            type: object
+        "400":
+          description: construct cell failure
+          schema:
+            $ref: '#/definitions/model.PostPositionResponseAPIError1'
+            type: object
+      summary: PostPosition
   /referrer_check_signup_email:
     post:
       consumes:

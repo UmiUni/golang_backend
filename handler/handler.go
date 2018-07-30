@@ -241,8 +241,8 @@ func GetResume(env *Env) func(ctx *gin.Context) {
 // @Description AddCompany is an endpoint that adds company json(id(generated), name, domain) to schemaless database
 // @Accept json
 // @Param body body model.AddCompanyRequest true "AddCompanyRequest is a POST JSON type"
-// @Success 200 {object} model.AddCompanyRequest "Success: schemaless add company success"
-// @Failure 400 {object} model.AddCompanyRequestError0 "Failure: schemaless add company fail"
+// @Success 200 {object} model.AddCompanyResponseSuccess "Success: schemaless add company success"
+// @Failure 400 {object} model.AddCompanyResponseError0 "Failure: schemaless add company fail"
 // @Router /add_company [post]
 func AddCompany(env *Env) func(ctx *gin.Context) {
 	return AddCompanySchool(env, "companies")
@@ -253,8 +253,8 @@ func AddCompany(env *Env) func(ctx *gin.Context) {
 // @Description AddSchool is an endpoint that adds school json(id(generated), name, domain) to schemaless database
 // @Accept json
 // @Param body body model.AddSchoolRequest true "AddSchoolRequest is a POST JSON type"
-// @Success 200 {object} model.AddSchoolRequest "Success: schemaless add school success"
-// @Failure 400 {object} model.AddSchoolRequestError0 "Failure: schemaless add school fail"
+// @Success 200 {object} model.AddSchoolResponseSuccess "Success: schemaless add school success"
+// @Failure 400 {object} model.AddSchoolResponseError0 "Failure: schemaless add school fail"
 // @Router /add_school [post]
 func AddSchool(env *Env) func(ctx *gin.Context) {
 	return AddCompanySchool(env, "schools")
@@ -329,6 +329,15 @@ func GetCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 	}
 }
 
+// @Title PostPosition
+// @Summary PostPosition
+// @Description PostPosition is an endpoint called when an applicant create a referral position with dedicated JSON.
+// @Accept  json
+// @Param body body model.PostPositionRequest true "PostPositionRequest is a POST JSON type"
+// @Success 200 {object} model.PostPositionResponseSuccess "Success: verification email sent"
+// @Failure 400 {object} model.PostPositionResponseAPIError0 "username does not exist"
+// @Failure 400 {object} model.PostPositionResponseAPIError1 "construct cell failure"
+// @Router /post_position [post]
 func PostPosition(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)

@@ -5,7 +5,11 @@ type AddCompanyRequest struct {
 	Domain string `required:"true" json:"Domain" example:"google.com"`
 }
 
-type AddCompanyRequestError0 struct {
+type AddCompanyResponseSuccess struct {
+	Message string `json:"message" example:"status 200"`
+}
+
+type AddCompanyResponseError0 struct {
 	ErrorMessage string `json:"error" example:"schemaless add company fail"`
 }
 
@@ -14,6 +18,10 @@ type AddSchoolRequest struct {
 	Domain string `required:"true" json:"Domain" example:"illinois.edu"`
 }
 
-type AddSchoolRequestError0 struct {
+type AddSchoolResponseSuccess struct {
+	Message string `json:"message" example:"status 200"`
+}
+
+type AddSchoolResponseError0 struct {
 	ErrorMessage string `json:"error" example:"schemaless add school fail"`
 }

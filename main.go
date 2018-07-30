@@ -49,7 +49,7 @@ func main() {
 	{
 		v1.POST("/upload_resume", handler.UploadResume(env))
 		v1.GET("/get_resume", handler.GetResume(env))
-		v1.POST("/post_job", handler.PostPosition(env))
+		v1.POST("/post_position", handler.PostPosition(env))
 		v1.POST("/comment_on", handler.CommentOn(env))
 	}
 
