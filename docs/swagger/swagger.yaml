@@ -114,6 +114,34 @@ definitions:
         example: verification email sent
         type: string
     type: object
+  model.CommentOnRequest:
+    properties:
+      Content:
+        type: string
+      ParentId:
+        example: ee3bc72c-9804-498b-be9d-c77471374e0a
+        type: string
+      ParentType:
+        type: string
+      PositionId:
+        example: 67bebc0c-f0bd-4352-b588-08a056085e0a
+        type: string
+      Username:
+        example: wang374
+        type: string
+    type: object
+  model.CommentOnResponseAPIError0:
+    properties:
+      error:
+        example: invalid parent type
+        type: string
+    type: object
+  model.CommentOnResponseSuccess:
+    properties:
+      message:
+        example: 'Success on commenting: status 200'
+        type: string
+    type: object
   model.PostPositionRequest:
     properties:
       Company:
@@ -387,6 +415,32 @@ paths:
             $ref: '#/definitions/model.ApplicantSignupResponseAPIError1'
             type: object
       summary: ApplicantCheckSignupEmail
+  /comment_on:
+    post:
+      consumes:
+      - application/json
+      description: CommentOn is an endpoint called when an applicant reply a comment
+        to a particular job position.
+      parameters:
+      - description: CommentOnRequest is a POST JSON type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.CommentOnRequest'
+          type: object
+      responses:
+        "200":
+          description: Success on commenting
+          schema:
+            $ref: '#/definitions/model.CommentOnResponseSuccess'
+            type: object
+        "400":
+          description: invalid parent type
+          schema:
+            $ref: '#/definitions/model.CommentOnResponseAPIError0'
+            type: object
+      summary: CommentOn
   /get_all_companies:
     get:
       description: GetAllCompanies is an endpoint that returns companies list from
@@ -401,8 +455,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: PostPosition is an endpoint called when an applicant create a referral
-        position with dedicated JSON.
+      description: PostPosition is an endpoint called when an referral create a job
+        position to refer with dedicated JSON.
       parameters:
       - description: PostPositionRequest is a POST JSON type
         in: body
@@ -413,7 +467,7 @@ paths:
           type: object
       responses:
         "200":
-          description: 'Success: verification email sent'
+          description: 'Success: position created'
           schema:
             $ref: '#/definitions/model.PostPositionResponseSuccess'
             type: object
