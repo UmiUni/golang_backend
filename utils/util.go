@@ -23,7 +23,7 @@ func GetToken(secret string, email string) string {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["sub"] = email
 	claims["iss"] = "jogchat.com"
-	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * 24 * 30).Unix()
 	signed, err := token.SignedString([]byte(secret))
 	utils.CheckErr(err)
 	return signed

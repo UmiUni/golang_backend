@@ -408,16 +408,15 @@ func CommentOn(env *Env) func(ctx *gin.Context) {
 
 func GetPositions(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		params := readParams(ctx)
 		var companies []string
 		var duration time.Duration
-		switch params["Companies"].(string) {
+		switch ctx.Query("Companies") {
 		case "*":
-			companies = strings.Split(params["Companies"].(string), ",")
+			companies = strings.Split(ctx.Query("Companies"), ",")
 		default:
 			companies = []string{}
 		}
-		switch params["Duration"].(string) {
+		switch ctx.Query("Duration") {
 		case "day":
 			duration = 24 * time.Hour
 		case "month":
