@@ -27,13 +27,15 @@ func uniqueUUID(columnKey string) uuid.UUID {
 	return id
 }
 
-func constructCell(columnKey string, body map[string]interface{}) (id uuid.UUID, cell models.Cell, err error) {
-	id = uniqueUUID(columnKey)
+func constructCell(columnKey string, body map[string]interface{}, uniqueId bool) (id uuid.UUID, cell models.Cell) {
+	if uniqueId {
+		id = uniqueUUID(columnKey)
+	} else {
+		id = utils.NewUUID()
+	}
 	body["id"] = id.String()
 	json_body, err := json.Marshal(body)
-	if err != nil {
-		return id, cell, err
-	}
+	utils.CheckErr(err)
 
 	cell = models.Cell{
 		RowKey: utils.NewUUID().Bytes(),
@@ -41,7 +43,7 @@ func constructCell(columnKey string, body map[string]interface{}) (id uuid.UUID,
 		RefKey: time.Now().UnixNano(),
 		Body: json_body,
 	}
-	return id, cell, nil
+	return id, cell
 }
 
 func mutateCell(cell models.Cell, body map[string]interface{}) models.Cell {

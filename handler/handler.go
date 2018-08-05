@@ -54,7 +54,7 @@ func ApplicantCheckSignupEmail(env *Env) func(ctx *gin.Context) {
 func CheckSignupEmail(env *Env, category string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		email := params["Email"]
+		email := params["Email"].(string)
 		token := utils.GetToken(env.Secret, email)
 		if email == "" {
 			handleFailure(errors.New("email cannot be empty"), ctx)
@@ -75,7 +75,7 @@ func CheckSignupEmail(env *Env, category string) func(ctx *gin.Context) {
 func ResendActivationEmail(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		email := params["Email"]
+		email := params["Email"].(string)
 		token := utils.GetToken(env.Secret, email)
 		if email == "" {
 			handleFailure(errors.New("email cannot be empty"), ctx)
@@ -106,10 +106,10 @@ func ResendActivationEmail(env *Env) func(ctx *gin.Context) {
 func ActivateAndSignup(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		email := params["Email"]
-		username := params["Username"]
-		password := params["Password"]
-		token := params["Token"]
+		email := params["Email"].(string)
+		username := params["Username"].(string)
+		password := params["Password"].(string)
+		token := params["Token"].(string)
 		info, successful, err := schemaless.ActivateEmail(email, username, password, token)
 		if !successful {
 			handleFailure(err, ctx)
@@ -132,8 +132,8 @@ func ActivateAndSignup(env *Env) func(ctx *gin.Context) {
 func Signin(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		email := params["Email"]
-		password := params["Password"]
+		email := params["Email"].(string)
+		password := params["Password"].(string)
 		info, successful, err := schemaless.SigninDB(email, password)
 		if !successful {
 			handleFailure(err, ctx)
@@ -154,7 +154,7 @@ func Signin(env *Env) func(ctx *gin.Context) {
 func SendResetPasswordEmail(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		email := params["Email"]
+		email := params["Email"].(string)
 		token := utils.GetToken(env.Secret, email)
 		found, err := schemaless.ResetRequest(email, token)
 		if !found {
@@ -179,9 +179,9 @@ func SendResetPasswordEmail(env *Env) func(ctx *gin.Context) {
 func ResetPasswordForm(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		email := params["Email"]
-		password := params["Password"]
-		token := params["Token"]
+		email := params["Email"].(string)
+		password := params["Password"].(string)
+		token := params["Token"].(string)
 		info, successful, err := schemaless.ResetPassword(email, password, token)
 		if !successful {
 			handleFailure(err, ctx)
@@ -263,9 +263,32 @@ func AddSchool(env *Env) func(ctx *gin.Context) {
 func AddCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		name := params["Name"]
-		domain := params["Domain"]
+		name := params["Name"].(string)
+		domain := params["Domain"].(string)
 		successful, err := schemaless.AddCompanySchool(category, name, domain)
+		if !successful {
+			handleFailure(err, ctx)
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": category + " added",
+			})
+		}
+	}
+}
+
+func AddCompanyBatch(env *Env) func(ctx *gin.Context) {
+	return AddCompanySchoolBatch(env, "companies")
+}
+
+func AddSchoolBatch(env *Env) func(ctx *gin.Context) {
+	return AddCompanySchoolBatch(env, "schools")
+}
+
+func AddCompanySchoolBatch(env *Env, category string) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		params := readParams(ctx)
+		entries := params["Entries"].([]interface{})
+		successful, err := schemaless.AddCompanySchoolBatch(category, entries)
 		if !successful {
 			handleFailure(err, ctx)
 		} else {
@@ -332,10 +355,10 @@ func GetCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 func PostPosition(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		username := params["Username"]
-		company := params["Company"]
-		position := params["Position"]
-		description := params["Description"]
+		username := params["Username"].(string)
+		company := params["Company"].(string)
+		position := params["Position"].(string)
+		description := params["Description"].(string)
 		info, successful, err := schemaless.PostPosition(username, company, position, description)
 		if !successful {
 			handleFailure(err, ctx)
@@ -348,11 +371,11 @@ func PostPosition(env *Env) func(ctx *gin.Context) {
 func CommentOn(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
-		username := params["Username"]
-		positionId := params["PositionId"]
-		parentId := params["ParentId"]
-		parentType := params["ParentType"]
-		content := params["Content"]
+		username := params["Username"].(string)
+		positionId := params["PositionId"].(string)
+		parentId := params["ParentId"].(string)
+		parentType := params["ParentType"].(string)
+		content := params["Content"].(string)
 		if parentType != "position" && parentType != "comment" {
 			handleFailure(errors.New("invalid parent type"), ctx)
 			return
@@ -371,13 +394,13 @@ func GetPositions(env *Env) func(ctx *gin.Context) {
 		params := readParams(ctx)
 		var companies []string
 		var duration time.Duration
-		switch params["Companies"] {
+		switch params["Companies"].(string) {
 		case "*":
-			companies = strings.Split(params["Companies"], ",")
+			companies = strings.Split(params["Companies"].(string), ",")
 		default:
 			companies = []string{}
 		}
-		switch params["Duration"] {
+		switch params["Duration"].(string) {
 		case "day":
 			duration = 24 * time.Hour
 		case "month":
