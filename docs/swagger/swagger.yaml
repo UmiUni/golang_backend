@@ -173,7 +173,7 @@ definitions:
   model.PostPositionResponseSuccess:
     properties:
       message:
-        example: 'Success: status 200'
+        example: 'Success: status 200 with position id {'
         type: string
     type: object
   model.ReferrerSignupEmailRequest:
@@ -467,7 +467,7 @@ paths:
           type: object
       responses:
         "200":
-          description: 'Success: position created'
+          description: 'Success with position id: {"id":"1528edfd-2cbd-451f-9053-a89e2e806cbe"}'
           schema:
             $ref: '#/definitions/model.PostPositionResponseSuccess'
             type: object

@@ -8,7 +8,7 @@ type PostPositionRequest struct {
 }
 
 type PostPositionResponseSuccess struct {
-	Message string `required:"true" json:"message" example:"Success: status 200"`
+	Message string `required:"true" json:"message" example:"Success: status 200 with position id {"id":"1528edfd-2cbd-451f-9053-a89e2e806cbe"} "`
 }
 
 type PostPositionResponseAPIError0 struct {

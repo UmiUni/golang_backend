@@ -236,7 +236,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success: position created",
+                        "description": "Success with position id: {\"id\":\"1528edfd-2cbd-451f-9053-a89e2e806cbe\"}",
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/model.PostPositionResponseSuccess"
@@ -654,7 +654,7 @@
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "Success: status 200"
+                    "example": "Success: status 200 with position id {"
                 }
             }
         },

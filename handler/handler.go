@@ -356,11 +356,13 @@ func GetCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 // @Summary PostPosition
 // @Description PostPosition is an endpoint called when an referral create a job position to refer with dedicated JSON.
 // @Accept  json
+// @in header
+// @name Authorization
 // @Param body body model.PostPositionRequest true "PostPositionRequest is a POST JSON type"
-// @Success 200 {object} model.PostPositionResponseSuccess "Success: position created"
+// @Success 200 {object} model.PostPositionResponseSuccess "Success with position id: {"id":"1528edfd-2cbd-451f-9053-a89e2e806cbe"}"
 // @Failure 400 {object} model.PostPositionResponseAPIError0 "username does not exist"
 // @Failure 400 {object} model.PostPositionResponseAPIError1 "construct cell failure"
-// @Router /post_position [post]
+// @Router /v1/post_position [post]
 func PostPosition(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
@@ -381,10 +383,12 @@ func PostPosition(env *Env) func(ctx *gin.Context) {
 // @Summary CommentOn
 // @Description CommentOn is an endpoint called when an applicant reply a comment to a particular job position.
 // @Accept  json
+// @in header
+// @name Authorization
 // @Param body body model.CommentOnRequest true "CommentOnRequest is a POST JSON type"
 // @Success 200 {object} model.CommentOnResponseSuccess "Success on commenting"
 // @Failure 400 {object} model.CommentOnResponseAPIError0 "invalid parent type"
-// @Router /comment_on [post]
+// @Router /v1/comment_on [post]
 func CommentOn(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		params := readParams(ctx)
