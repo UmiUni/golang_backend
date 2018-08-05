@@ -63,9 +63,9 @@ func sendEmail(env *Env, email string, subject string, text string, body string)
 	utils.CheckErr(err)
 }
 
-func readParams(ctx *gin.Context) map[string]string {
+func readParams(ctx *gin.Context) map[string]interface{} {
 	data, _ := ioutil.ReadAll(ctx.Request.Body)
-	var params map[string]string
+	var params map[string]interface{}
 	json.Unmarshal(data, &params)
 	return params
 }

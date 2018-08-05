@@ -63,6 +63,8 @@ func main() {
 
 	r.POST("/add_company", handler.AddCompany(env))
 	r.POST("/add_school", handler.AddSchool(env))
+	r.POST("/add_company_batch", handler.AddCompanyBatch(env))
+	r.POST("/add_school_batch", handler.AddSchoolBatch(env))
 	r.GET("/get_all_companies", handler.GetAllCompanies(env))
 	r.GET("/get_all_schools", handler.GetAllSchools(env))
 	r.GET("/get_company", handler.GetCompany(env))

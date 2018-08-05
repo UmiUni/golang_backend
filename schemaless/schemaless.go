@@ -36,7 +36,7 @@ func SignupDB(category string, email string, token string) (successful bool, err
 		category: true,
 		"activate": false,
 	}
-	_, cell, err := constructCell("users", body)
+	_, cell := constructCell("users", body, true)
 	go func() {
 		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "token")
 		utils.CheckErr(err)
@@ -62,7 +62,7 @@ func ReverifyEmail(email string, token string) (successful bool, err error) {
 }
 
 func ActivateEmail(email string, username string, password string, token string) (info map[string]string, successful bool, err error) {
-	_, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "users", "username", username, "=")
+	_, found, _ := DataStore.GetCellByUniqueFieldLatest(context.TODO(), "users", "username", username)
 	if found {
 		return nil, false, errors.New("username already in use")
 	}
@@ -187,12 +187,27 @@ func AddCompanySchool(category string, name string, domain string) (successful b
 		"name": name,
 		"domain": domain,
 	}
-	_, cell, err := constructCell(category, body)
+	_, cell := constructCell(category, body, true)
 	go func() {
 		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
 		utils.CheckErr(err)
 	}()
 
+	return true, nil
+}
+
+func AddCompanySchoolBatch(category string, entries []interface{}) (successful bool, err error) {
+	for _, entry := range entries {
+		body := map[string]interface{} {
+			"name": entry.(map[string]interface{})["Name"].(string),
+			"domain": entry.(map[string]interface{})["Domain"].(string),
+		}
+		_, cell := constructCell(category, body, false)
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
+		if err != nil {
+			return false, err
+		}
+	}
 	return true, nil
 }
 
@@ -236,7 +251,7 @@ func PostPosition(username string, company string, position string, description 
 		"postedAt": time.Now().UnixNano(),
 		"description": description,
 	}
-	id, cell, err := constructCell("position", body)
+	id, cell := constructCell("position", body, true)
 	go func() {
 		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "description")
 		utils.CheckErr(err)
@@ -267,7 +282,7 @@ func CommentOn(username string, positionId string, parentId string, parentType s
 		"parentId": parentId,
 		"content": content,
 	}
-	id, cell, err := constructCell("comment", body)
+	id, cell := constructCell("comment", body, true)
 	go func() {
 		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "content")
 		utils.CheckErr(err)
