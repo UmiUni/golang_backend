@@ -155,7 +155,7 @@ definitions:
         example: Software Engineer
         type: string
       Username:
-        example: chaoran@Uber.com
+        example: wang374
         type: string
     type: object
   model.PostPositionResponseAPIError0:
