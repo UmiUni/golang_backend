@@ -45,7 +45,7 @@ func main() {
 	r.Use(middleware.CORSMiddleware())
 
 	v1 := r.Group("/v1")
-	//v1.Use(middleware.VerifyToken(env))
+	v1.Use(middleware.VerifyToken(env))
 	{
 		v1.POST("/upload_resume", handler.UploadResume(env))
 		v1.GET("/get_resume", handler.GetResume(env))
