@@ -22,9 +22,9 @@ type PostPositionResponseAPIError1 struct {
 type CommentOnRequest struct {
 	Username string `required:"true" json:"Username" example:"wang374"`
 	PositionId string `required:"true" json:"PositionId" example:"67bebc0c-f0bd-4352-b588-08a056085e0a"]`
-	ParentId string `required:"true" json:"ParentId" example:"ee3bc72c-9804-498b-be9d-c77471374e0a"`
-	ParentType string `required:"true" json:"ParentType" example:""`
-    Content string `required:"true" json:"Content" example:""`
+	ParentId string `required:"true" json:"ParentId" example:"67bebc0c-f0bd-4352-b588-08a056085e0a"`
+	ParentType string `required:"true" json:"ParentType" example:"position"`
+    Content string `required:"true" json:"Content" example:"这个Position很适合我背景，请联系superchaoran@gmail.com"`
 }
 
 type CommentOnResponseSuccess struct {

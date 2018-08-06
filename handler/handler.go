@@ -381,7 +381,7 @@ func PostPosition(env *Env) func(ctx *gin.Context) {
 
 // @Title CommentOn
 // @Summary CommentOn
-// @Description CommentOn is an endpoint called when an applicant reply a comment to a particular job position.
+// @Description CommentOn is an endpoint called when an applicant reply a comment to a particular job position. ParentType can be either position or comment. ParentID is the positionID or commentID from which current commentID is commenting on.
 // @Accept  json
 // @Param body body model.CommentOnRequest true "CommentOnRequest is a POST JSON type"
 // @Success 200 {object} model.CommentOnResponseSuccess "Success on commenting"
@@ -393,6 +393,7 @@ func CommentOn(env *Env) func(ctx *gin.Context) {
 		username := params["Username"].(string)
 		positionId := params["PositionId"].(string)
 		parentId := params["ParentId"].(string)
+		//ParentType can be either position or comment
 		parentType := params["ParentType"].(string)
 		content := params["Content"].(string)
 		if parentType != "position" && parentType != "comment" {

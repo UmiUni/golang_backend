@@ -24,7 +24,7 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host http://178.128.0.108:3001
+// @host 178.128.0.108:3001
 // @BasePath /
 
 
