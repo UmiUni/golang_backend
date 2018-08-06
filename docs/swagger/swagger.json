@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "178.128.0.108:3001",
+    "host": "localhost:3001",
     "basePath": "/",
     "paths": {
         "/activate_and_signup": {
@@ -166,43 +166,6 @@
                 }
             }
         },
-        "/comment_on": {
-            "post": {
-                "description": "CommentOn is an endpoint called when an applicant reply a comment to a particular job position.",
-                "consumes": [
-                    "application/json"
-                ],
-                "summary": "CommentOn",
-                "parameters": [
-                    {
-                        "description": "CommentOnRequest is a POST JSON type",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.CommentOnRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success on commenting",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.CommentOnResponseSuccess"
-                        }
-                    },
-                    "400": {
-                        "description": "invalid parent type",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.CommentOnResponseAPIError0"
-                        }
-                    }
-                }
-            }
-        },
         "/get_all_companies": {
             "get": {
                 "description": "GetAllCompanies is an endpoint that returns companies list from schemaless database",
@@ -213,43 +176,6 @@
             "get": {
                 "description": "GetAllSchools is an endpoint that returns schools list from schemaless database",
                 "summary": "Get All Schools"
-            }
-        },
-        "/post_position": {
-            "post": {
-                "description": "PostPosition is an endpoint called when an referral create a job position to refer with dedicated JSON.",
-                "consumes": [
-                    "application/json"
-                ],
-                "summary": "PostPosition",
-                "parameters": [
-                    {
-                        "description": "PostPositionRequest is a POST JSON type",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PostPositionRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success with position id: {\"id\":\"1528edfd-2cbd-451f-9053-a89e2e806cbe\"}",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PostPositionResponseSuccess"
-                        }
-                    },
-                    "400": {
-                        "description": "construct cell failure",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PostPositionResponseAPIError1"
-                        }
-                    }
-                }
             }
         },
         "/referrer_check_signup_email": {
@@ -395,6 +321,80 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/model.SigninResponseAPIError2"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/comment_on": {
+            "post": {
+                "description": "CommentOn is an endpoint called when an applicant reply a comment to a particular job position.",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "CommentOn",
+                "parameters": [
+                    {
+                        "description": "CommentOnRequest is a POST JSON type",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.CommentOnRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success on commenting",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.CommentOnResponseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "invalid parent type",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.CommentOnResponseAPIError0"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/post_position": {
+            "post": {
+                "description": "PostPosition is an endpoint called when an referral create a job position to refer with dedicated JSON.",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "PostPosition",
+                "parameters": [
+                    {
+                        "description": "PostPositionRequest is a POST JSON type",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.PostPositionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success with position id: {\"id\":\"1528edfd-2cbd-451f-9053-a89e2e806cbe\"}",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.PostPositionResponseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "construct cell failure",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.PostPositionResponseAPIError1"
                         }
                     }
                 }
@@ -826,6 +826,13 @@
                     "example": "wang374"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

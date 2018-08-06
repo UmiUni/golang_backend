@@ -24,9 +24,13 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host 178.128.0.108:3001
+// @host localhost:3001
 // @BasePath /
 
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	// Initialise our app-wide environment data we'll send to the handler
 	env := &handler.Env{

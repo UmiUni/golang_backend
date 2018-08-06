@@ -383,8 +383,6 @@ func PostPosition(env *Env) func(ctx *gin.Context) {
 // @Summary CommentOn
 // @Description CommentOn is an endpoint called when an applicant reply a comment to a particular job position.
 // @Accept  json
-// @in header
-// @name Authorization
 // @Param body body model.CommentOnRequest true "CommentOnRequest is a POST JSON type"
 // @Success 200 {object} model.CommentOnResponseSuccess "Success on commenting"
 // @Failure 400 {object} model.CommentOnResponseAPIError0 "invalid parent type"
