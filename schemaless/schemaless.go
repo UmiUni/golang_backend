@@ -240,18 +240,21 @@ func GetCompanySchool(category string, domain string) (info map[string]interface
 }
 
 func PostPosition(username string, company string, position string, description string) (info map[string]interface{}, successful bool, err error) {
-	found, _ := DataStore.CheckValueExist(context.TODO(), "users", "username", username)
+	_, body, found, _ := getUserByUniqueField("username", username)
 	if !found {
 		return nil, false, errors.New("username does not exist")
 	}
-	body := map[string]interface{} {
+	if _, ok := body["referrer"]; !ok {
+		return nil, false, errors.New("only referrer can post positions")
+	}
+	body = map[string]interface{} {
 		"postedBy": username,
 		"company": company,
 		"position": position,
 		"postedAt": time.Now().UnixNano(),
 		"description": description,
 	}
-	id, cell := constructCell("position", body, true)
+	id, cell := constructCell("positions", body, true)
 	go func() {
 		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell, "description")
 		utils.CheckErr(err)
@@ -268,7 +271,7 @@ func CommentOn(username string, positionId string, parentId string, parentType s
 	if !found {
 		return nil, false, errors.New("username does not exist")
 	}
-	found, _ = DataStore.CheckValueExist(context.TODO(), "position", "id", positionId)
+	found, _ = DataStore.CheckValueExist(context.TODO(), "positions", "id", positionId)
 	if !found {
 		return nil, false, errors.New("invalid position id")
 	}

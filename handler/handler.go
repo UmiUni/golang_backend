@@ -414,11 +414,12 @@ func GetPositions(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var companies []string
 		var duration time.Duration
-		switch ctx.Query("Companies") {
+		corporate := ctx.Query("Companies")
+		switch corporate {
 		case "*":
-			companies = strings.Split(ctx.Query("Companies"), ",")
-		default:
 			companies = []string{}
+		default:
+			companies = strings.Split(corporate, ",")
 		}
 		switch ctx.Query("Duration") {
 		case "day":
