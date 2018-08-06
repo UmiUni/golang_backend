@@ -299,7 +299,7 @@ func CommentOn(username string, positionId string, parentId string, parentType s
 func GetPositions(companies map[string]bool, duration time.Duration) (info map[string]interface{}, found bool, err error) {
 	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "positions", "postedAt", time.Now().UnixNano() - duration.Nanoseconds(), ">=")
 	if !found {
-		return nil, false, err
+		return nil, false, errors.New("no position found")
 	}
 	var positions []map[string]interface{}
 	for _, cell := range cells {
