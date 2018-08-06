@@ -1,7 +1,7 @@
 package model
 
 type PostPositionRequest struct {
-	Username string `required:"true" json:"Username" example:"chaoran@Uber.com"`
+	Username string `required:"true" json:"Username" example:"wang374"`
 	Company string `required:"true" json:"Company" example:"Uber"`
 	Position string `required:"true" json:"Position" example:"Software Engineer"`
 	Description string `required:"true" json:"Description" example:"Build a microservice platform for Uber. A position require microservice knowledge and past experience in Golang."`
