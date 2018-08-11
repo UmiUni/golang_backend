@@ -27,6 +27,8 @@ func uniqueUUID(columnKey string) uuid.UUID {
 	return id
 }
 
+// Construct a cell object using column name and body.
+// If uniqueId is set to true, search for generated id to make sure no id duplication
 func constructCell(columnKey string, body map[string]interface{}, uniqueId bool) (id uuid.UUID, cell models.Cell) {
 	if uniqueId {
 		id = uniqueUUID(columnKey)
@@ -46,6 +48,7 @@ func constructCell(columnKey string, body map[string]interface{}, uniqueId bool)
 	return id, cell
 }
 
+// set body and ref_key of cell and returns the original cell object
 func mutateCell(cell models.Cell, body map[string]interface{}) models.Cell {
 	cell.Body, _ = json.Marshal(body)
 	cell.RefKey = time.Now().UnixNano()

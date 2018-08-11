@@ -24,6 +24,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
+// middleware to handle token verification
 func VerifyToken(env *handler.Env) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")

@@ -48,6 +48,7 @@ func main() {
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
 
+	// the following group requires token verification
 	v1 := r.Group("/v1")
 	v1.Use(middleware.VerifyToken(env))
 	{

@@ -174,11 +174,14 @@ func GetResume(username string) (filename string, found bool, err error) {
 	return resume.(string), true, nil
 }
 
+// insert single school or company, checks name or domain duplication
 func AddCompanySchool(category string, name string, domain string) (successful bool, err error) {
+	// verify no name duplicate
 	duplicate, _ := DataStore.CheckValueExist(context.TODO(), category, "name", name)
 	if duplicate {
 		return false, errors.New(category + " name already exist")
 	}
+	// veriy no domain duplicate
 	duplicate, _ = DataStore.CheckValueExist(context.TODO(), category, "domain", domain)
 	if duplicate {
 		return false, errors.New(category + " domain already exist")
@@ -196,6 +199,7 @@ func AddCompanySchool(category string, name string, domain string) (successful b
 	return true, nil
 }
 
+// insert companies or schools in batch mode, does not check name or domain duplication
 func AddCompanySchoolBatch(category string, entries []interface{}) (successful bool, err error) {
 	for _, entry := range entries {
 		body := map[string]interface{} {
@@ -211,6 +215,7 @@ func AddCompanySchoolBatch(category string, entries []interface{}) (successful b
 	return true, nil
 }
 
+// retrieve all companies or schools in batch mode
 func GetAllCompaniesSchools(category string) (info map[string]interface{}, err error) {
 	var results []map[string]interface{}
 	info = map[string]interface{} {
@@ -231,6 +236,7 @@ func GetAllCompaniesSchools(category string) (info map[string]interface{}, err e
 	return info, nil
 }
 
+// get single company or school by domain
 func GetCompanySchool(category string, domain string) (info map[string]interface{}, found bool, err error) {
 	_, body, found, err := getEntityByUniqueField(category, "domain", domain)
 	if !found {
@@ -271,10 +277,12 @@ func CommentOn(username string, positionId string, parentId string, parentType s
 	if !found {
 		return nil, false, errors.New("username does not exist")
 	}
+	// verify position exists
 	found, _ = DataStore.CheckValueExist(context.TODO(), "positions", "id", positionId)
 	if !found {
 		return nil, false, errors.New("invalid position id")
 	}
+	// verify parent exists
 	found, _ = DataStore.CheckValueExist(context.TODO(), parentType, "id", parentId)
 	if !found {
 		return nil, false, errors.New("invalid parent id")
@@ -296,6 +304,7 @@ func CommentOn(username string, positionId string, parentId string, parentType s
 	return info, true, nil
 }
 
+// retrieve positions within a certain within a certain duration from now, companies is a map of company names which can be empty,
 func GetPositions(companies map[string]bool, duration time.Duration) (info map[string]interface{}, found bool, err error) {
 	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "positions", "postedAt", time.Now().UnixNano() - duration.Nanoseconds(), ">=")
 	if !found {
