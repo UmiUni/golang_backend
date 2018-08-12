@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:3001",
+    "host": "178.128.0.108:3001",
     "basePath": "/",
     "paths": {
         "/activate_and_signup": {
@@ -328,11 +328,11 @@
         },
         "/v1/comment_on": {
             "post": {
-                "description": "CommentOn is an endpoint called when an applicant reply a comment to a particular job position.",
+                "description": "GetPositions is an endpoint called to get all the positions",
                 "consumes": [
                     "application/json"
                 ],
-                "summary": "CommentOn",
+                "summary": "GetPositions",
                 "parameters": [
                     {
                         "description": "CommentOnRequest is a POST JSON type",
@@ -407,11 +407,11 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "wang374@uiuc.edu"
+                    "example": "admin@umiuni.com"
                 },
                 "Password": {
                     "type": "string",
-                    "example": "wang374password"
+                    "example": "admin374password"
                 },
                 "Token": {
                     "type": "string",
@@ -419,7 +419,7 @@
                 },
                 "Username": {
                     "type": "string",
-                    "example": "wang374"
+                    "example": "admin374"
                 }
             }
         },
@@ -459,7 +459,7 @@
                 },
                 "Email": {
                     "type": "string",
-                    "example": "wang374@uiuc.edu"
+                    "example": "admin@umiuni.com"
                 },
                 "UserId": {
                     "type": "string",
@@ -467,7 +467,7 @@
                 },
                 "Username": {
                     "type": "string",
-                    "example": "wang374"
+                    "example": "admin374"
                 }
             }
         },
@@ -476,11 +476,11 @@
             "properties": {
                 "Domain": {
                     "type": "string",
-                    "example": "google.com"
+                    "example": "jogchat.com"
                 },
                 "Name": {
                     "type": "string",
-                    "example": "Google"
+                    "example": "Jogchat"
                 }
             }
         },
@@ -573,14 +573,16 @@
             "type": "object",
             "properties": {
                 "Content": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "这个Position很适合我背景，请联系superchaoran@gmail.com"
                 },
                 "ParentId": {
                     "type": "string",
-                    "example": "ee3bc72c-9804-498b-be9d-c77471374e0a"
+                    "example": "67bebc0c-f0bd-4352-b588-08a056085e0a"
                 },
                 "ParentType": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "position"
                 },
                 "PositionId": {
                     "type": "string",
@@ -588,7 +590,7 @@
                 },
                 "Username": {
                     "type": "string",
-                    "example": "wang374"
+                    "example": "admin374"
                 }
             }
         },
@@ -615,11 +617,11 @@
             "properties": {
                 "Company": {
                     "type": "string",
-                    "example": "Uber"
+                    "example": "Jogchat"
                 },
                 "Description": {
                     "type": "string",
-                    "example": "Build a microservice platform for Uber. A position require microservice knowledge and past experience in Golang."
+                    "example": "Build a microservice platform for Jogchat. A position require microservice knowledge and past experience in Golang."
                 },
                 "Position": {
                     "type": "string",
@@ -627,7 +629,7 @@
                 },
                 "Username": {
                     "type": "string",
-                    "example": "wang374"
+                    "example": "admin374"
                 }
             }
         },
@@ -663,7 +665,7 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "admin@jogchat.com"
+                    "example": "admin@umiuni.com"
                 }
             }
         },
@@ -699,11 +701,11 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "wang374@uiuc.edu"
+                    "example": "admin@umiuni.com"
                 },
                 "Password": {
                     "type": "string",
-                    "example": "wang374newpassword"
+                    "example": "admin374newpassword"
                 },
                 "Token": {
                     "type": "string"
@@ -727,7 +729,7 @@
                 },
                 "Email": {
                     "type": "string",
-                    "example": "wang374@uiuc.edu"
+                    "example": "admin@umiuni.com"
                 },
                 "UserId": {
                     "type": "string",
@@ -735,7 +737,7 @@
                 },
                 "Username": {
                     "type": "string",
-                    "example": "wang374"
+                    "example": "admin374"
                 }
             }
         },
@@ -744,7 +746,7 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "wang374@uiuc.edu"
+                    "example": "admin@umiuni.com"
                 }
             }
         },
@@ -771,11 +773,11 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "wang374@uiuc.edu"
+                    "example": "admin@umiuni.com"
                 },
                 "Password": {
                     "type": "string",
-                    "example": "wang374password"
+                    "example": "admin374password"
                 }
             }
         },
@@ -815,7 +817,7 @@
                 },
                 "Email": {
                     "type": "string",
-                    "example": "wang374@uiuc.edu"
+                    "example": "admin@umiuni.com"
                 },
                 "UserId": {
                     "type": "string",
@@ -823,7 +825,7 @@
                 },
                 "Username": {
                     "type": "string",
-                    "example": "wang374"
+                    "example": "admin374"
                 }
             }
         }
