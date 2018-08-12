@@ -572,6 +572,9 @@
         "model.CommentOnRequest": {
             "type": "object",
             "properties": {
+                "Authorization example:": {
+                    "type": "string"
+                },
                 "Content": {
                     "type": "string",
                     "example": "这个Position很适合我背景，请联系superchaoran@gmail.com"
@@ -615,6 +618,9 @@
         "model.PostPositionRequest": {
             "type": "object",
             "properties": {
+                "Authorization example:": {
+                    "type": "string"
+                },
                 "Company": {
                     "type": "string",
                     "example": "Jogchat"
