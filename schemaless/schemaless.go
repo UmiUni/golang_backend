@@ -305,7 +305,7 @@ func CommentOn(username string, positionId string, parentId string, parentType s
 	return info, true, nil
 }
 
-// retrieve positions within a certain within a certain duration from now, companies is a map of company names which can be empty,
+// retrieve positions sorted by timestamp within a certain within a certain duration from now, companies is a map of company names which can be empty,
 func GetPositions(companies map[string]bool, duration time.Duration, limit int) (info map[string]interface{}, found bool, err error) {
 	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "positions", "postedAt", time.Now().UnixNano() - duration.Nanoseconds(), ">=")
 	if !found {
