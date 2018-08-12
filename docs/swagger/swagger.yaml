@@ -3,7 +3,7 @@ definitions:
   model.ActivateAndSignupRequest:
     properties:
       Email:
-        example: admin@jogchat.com
+        example: admin@umiuni.com
         type: string
       Password:
         example: admin374password
@@ -39,7 +39,7 @@ definitions:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM1NjUsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.XwmDhW1b99E9jwGatN_6y1tYpLGBcAqywS9fI23Oxxo
         type: string
       Email:
-        example: admin@jogchat.com
+        example: admin@umiuni.com
         type: string
       UserId:
         example: ce57e12a-fe27-43a2-9a1f-0792b3d36f2e
@@ -181,7 +181,7 @@ definitions:
   model.ReferrerSignupEmailRequest:
     properties:
       Email:
-        example: admin@jogchat.com
+        example: admin@umiuni.com
         type: string
     type: object
   model.ReferrerSignupResponseAPIError0:
@@ -205,7 +205,7 @@ definitions:
   model.ResetPasswordFormRequest:
     properties:
       Email:
-        example: admin@jogchat.com
+        example: admin@umiuni.com
         type: string
       Password:
         example: admin374newpassword
@@ -224,7 +224,7 @@ definitions:
       AuthToken:
         type: string
       Email:
-        example: admin@jogchat.com
+        example: admin@umiuni.com
         type: string
       UserId:
         example: ce57e12a-fe27-43a2-9a1f-0792b3d36f2e
@@ -236,7 +236,7 @@ definitions:
   model.SendResetPasswordEmailRequest:
     properties:
       Email:
-        example: admin@jogchat.com
+        example: admin@umiuni.com
         type: string
     type: object
   model.SendResetPasswordEmailResponseAPIError0:
@@ -254,7 +254,7 @@ definitions:
   model.SigninRequest:
     properties:
       Email:
-        example: admin@jogchat.com
+        example: admin@umiuni.com
         type: string
       Password:
         example: admin374password
@@ -284,7 +284,7 @@ definitions:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM2MzgsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.RhRUpHJbIfid1hiJOTtStuxc86v0isnWny85COG9Mek
         type: string
       Email:
-        example: admin@jogchat.com
+        example: admin@umiuni.com
         type: string
       UserId:
         example: ce57e12a-fe27-43a2-9a1f-0792b3d36f2e

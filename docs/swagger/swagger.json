@@ -407,7 +407,7 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "admin@jogchat.com"
+                    "example": "admin@umiuni.com"
                 },
                 "Password": {
                     "type": "string",
@@ -459,7 +459,7 @@
                 },
                 "Email": {
                     "type": "string",
-                    "example": "admin@jogchat.com"
+                    "example": "admin@umiuni.com"
                 },
                 "UserId": {
                     "type": "string",
@@ -665,7 +665,7 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "admin@jogchat.com"
+                    "example": "admin@umiuni.com"
                 }
             }
         },
@@ -701,7 +701,7 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "admin@jogchat.com"
+                    "example": "admin@umiuni.com"
                 },
                 "Password": {
                     "type": "string",
@@ -729,7 +729,7 @@
                 },
                 "Email": {
                     "type": "string",
-                    "example": "admin@jogchat.com"
+                    "example": "admin@umiuni.com"
                 },
                 "UserId": {
                     "type": "string",
@@ -746,7 +746,7 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "admin@jogchat.com"
+                    "example": "admin@umiuni.com"
                 }
             }
         },
@@ -773,7 +773,7 @@
             "properties": {
                 "Email": {
                     "type": "string",
-                    "example": "admin@jogchat.com"
+                    "example": "admin@umiuni.com"
                 },
                 "Password": {
                     "type": "string",
@@ -817,7 +817,7 @@
                 },
                 "Email": {
                     "type": "string",
-                    "example": "admin@jogchat.com"
+                    "example": "admin@umiuni.com"
                 },
                 "UserId": {
                     "type": "string",
