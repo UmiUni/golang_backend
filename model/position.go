@@ -1,10 +1,10 @@
 package model
 
 type PostPositionRequest struct {
-	Username string `required:"true" json:"Username" example:"wang374"`
-	Company string `required:"true" json:"Company" example:"Uber"`
+	Username string `required:"true" json:"Username" example:"admin374"`
+	Company string `required:"true" json:"Company" example:"Jogchat"`
 	Position string `required:"true" json:"Position" example:"Software Engineer"`
-	Description string `required:"true" json:"Description" example:"Build a microservice platform for Uber. A position require microservice knowledge and past experience in Golang."`
+	Description string `required:"true" json:"Description" example:"Build a microservice platform for Jogchat. A position require microservice knowledge and past experience in Golang."`
 }
 
 type PostPositionResponseSuccess struct {
@@ -20,7 +20,7 @@ type PostPositionResponseAPIError1 struct {
 }
 
 type CommentOnRequest struct {
-	Username string `required:"true" json:"Username" example:"wang374"`
+	Username string `required:"true" json:"Username" example:"admin374"`
 	PositionId string `required:"true" json:"PositionId" example:"67bebc0c-f0bd-4352-b588-08a056085e0a"]`
 	ParentId string `required:"true" json:"ParentId" example:"67bebc0c-f0bd-4352-b588-08a056085e0a"`
 	ParentType string `required:"true" json:"ParentType" example:"position"`

@@ -1,8 +1,8 @@
 package model
 
 type AddCompanyRequest struct {
-	Name string `required:"true" json:"Name" example:"Google"`
-	Domain string `required:"true" json:"Domain" example:"google.com"`
+	Name string `required:"true" json:"Name" example:"Jogchat"`
+	Domain string `required:"true" json:"Domain" example:"jogchat.com"`
 }
 
 type AddCompanyResponseSuccess struct {

@@ -409,6 +409,14 @@ func CommentOn(env *Env) func(ctx *gin.Context) {
 	}
 }
 
+// @Title GetPositions
+// @Summary GetPositions
+// @Description GetPositions is an endpoint called to get all the positions
+// @Accept  json
+// @Param body body model.CommentOnRequest true "CommentOnRequest is a POST JSON type"
+// @Success 200 {object} model.CommentOnResponseSuccess "Success on commenting"
+// @Failure 400 {object} model.CommentOnResponseAPIError0 "invalid parent type"
+// @Router /v1/comment_on [post]
 func GetPositions(env *Env) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		var companies []string
