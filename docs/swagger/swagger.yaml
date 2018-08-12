@@ -116,8 +116,6 @@ definitions:
     type: object
   model.CommentOnRequest:
     properties:
-      'Authorization example:':
-        type: string
       Content:
         example: 这个Position很适合我背景，请联系superchaoran@gmail.com
         type: string
@@ -148,8 +146,6 @@ definitions:
     type: object
   model.PostPositionRequest:
     properties:
-      'Authorization example:':
-        type: string
       Company:
         example: Jogchat
         type: string
