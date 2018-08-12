@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 	"strings"
+	"strconv"
 )
 
 
@@ -436,7 +437,9 @@ func GetPositions(env *Env) func(ctx *gin.Context) {
 		default:
 			duration = 365 * 30 * time.Hour
 		}
-		info, found, err := schemaless.GetPositions(utils.List2Map(companies), duration)
+		limit, err := strconv.Atoi(ctx.Query("Limit"))
+		utils.CheckErr(err)
+		info, found, err := schemaless.GetPositions(utils.List2Map(companies), duration, limit)
 		if !found {
 			handleFailure(err, ctx)
 		} else {

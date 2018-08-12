@@ -9,6 +9,7 @@ import (
 	"code.jogchat.internal/go-schemaless"
 	"encoding/json"
 	"time"
+	"sort"
 )
 
 const hashCost = 8
@@ -305,11 +306,15 @@ func CommentOn(username string, positionId string, parentId string, parentType s
 }
 
 // retrieve positions within a certain within a certain duration from now, companies is a map of company names which can be empty,
-func GetPositions(companies map[string]bool, duration time.Duration) (info map[string]interface{}, found bool, err error) {
+func GetPositions(companies map[string]bool, duration time.Duration, limit int) (info map[string]interface{}, found bool, err error) {
 	cells, found, _ := DataStore.GetCellsByFieldLatest(context.TODO(), "positions", "postedAt", time.Now().UnixNano() - duration.Nanoseconds(), ">=")
 	if !found {
 		return nil, false, errors.New("no position found")
 	}
+	sort.Slice(cells, func(i, j int) bool {
+		return cells[i].AddedAt < cells[j].AddedAt
+	})
+	cells = cells[:limit]
 	var positions []map[string]interface{}
 	for _, cell := range cells {
 		var body map[string]interface{}
