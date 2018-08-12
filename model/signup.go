@@ -1,6 +1,6 @@
 package model
 
-// @Example "{"Email":"wang374@uiuc.edu", "Username":"wang374", "Password":"wang374password", "Token":""}"
+// @Example "{"Email":"admin@gmail.com", "Username":"admin374", "Password":"admin374password", "Token":""}"
 type ActivateAndSignupRequest struct {
 	Email string `required:"true" json:"Email" example:"admin@jogchat.com"`
 	Username string `required:"true" json:"Username" example:"admin374"`

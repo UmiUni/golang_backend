@@ -42,7 +42,7 @@ func ReferrerCheckSignupEmail(env *Env) func(ctx *gin.Context) {
 // @Description Provide a school/university edu email to sign up for the applicant portal, if the email does not exists in schemaless database, we will send the email an activation link
 // @Accept  json
 // @Param body body model.ApplicantSignupEmailRequest true "ApplicantSignupEmailRequest is a POST JSON type"
-// @Example "{"Email":"wang374@uiuc.edu"}"
+// @Example "{"Email":"admin@gmail.com"}"
 // @Success 200 {object} model.ApplicantSignupResponseSuccess "Success: verification email sent"
 // @Failure 400 {object} model.ApplicantSignupResponseAPIError0 "email cannot be empty"
 // @Failure 400 {object} model.ApplicantSignupResponseAPIError1 "email already registered"
