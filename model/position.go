@@ -1,6 +1,7 @@
 package model
 
 type PostPositionRequest struct {
+	Authorization string `required:"true" json:"Authorization example:""`
 	Username string `required:"true" json:"Username" example:"admin374"`
 	Company string `required:"true" json:"Company" example:"Jogchat"`
 	Position string `required:"true" json:"Position" example:"Software Engineer"`
@@ -20,6 +21,7 @@ type PostPositionResponseAPIError1 struct {
 }
 
 type CommentOnRequest struct {
+	Authorization string `required:"true" json:"Authorization example:""`
 	Username string `required:"true" json:"Username" example:"admin374"`
 	PositionId string `required:"true" json:"PositionId" example:"67bebc0c-f0bd-4352-b588-08a056085e0a"]`
 	ParentId string `required:"true" json:"ParentId" example:"67bebc0c-f0bd-4352-b588-08a056085e0a"`
