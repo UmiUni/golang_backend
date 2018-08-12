@@ -1,7 +1,7 @@
 package model
 
 type ReferrerSignupEmailRequest struct {
-	Email string `required:"true" json:"Email" example:"admin@jogchat.com"`
+	Email string `required:"true" json:"Email" example:"admin@umiuni.com"`
 }
 
 type ReferrerSignupResponseSuccess struct {

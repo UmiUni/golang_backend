@@ -3,16 +3,16 @@ definitions:
   model.ActivateAndSignupRequest:
     properties:
       Email:
-        example: wang374@uiuc.edu
+        example: admin@jogchat.com
         type: string
       Password:
-        example: wang374password
+        example: admin374password
         type: string
       Token:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTIyMDAsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.gC7dTl64XDe5BwlS8PuZxBxGes1ujcCWFbe23r0xOXM
         type: string
       Username:
-        example: wang374
+        example: admin374
         type: string
     type: object
   model.ActivateAndSignupResponseAPIError0:
@@ -39,22 +39,22 @@ definitions:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM1NjUsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.XwmDhW1b99E9jwGatN_6y1tYpLGBcAqywS9fI23Oxxo
         type: string
       Email:
-        example: wang374@uiuc.edu
+        example: admin@jogchat.com
         type: string
       UserId:
         example: ce57e12a-fe27-43a2-9a1f-0792b3d36f2e
         type: string
       Username:
-        example: wang374
+        example: admin374
         type: string
     type: object
   model.AddCompanyRequest:
     properties:
       Domain:
-        example: google.com
+        example: jogchat.com
         type: string
       Name:
-        example: Google
+        example: Jogchat
         type: string
     type: object
   model.AddCompanyResponseError0:
@@ -117,17 +117,19 @@ definitions:
   model.CommentOnRequest:
     properties:
       Content:
+        example: 这个Position很适合我背景，请联系superchaoran@gmail.com
         type: string
       ParentId:
-        example: ee3bc72c-9804-498b-be9d-c77471374e0a
+        example: 67bebc0c-f0bd-4352-b588-08a056085e0a
         type: string
       ParentType:
+        example: position
         type: string
       PositionId:
         example: 67bebc0c-f0bd-4352-b588-08a056085e0a
         type: string
       Username:
-        example: wang374
+        example: admin374
         type: string
     type: object
   model.CommentOnResponseAPIError0:
@@ -145,17 +147,17 @@ definitions:
   model.PostPositionRequest:
     properties:
       Company:
-        example: Uber
+        example: Jogchat
         type: string
       Description:
-        example: Build a microservice platform for Uber. A position require microservice
+        example: Build a microservice platform for Jogchat. A position require microservice
           knowledge and past experience in Golang.
         type: string
       Position:
         example: Software Engineer
         type: string
       Username:
-        example: wang374
+        example: admin374
         type: string
     type: object
   model.PostPositionResponseAPIError0:
@@ -203,10 +205,10 @@ definitions:
   model.ResetPasswordFormRequest:
     properties:
       Email:
-        example: wang374@uiuc.edu
+        example: admin@jogchat.com
         type: string
       Password:
-        example: wang374newpassword
+        example: admin374newpassword
         type: string
       Token:
         type: string
@@ -222,19 +224,19 @@ definitions:
       AuthToken:
         type: string
       Email:
-        example: wang374@uiuc.edu
+        example: admin@jogchat.com
         type: string
       UserId:
         example: ce57e12a-fe27-43a2-9a1f-0792b3d36f2e
         type: string
       Username:
-        example: wang374
+        example: admin374
         type: string
     type: object
   model.SendResetPasswordEmailRequest:
     properties:
       Email:
-        example: wang374@uiuc.edu
+        example: admin@jogchat.com
         type: string
     type: object
   model.SendResetPasswordEmailResponseAPIError0:
@@ -252,10 +254,10 @@ definitions:
   model.SigninRequest:
     properties:
       Email:
-        example: wang374@uiuc.edu
+        example: admin@jogchat.com
         type: string
       Password:
-        example: wang374password
+        example: admin374password
         type: string
     type: object
   model.SigninResponseAPIError0:
@@ -282,16 +284,16 @@ definitions:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzEzNTM2MzgsImlzcyI6ImpvZ2NoYXQuY29tIiwic3ViIjoid2FuZzM3NEB1aXVjLmVkdSJ9.RhRUpHJbIfid1hiJOTtStuxc86v0isnWny85COG9Mek
         type: string
       Email:
-        example: wang374@uiuc.edu
+        example: admin@jogchat.com
         type: string
       UserId:
         example: ce57e12a-fe27-43a2-9a1f-0792b3d36f2e
         type: string
       Username:
-        example: wang374
+        example: admin374
         type: string
     type: object
-host: localhost:3001
+host: 178.128.0.108:3001
 info:
   contact:
     email: admin@jogchat.com
@@ -547,8 +549,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: CommentOn is an endpoint called when an applicant reply a comment
-        to a particular job position.
+      description: GetPositions is an endpoint called to get all the positions
       parameters:
       - description: CommentOnRequest is a POST JSON type
         in: body
@@ -568,7 +569,7 @@ paths:
           schema:
             $ref: '#/definitions/model.CommentOnResponseAPIError0'
             type: object
-      summary: CommentOn
+      summary: GetPositions
   /v1/post_position:
     post:
       consumes:
