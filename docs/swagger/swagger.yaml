@@ -150,7 +150,7 @@ definitions:
         example: Jogchat
         type: string
       Description:
-        example: Build a microservice platform for Jogchat. A position require microservice
+        example: Build a microservice platform for Jogchat. A position requires microservice
           knowledge and past experience in Golang.
         type: string
       Position:

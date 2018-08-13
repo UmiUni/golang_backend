@@ -357,8 +357,6 @@ func GetCompanySchool(env *Env, category string) func(ctx *gin.Context) {
 // @Summary PostPosition
 // @Description PostPosition is an endpoint called when an referral create a job position to refer with dedicated JSON.
 // @Accept  json
-// @in header
-// @name Authorization
 // @Param body body model.PostPositionRequest true "PostPositionRequest is a POST JSON type"
 // @Success 200 {object} model.PostPositionResponseSuccess "Success with position id: {"id":"1528edfd-2cbd-451f-9053-a89e2e806cbe"}"
 // @Failure 400 {object} model.PostPositionResponseAPIError0 "username does not exist"

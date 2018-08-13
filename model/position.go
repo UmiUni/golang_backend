@@ -4,7 +4,7 @@ type PostPositionRequest struct {
 	Username string `required:"true" json:"Username" example:"admin374"`
 	Company string `required:"true" json:"Company" example:"Jogchat"`
 	Position string `required:"true" json:"Position" example:"Software Engineer"`
-	Description string `required:"true" json:"Description" example:"Build a microservice platform for Jogchat. A position require microservice knowledge and past experience in Golang."`
+	Description string `required:"true" json:"Description" example:"Build a microservice platform for Jogchat. A position requires microservice knowledge and past experience in Golang."`
 }
 
 type PostPositionResponseSuccess struct {

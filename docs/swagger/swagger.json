@@ -621,7 +621,7 @@
                 },
                 "Description": {
                     "type": "string",
-                    "example": "Build a microservice platform for Jogchat. A position require microservice knowledge and past experience in Golang."
+                    "example": "Build a microservice platform for Jogchat. A position requires microservice knowledge and past experience in Golang."
                 },
                 "Position": {
                     "type": "string",
