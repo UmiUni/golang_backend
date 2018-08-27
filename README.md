@@ -43,7 +43,7 @@ export GOPATH=$HOME/gocode
 export PATH="$PATH:$GOPATH/bin"
 ```
 * Then 
-```source ~./bash_profile```
+```source ~/.bash_profile```
 * generate swag doc in our repo
 
 ```
