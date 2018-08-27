@@ -37,6 +37,13 @@ go get -u github.com/swaggo/gin-swagger/swaggerFiles
 ```
 export PATH=$PATH:/root/go/bin
 ```
+* for mac ~./bash_profile add two lines
+```
+export GOPATH=$HOME/gocode
+export PATH="$PATH:$GOPATH/bin"
+```
+* Then 
+```source ~./bash_profile```
 * generate swag doc in our repo
 
 ```
