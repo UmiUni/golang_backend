@@ -17,8 +17,44 @@ https://github.com/swaggo
 * Comments should follow Declarative Comments Format:
 https://github.com/Jogchat/golang_backend/blob/master/DeclarativeCommentsFormat.md
 
+
+# GET STARTED
+
+## Install Golang
+For Ubuntu:
+```
+sudo apt-get update
+sudo apt-get -y upgrade
+
+find latestes version in:
+https://golang.org/dl/
+
+sudo curl -O https://storage.googleapis.com/golang/go1.10.3.linux-amd64.tar.gz
+sudo tar -xvf go1.10.3.linux-amd64.tar.gz
+
+```
+* reference: https://medium.com/@patdhlk/how-to-install-go-1-9-1-on-ubuntu-16-04-ee64c073cd79
+
+## Set GOPATH
+```
+sudo mv DOWNLOADED_GO_DIR /usr/local
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+source ~/.profile
+mkdir -p go/src/code.jogchat.internal
+```
+* for mac add this two lines to `~./bash_profile` and then `source ~/.bash_profile`
+```
+export GOPATH=$HOME/gocode
+export PATH="$PATH:$GOPATH/bin"
+```
+## Clone two repositories to `$GOPATH/src`
+```
+git clone https://github.com/Jogchat/go-schemaless.git
+git clone https://github.com/Jogchat/golang_backend.git
+```
  
-# Clone other dependency repos
+## Clone other dependency repos to `$GOPATH/src`
 * git clone repos under $GOPATH/src/code.jogchat.internal
 ```
 https://github.com/Jogchat/dgrijalva-jwt-go
@@ -37,11 +73,6 @@ go get -u github.com/swaggo/gin-swagger/swaggerFiles
 ```
 export PATH=$PATH:/root/go/bin
 ```
-* for mac ~./bash_profile add two lines
-```
-export GOPATH=$HOME/gocode
-export PATH="$PATH:$GOPATH/bin"
-```
 * Then 
 ```source ~/.bash_profile```
 * generate swag doc in our repo
@@ -54,6 +85,13 @@ swag init
 ```
 https://github.com/go-sql-driver/mysql.git
 ```
+## To update Go packages:
+```
+go get 
+```
+
+## Start server
+under golang_backend, do `go run main.go`
 
 # Jogchat React+Golang server
 
@@ -75,38 +113,6 @@ Description:
 
 ```
 http://138.68.227.175:3001
-```
-
-# Install Golang
-```
-sudo apt-get update
-sudo apt-get -y upgrade
-
-find latestes version in:
-https://golang.org/dl/
-
-sudo curl -O https://storage.googleapis.com/golang/go1.10.3.linux-amd64.tar.gz
-sudo tar -xvf go1.10.3.linux-amd64.tar.gz
-
-```
-* reference: https://medium.com/@patdhlk/how-to-install-go-1-9-1-on-ubuntu-16-04-ee64c073cd79
-
-# Set Go Home
-```
-sudo mv go /usr/local
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-source ~/.profile
-mkdir -p go/src/code.internal.jogchat
-```
-# Clone two repositories
-```
-git clone https://github.com/Jogchat/go-schemaless.git
-git clone https://github.com/Jogchat/golang_backend.git
-```
-# To update Go packages:
-```
-go get 
 ```
 
 # Backbone reference for this project:
