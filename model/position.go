@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 type PostPositionRequest struct {
 	Username string `required:"true" json:"Username" example:"admin374"`
 	Company string `required:"true" json:"Company" example:"Jogchat"`
@@ -45,4 +47,22 @@ type CommentOnResponseAPIError2 struct {
 
 type CommentOnResponseAPIError3 struct {
 	ErrorMessage string `json:"error" example:"invalid parent id"`
+}
+
+type GetPositionsRequest struct {
+	Companies string `required:"true" json:"Companies" example:"Jogchat,Google"`
+	Duration string `required:"true" json:"Duration" example:"day"`
+	Limit string `required:"true" json:"Limit" example:"2"`
+}
+
+type Position struct {
+	PostedBy string `required:"true" json:"Companies" example:"superchaoran"`
+	Company string `required:"true" json:"Duration" example:"Jogchat"`
+	Position string `required:"true" json:"Limit" example:"Software Engineer"`
+	PostedAt time.Time `required:"true" json:"Limit" example:"1537765825"`
+	Description string `required:"true" json:"Limit" example:"Software Engineer position at Jogchat.com"`
+}
+
+type GetPositionsResponse struct {
+   Postions []Position `required:"true" json:"Positions" example:""`
 }

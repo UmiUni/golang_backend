@@ -144,6 +144,37 @@ definitions:
         example: 'Success on commenting: status 200'
         type: string
     type: object
+  model.GetPositionsRequest:
+    properties:
+      Companies:
+        example: Jogchat,Google
+        type: string
+      Duration:
+        example: day
+        type: string
+      Limit:
+        example: "2"
+        type: string
+    type: object
+  model.GetPositionsResponse:
+    properties:
+      Positions:
+        items:
+          $ref: '#/definitions/model.Position'
+        type: array
+    type: object
+  model.Position:
+    properties:
+      Companies:
+        example: superchaoran
+        type: string
+      Duration:
+        example: Jogchat
+        type: string
+      Limit:
+        example: Software Engineer position at Jogchat.com
+        type: string
+    type: object
   model.PostPositionRequest:
     properties:
       Company:
@@ -427,6 +458,26 @@ paths:
       description: GetAllSchools is an endpoint that returns schools list from schemaless
         database
       summary: Get All Schools
+  /get_positions:
+    post:
+      consumes:
+      - application/json
+      description: GetPositions is an endpoint called to get all the positions
+      parameters:
+      - description: GetPositionsRequest is a POST JSON type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.GetPositionsRequest'
+          type: object
+      responses:
+        "200":
+          description: Success on GetPositions
+          schema:
+            $ref: '#/definitions/model.GetPositionsResponse'
+            type: object
+      summary: GetPositions
   /referrer_check_signup_email:
     post:
       consumes:
@@ -549,7 +600,10 @@ paths:
     post:
       consumes:
       - application/json
-      description: GetPositions is an endpoint called to get all the positions
+      description: CommentOn is an endpoint called when an applicant reply a comment
+        to a particular job position. ParentType can be either position or comment.
+        ParentID is the positionID or commentID from which current commentID is commenting
+        on.
       parameters:
       - description: CommentOnRequest is a POST JSON type
         in: body
@@ -569,7 +623,7 @@ paths:
           schema:
             $ref: '#/definitions/model.CommentOnResponseAPIError0'
             type: object
-      summary: GetPositions
+      summary: CommentOn
   /v1/post_position:
     post:
       consumes:

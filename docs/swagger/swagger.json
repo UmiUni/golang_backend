@@ -178,6 +178,36 @@
                 "summary": "Get All Schools"
             }
         },
+        "/get_positions": {
+            "post": {
+                "description": "GetPositions is an endpoint called to get all the positions",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "GetPositions",
+                "parameters": [
+                    {
+                        "description": "GetPositionsRequest is a POST JSON type",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.GetPositionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success on GetPositions",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.GetPositionsResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/referrer_check_signup_email": {
             "post": {
                 "description": "Onboarding user will provide a company email to sign up for the referral portal, if the email does not exists in schemaless database, we will send the email an activation link",
@@ -328,11 +358,11 @@
         },
         "/v1/comment_on": {
             "post": {
-                "description": "GetPositions is an endpoint called to get all the positions",
+                "description": "CommentOn is an endpoint called when an applicant reply a comment to a particular job position. ParentType can be either position or comment. ParentID is the positionID or commentID from which current commentID is commenting on.",
                 "consumes": [
                     "application/json"
                 ],
-                "summary": "GetPositions",
+                "summary": "CommentOn",
                 "parameters": [
                     {
                         "description": "CommentOnRequest is a POST JSON type",
@@ -609,6 +639,51 @@
                 "message": {
                     "type": "string",
                     "example": "Success on commenting: status 200"
+                }
+            }
+        },
+        "model.GetPositionsRequest": {
+            "type": "object",
+            "properties": {
+                "Companies": {
+                    "type": "string",
+                    "example": "Jogchat,Google"
+                },
+                "Duration": {
+                    "type": "string",
+                    "example": "day"
+                },
+                "Limit": {
+                    "type": "string",
+                    "example": "2"
+                }
+            }
+        },
+        "model.GetPositionsResponse": {
+            "type": "object",
+            "properties": {
+                "Positions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Position"
+                    }
+                }
+            }
+        },
+        "model.Position": {
+            "type": "object",
+            "properties": {
+                "Companies": {
+                    "type": "string",
+                    "example": "superchaoran"
+                },
+                "Duration": {
+                    "type": "string",
+                    "example": "Jogchat"
+                },
+                "Limit": {
+                    "type": "string",
+                    "example": "Software Engineer position at Jogchat.com"
                 }
             }
         },
