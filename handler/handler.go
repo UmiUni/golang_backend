@@ -1,15 +1,17 @@
 package handler
 
 import (
-	"net/http"
-	"errors"
 	"code.jogchat.internal/golang_backend/schemaless"
-	"github.com/gin-gonic/gin"
 	"code.jogchat.internal/golang_backend/utils"
+	"crypto/tls"
+	"errors"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"net/http"
 	"os"
-	"time"
-	"strings"
 	"strconv"
+	"strings"
+	"time"
 )
 
 
@@ -22,6 +24,7 @@ type Env struct {
 	Email	string
 	PrivateKey	string
 	PublicKey	string
+	APNCert tls.Certificate
 }
 
 // @Title ReferrerCheckSignupEmail
@@ -141,6 +144,18 @@ func Signin(env *Env) func(ctx *gin.Context) {
 		} else {
 			addCredentials(env, ctx, info["id"], info["username"], info["email"])
 		}
+	}
+}
+
+//after sign in, iphone device needs to set up the device token with the user id
+func IOSUpdateDeviceToken(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		params := readParams(ctx)
+		userId := params["id"].(string)
+		deviceToken := params["DeviceToken"].(string)
+		deviceType := params["DeviceType"].(string)
+		// update a col of a exisiting row
+		schemaless.SetDeviceToken(userId, deviceToken, deviceType)
 	}
 }
 
@@ -443,5 +458,32 @@ func GetPositions(env *Env) func(ctx *gin.Context) {
 		} else {
 			ctx.JSON(http.StatusOK, info)
 		}
+	}
+}
+
+func ApplyJob(env *Env) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		var requestUserId := ctx.Query("userId")
+		var jobId := ctx.Query("jobId")
+		var referralId, found, err := schemaless.GetUserIdByJobId(jobId)
+		if !found {
+			handleFailure(err, ctx)
+		}
+		deviceTokens, found, err := schemaless.GetDeviceToken(requestUserId)
+		if !found {
+			handleFailure(err, ctx)
+		}
+
+		payload = map[string]interface{} {
+			"title": fmt.Sprintf("%s has sent you a referral request for position %s", referralId, jobId),
+			"body": fmt.Sprintf("We have screened a potential candidate for your job! What happens next? We have sent you an email with %s's profile and resume. You can also check this information in \"My Candidates\" in the app.", referralId),
+		}
+
+		for _, deviceToken := range deviceTokens {
+			Notify(deviceToken, payload)
+			// handle error
+		}
+
+		ctx.JSON(http.StatusOK, info)
 	}
 }

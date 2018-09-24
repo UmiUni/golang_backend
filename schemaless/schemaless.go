@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"time"
 	"sort"
+	"github.com/sideshow/apns2"
 )
 
 const hashCost = 8
@@ -91,6 +92,7 @@ func ActivateEmail(email string, username string, password string, token string)
 	return info, true, nil
 }
 
+// query the database by email and check if the password match the one in response.
 func SigninDB(email string, password string) (info map[string]string, successful bool, err error) {
 	_, body, found, _ := getUserByUniqueField("email", email)
 	if !found {
@@ -107,6 +109,7 @@ func SigninDB(email string, password string) (info map[string]string, successful
 		"username": body["username"].(string),
 		"email": body["email"].(string),
 	}
+
 	return info, true, nil
 }
 
@@ -331,4 +334,61 @@ func GetPositions(companies map[string]bool, duration time.Duration, limit int) 
 		"positions": positions,
 	}
 	return info, true, nil
+}
+
+func SetDeviceToken(userId string, deviceToken string, deviceType string) (info map[string]interface{}, successful bool, err error) {
+	body := map[string]interface{} {}
+	switch deviceType {
+	case "ios":
+		body = map[string]interface{} {
+			"iosDeviceToken": deviceToken,
+			"userId": userId,
+		}
+	case "android":
+		body = map[string]interface{} {
+		"andDeviceToken": deviceToken,
+		"userId": userId,
+		}
+	}
+	id, cell := constructCell("deviceToken", body, true)
+	go func() {
+		err = DataStore.PutCell(context.TODO(), cell.RowKey, cell.ColumnName, cell.RefKey, cell)
+		utils.CheckErr(err)
+	}()
+	info = map[string]interface{} {
+		"id": id,
+	}
+	return info, true, nil
+
+	// TODO ideally "deviceTokens" is a map of deviceType: deviceToken, like iphone: xxx, ipad: yyy, appleTV: zzz
+	// TODO but hard to get this map from a struct(unmarshaled from json byte). Or there should be a better model.
+	// TODO Chaoran said that model.go is used for swagger only.
+}
+
+// return all deviceToken for a given user.
+func GetDeviceToken(userId string) (info map[string]interface{}, found bool, err error) {
+	cell, found, _ := DataStore.GetCellByUniqueFieldLatest(context.TODO(), "deviceToken", "userId", userId)
+	if !found {
+		return nil, false, errors.New("No device available for userId = " + userId)
+	}
+	var body map[string]interface{}
+	json.Unmarshal(cell.Body, &body)
+	info = map[string]interface{} {
+		"positions": body,
+	}
+	return info, true, nil
+}
+
+//	get the cell for the job id, the user id to return is in the same blob
+func GetUserIdByJobId(jobId string) (info map[string]interface{}, found bool, err error) {
+	info = map[string]interface{} {
+		"userId": "sample",
+	}
+	return info, true, nil
+}
+
+func Notify(userId string) {
+	info, found,
+	notification := &apns2.Notification{}
+	notig
 }
